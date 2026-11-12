@@ -204,7 +204,7 @@
                   주문 파일 여러 개를 여기에 놓으세요
                 </div>
                 <span class="ow-btn ow-btn-secondary" style="min-height:36px;padding:7px 14px;font-size:0.8125rem;">파일 직접 선택</span>
-                <div class="ow-fine" style="margin-top:8px;">* 암호 설정된 엑셀은 해제 후 투입</div>
+                <div class="ow-fine" style="margin-top:8px;">* 스마트스토어 엑셀은 다운로드창에서 [암호 해제] 체크 후 투입 (EUC-KR 한글 CSV 자동 호환)</div>
               </div>
 
               <div id="resultPanel" style="margin-top:16px;border-top:1px solid var(--ow-border-default);padding-top:14px;">
@@ -224,11 +224,13 @@
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);">
                   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <label for="exportPresetSelect" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">출고 양식</label>
-                    <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);min-width:196px;padding:6px 10px;">
-                      <option value="standard">표준 통합발주서 (9열)</option>
+                    <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);min-width:206px;padding:6px 10px;">
+                      <option value="standard">표준 통합발주서 (10열)</option>
                       <option value="cj">CJ대한통운 CNPlus 일괄등록</option>
                       <option value="epost">우체국택배 계약소포 엑셀접수</option>
-                      <option value="hanjin">한진·롯데·로젠 표준 택배양식</option>
+                      <option value="hanjin">한진택배 H-Focus 일괄출고</option>
+                      <option value="lotte">롯데택배 알짜배기 운송장</option>
+                      <option value="logen">로젠택배 i-LOGEN 표준양식</option>
                       <option value="wholesale">도매꾹·오너클랜 위탁발주서</option>
                     </select>
                   </div>
@@ -680,6 +682,7 @@
         </div>
         <div class="ow-footer-links ow-fine">
           <a href="./">6대 마켓 발주서 통합</a>
+          <a href="courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
           <a href="../">카카오 지도 코드 복구</a>
           <a href="../daumcdn-map-error/">다음·카카오 지도 백지 복구</a>
@@ -844,27 +847,41 @@
         if (/장바구니번호|수령인명/.test(keys) || /gmarket|auction|esm/i.test(fileName)) return 'G마켓·옥션';
         if (/수령인 휴대전화/.test(keys) || /cafe24|카페24/i.test(fileName)) return '카페24';
         if (/11st|11번가/i.test(fileName)) return '11번가';
-        return pickField(row, ['판매채널', '마켓', '쇼핑몰']) || '오픈마켓';
+        if (/오늘의집|ohou/i.test(fileName) || /배송지우편번호/.test(keys)) return '오늘의집';
+        if (/imweb|아임웹/i.test(fileName)) return '아임웹';
+        if (/kakao|톡스토어/i.test(fileName)) return '톡스토어';
+        if (/lotteon|롯데온/i.test(fileName)) return '롯데온';
+        return pickField(row, ['판매채널', '마켓', '쇼핑몰', '주문경로']) || '오픈마켓';
       }
 
       function formatPhone(p) {
         var digits = String(p || '').replace(/[^0-9]/g, '');
+        if (digits.length === 10 && /^(10|11|16|17|18|19)/.test(digits)) digits = '0' + digits;
+        if (digits.length === 11 && digits.indexOf('50') === 0) digits = '0' + digits;
+        if (digits.length === 9 && digits.indexOf('2') === 0) digits = '0' + digits;
+        if (digits.length === 9 && digits.indexOf('02') === 0) return digits.replace(/(\d{2})(\d{3})(\d{4})/, '$1-$2-$3');
+        if (digits.length === 10 && digits.indexOf('02') === 0) return digits.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3');
         if (digits.length === 11) return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
         if (digits.length === 10) return digits.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
         if (digits.length === 12 && digits.indexOf('050') === 0) return digits.replace(/(\d{4})(\d{4})(\d{4})/, '$1-$2-$3');
         return String(p || '').trim();
       }
 
+      function formatZip(z) {
+        var digits = String(z || '').replace(/[^0-9]/g, '');
+        if (digits.length === 4) return '0' + digits;
+        return digits || String(z || '').trim();
+      }
+
       var bundleSavingBadge = document.getElementById('bundleSavingBadge');
       var exportPresetSelect = document.getElementById('exportPresetSelect');
       var chkBundleMerge = document.getElementById('chkBundleMerge');
 
-      function extractSheetRows(ws) {
-        var matrix = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-        var maxScan = Math.min(matrix.length, 12);
+      function matrixToObjects(matrix) {
+        var maxScan = Math.min(matrix.length, 14);
         var headerIdx = 0;
-        var recvRe = /수취인|수령인|받는분|받는사람/;
-        var orderRe = /상품|품목|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
+        var recvRe = /수취인|수령인|수령자|받는분|받는사람|받으시는분/;
+        var orderRe = /상품|품목|단품|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
         for (var i = 0; i < maxScan; i++) {
           var joined = (matrix[i] || []).map(function(c) { return String(c || '').replace(/\s+/g, ''); }).join('|');
           if (recvRe.test(joined) && orderRe.test(joined)) {
@@ -872,27 +889,74 @@
             break;
           }
         }
-        return XLSX.utils.sheet_to_json(ws, { range: headerIdx, defval: '' });
+        var headers = (matrix[headerIdx] || []).map(function(h, idx) {
+          var clean = String(h || '').trim();
+          return clean || ('_col' + idx);
+        });
+        var out = [];
+        for (var r = headerIdx + 1; r < matrix.length; r++) {
+          var cells = matrix[r] || [];
+          var nonEmpty = false;
+          var obj = {};
+          for (var c = 0; c < headers.length; c++) {
+            var val = cells[c] !== undefined && cells[c] !== null ? String(cells[c]).trim() : '';
+            if (val !== '') nonEmpty = true;
+            if (obj[headers[c]] === undefined || obj[headers[c]] === '') {
+              obj[headers[c]] = val;
+            }
+          }
+          if (nonEmpty) out.push(obj);
+        }
+        return out;
+      }
+
+      function parseDelimitedMatrix(text, delim) {
+        var rows = [], row = [], cur = '', inQ = false;
+        for (var i = 0; i < text.length; i++) {
+          var ch = text[i];
+          if (inQ) {
+            if (ch === '"') {
+              if (text[i + 1] === '"') { cur += '"'; i++; }
+              else inQ = false;
+            } else cur += ch;
+          } else {
+            if (ch === '"') inQ = true;
+            else if (ch === delim) { row.push(cur); cur = ''; }
+            else if (ch === '\r') {
+              if (text[i + 1] === '\n') i++;
+              row.push(cur); rows.push(row); row = []; cur = '';
+            } else if (ch === '\n') {
+              row.push(cur); rows.push(row); row = []; cur = '';
+            } else cur += ch;
+          }
+        }
+        if (cur.length > 0 || row.length > 0) { row.push(cur); rows.push(row); }
+        return rows;
+      }
+
+      function extractSheetRows(ws) {
+        var matrix = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
+        return matrixToObjects(matrix);
       }
 
       function normalizeRow(raw, fileName) {
-        var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '받는분', '받는사람']);
-        var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명']);
-        if ((!recipient && !product) || /^(수취인명|수령인|받는분)$/.test(recipient)) return null;
+        var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '수령자명', '받는분', '받는사람', '받으시는분']);
+        var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명', '단품명']);
+        if ((!recipient && !product) || /^(수취인명|수령인|수령자명|받는분)$/.test(recipient)) return null;
 
-        var addrBase = pickField(raw, ['통합배송지', '배송지', '수취인 주소', '수령인 주소', '주소', '기본주소']);
+        var addrBase = pickField(raw, ['통합배송지', '배송지', '배송지 주소', '수취인 주소', '수취인 기본주소', '수령인 주소', '주소', '기본주소']);
         var addrDetail = pickField(raw, ['상세주소', '수취인 상세주소', '배송지상세주소', '나머지주소']);
         var fullAddr = (addrBase + (addrDetail && addrBase.indexOf(addrDetail) === -1 ? ' ' + addrDetail : '')).replace(/\s+/g, ' ').trim();
         var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수량', '구매수', '주문수량']) || '1';
         var qty = parseInt(qtyRaw.replace(/[^0-9]/g, ''), 10) || 1;
-        var opt = pickField(raw, ['옵션정보', '옵션명', '등록옵션명', '주문옵션', '선택사항', '옵션']);
+        var opt = pickField(raw, ['옵션정보', '옵션명', '등록옵션명', '주문옵션', '옵션내용', '선택사항', '옵션']);
 
         return {
           '마켓구분': detectMarket(raw, fileName || ''),
-          '주문번호': pickField(raw, ['상품주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드']) || '-',
+          '주문번호': pickField(raw, ['상품주문번호', '품목별 주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드']) || '-',
           '수취인명': recipient,
-          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '안심번호', '연락처'])),
-          '우편번호': pickField(raw, ['우편번호', '수취인 우편번호', '배송지우편번호', '새우편번호']),
+          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '안심번호', '연락처', '주문자연락처'])),
+          '우편번호': formatZip(pickField(raw, ['우편번호', '수취인 우편번호', '수취인우편번호', '배송지우편번호', '새우편번호'])),
           '통합배송지': fullAddr,
           '상품및옵션': (product + (opt ? ' [' + opt + ']' : '')).trim(),
           '수량': qty,
@@ -942,7 +1006,9 @@
         standard: '통합발주서',
         cj: 'CJ대한통운_CNPlus',
         epost: '우체국택배_일괄접수',
-        hanjin: '한진롯데로젠_택배양식',
+        hanjin: '한진택배_HFocus',
+        lotte: '롯데택배_알짜배기',
+        logen: '로젠택배_iLOGEN',
         wholesale: '도매위탁발주서'
       };
 
@@ -991,6 +1057,34 @@
               '운임구분': '선불',
               '배송메세지': r['배송메시지'],
               '주문번호': r['주문번호']
+            };
+          }
+          if (preset === 'lotte') {
+            return {
+              '수하인명': r['수취인명'],
+              '우편번호': r['우편번호'],
+              '배달주소': r['통합배송지'],
+              '전화번호1': r['수취인연락처'],
+              '전화번호2': '',
+              '수량': 1,
+              '운임구분': '신용',
+              '상품명': itemWithQty,
+              '배송메시지': r['배송메시지'],
+              '주문번호': r['주문번호']
+            };
+          }
+          if (preset === 'logen') {
+            return {
+              '수하인명': r['수취인명'],
+              '우편번호': r['우편번호'],
+              '수하인주소': r['통합배송지'],
+              '수하인전화번호': r['수취인연락처'],
+              '수하인핸드폰번호': r['수취인연락처'],
+              '택배수량': 1,
+              '운임구분': '신용',
+              '물품명': itemWithQty,
+              '배송메세지': r['배송메시지'],
+              '고객주문번호': r['주문번호']
             };
           }
           if (preset === 'wholesale') {
@@ -1117,28 +1211,43 @@
         var files = Array.prototype.slice.call(fileList || []);
         if (!files.length) return;
         var pending = files.length;
+        var hadEncryptedError = false;
         files.forEach(function(file) {
           var reader = new FileReader();
           reader.onload = function(evt) {
             try {
-              var wb = XLSX.read(evt.target.result, { type: 'array' });
-              var ws = wb.Sheets[wb.SheetNames[0]];
-              var rows = extractSheetRows(ws);
+              var rows = [];
+              if (/\.(csv|tsv)$/i.test(file.name || '')) {
+                var text = '';
+                try {
+                  text = new TextDecoder('utf-8', { fatal: true }).decode(evt.target.result);
+                } catch (decErr) {
+                  text = new TextDecoder('euc-kr').decode(evt.target.result);
+                }
+                text = text.replace(/^\uFEFF/, '');
+                var delim = /\.tsv$/i.test(file.name || '') ? '\t' : ',';
+                rows = matrixToObjects(parseDelimitedMatrix(text, delim));
+              } else {
+                var wb = XLSX.read(evt.target.result, { type: 'array', codepage: 949 });
+                var ws = wb.Sheets[wb.SheetNames[0]];
+                rows = extractSheetRows(ws);
+              }
               rows.forEach(function(r) {
                 var norm = normalizeRow(r, file.name);
                 if (norm) normalizedOrders.push(norm);
               });
             } catch (err) {
-              showFeedback('암호가 설정된 엑셀입니다. 비밀번호 해제 후 다시 올려 주세요.', 'is-crit');
+              hadEncryptedError = true;
+              showFeedback('암호 설정된 엑셀입니다. 스마트스토어 다운로드창에서 [엑셀 암호 설정 해제]를 체크하거나 암호 제거 저장 후 다시 올려 주세요.', 'is-crit');
             }
             pending -= 1;
-            if (pending === 0) {
+            if (pending === 0 && !hadEncryptedError) {
               renderPreview();
               var b = getProcessedBundle();
               if (b.rows.length > 0) {
                 showFeedback(b.rows.length + '건 출고 시트 준비 완료' + (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') + ' · 외부 전송 0 Byte', 'is-ok');
               } else {
-                showFeedback('인식된 주문 행이 없습니다. 주문 발주서 원본 파일인지 확인해 주세요.', 'is-warn');
+                showFeedback('인식된 주문 행이 없습니다. 주문 발주서 원본 파일(수취인·상품·주소 포함)인지 확인해 주세요.', 'is-warn');
               }
             }
           };
@@ -1240,6 +1349,13 @@
         convStep3.className = 'ow-step-pill is-done';
         showFeedback(label.replace(/_/g, ' ') + ' CSV(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
       });
+
+      try {
+        var qp = new URLSearchParams(window.location.search).get('preset');
+        if (qp && PRESET_LABELS[qp] && exportPresetSelect) {
+          exportPresetSelect.value = qp;
+        }
+      } catch (e) {}
 
       updateLicenseUI();
     })();
