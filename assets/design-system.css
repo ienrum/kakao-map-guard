@@ -70,7 +70,9 @@
   --ow-radius-md: 12px;
   --ow-radius-lg: 14px;
 
-  --ow-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Emil Kowalski custom UI curves (stronger than CSS defaults) */
+  --ow-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ow-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Browser Surface Theming */
@@ -276,7 +278,7 @@ a {
   gap: 10px;
 }
 
-/* 3. Buttons (Toss TDS Single Primary Rule) */
+/* 3. Buttons (Toss TDS Single Primary Rule + Emil Kowalski Tactile Press) */
 .ow-btn {
   display: inline-flex;
   align-items: center;
@@ -288,24 +290,20 @@ a {
   line-height: 1;
   border-radius: var(--ow-radius-sm);
   padding: 11px 18px;
-  min-height: 40px;
+  min-height: 44px;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 150ms var(--ow-ease-out), border-color 150ms var(--ow-ease-out), transform 120ms var(--ow-ease-out);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ow-ease-out), opacity 150ms var(--ow-ease-out);
   white-space: nowrap;
 }
 
-.ow-btn:active { transform: translateY(1px); }
+.ow-btn:active:not(:disabled) { transform: scale(0.97); }
+.ow-btn:disabled { opacity: 0.48; cursor: not-allowed; }
 
 .ow-btn-primary {
   background-color: var(--ow-action-primary);
   color: var(--ow-text-on-dark);
   border: 1px solid var(--ow-action-primary);
-}
-.ow-btn-primary:hover {
-  background-color: var(--ow-action-primary-hover);
-  border-color: var(--ow-action-primary-hover);
-  color: var(--ow-text-on-dark);
 }
 
 .ow-btn-secondary {
@@ -313,17 +311,25 @@ a {
   color: var(--ow-text-primary);
   border: 1px solid var(--ow-border-strong);
 }
-.ow-btn-secondary:hover {
-  background-color: var(--ow-bg-recessed);
-}
 
 .ow-btn-subtle {
   background-color: var(--ow-action-wash);
   color: var(--ow-action-primary);
   border: 1px solid var(--ow-action-border);
 }
-.ow-btn-subtle:hover {
-  background-color: var(--ow-p-cobalt-100);
+
+@media (hover: hover) and (pointer: fine) {
+  .ow-btn-primary:hover:not(:disabled) {
+    background-color: var(--ow-action-primary-hover);
+    border-color: var(--ow-action-primary-hover);
+    color: var(--ow-text-on-dark);
+  }
+  .ow-btn-secondary:hover:not(:disabled) {
+    background-color: var(--ow-bg-recessed);
+  }
+  .ow-btn-subtle:hover:not(:disabled) {
+    background-color: var(--ow-p-cobalt-100);
+  }
 }
 
 .ow-btn-lg {
@@ -480,16 +486,21 @@ a {
   color: var(--ow-text-secondary);
   border: 1px solid var(--ow-border-default);
   border-radius: var(--ow-radius-xs);
-  padding: 6px 10px;
+  padding: 7px 12px;
+  min-height: 36px;
   font-family: var(--ow-font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, transform 140ms var(--ow-ease-out);
 }
-.ow-preset-btn:hover {
-  background-color: var(--ow-action-wash);
-  color: var(--ow-action-primary);
-  border-color: var(--ow-action-border);
+.ow-preset-btn:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) {
+  .ow-preset-btn:hover {
+    background-color: var(--ow-action-wash);
+    color: var(--ow-action-primary);
+    border-color: var(--ow-action-border);
+  }
 }
 
 .ow-code-input {
@@ -798,6 +809,273 @@ a {
   text-decoration: underline;
 }
 
+/* 11. Interactive Pipeline Visualization, Before/After Switcher & GPU Bar Charts */
+.ow-viz-card {
+  border-radius: var(--ow-radius-md);
+  border: 1px solid var(--ow-border-default);
+  background-color: var(--ow-bg-telemetry);
+  color: var(--ow-text-on-dark);
+  overflow: hidden;
+}
+
+.ow-viz-header {
+  padding: 10px 14px;
+  background-color: var(--ow-bg-telemetry-raised);
+  border-bottom: 1px solid var(--ow-border-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ow-viz-tabs {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--ow-bg-telemetry);
+  border: 1px solid var(--ow-border-on-dark);
+  border-radius: var(--ow-radius-xs);
+  padding: 3px;
+  gap: 3px;
+}
+
+.ow-viz-tab {
+  background-color: transparent;
+  color: var(--ow-text-on-dark-muted);
+  border: 1px solid transparent;
+  border-radius: var(--ow-radius-xs);
+  padding: 6px 10px;
+  min-height: 32px;
+  font-family: var(--ow-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, transform 140ms var(--ow-ease-out);
+}
+.ow-viz-tab:active { transform: scale(0.97); }
+.ow-viz-tab[aria-selected="true"] {
+  background-color: var(--ow-action-primary);
+  color: var(--ow-text-on-dark);
+}
+@media (hover: hover) and (pointer: fine) {
+  .ow-viz-tab:hover:not([aria-selected="true"]) {
+    color: var(--ow-text-on-dark);
+  }
+}
+
+.ow-viz-stage {
+  padding: 16px;
+  position: relative;
+}
+
+.ow-viz-pane {
+  display: none;
+}
+.ow-viz-pane.is-active {
+  display: block;
+  animation: owPaneReveal 200ms var(--ow-ease-out) both;
+}
+
+@keyframes owPaneReveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ow-pipeline-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ow-flow-path {
+  stroke-dasharray: 6 6;
+  animation: owFlowDash 1.8s linear infinite;
+}
+
+.ow-viz-card[data-paused="true"] .ow-flow-path {
+  animation-play-state: paused;
+}
+
+.ow-viz-card[data-state="active"] .ow-flow-path {
+  stroke: var(--ow-p-emerald-500);
+  animation-duration: 0.9s;
+}
+
+@keyframes owFlowDash {
+  to { stroke-dashoffset: -24; }
+}
+
+/* Ranked Horizontal Bar Charts (GPU scaleX only — zero width layout thrash) */
+.ow-bar-group {
+  display: grid;
+  gap: 14px;
+  padding: 14px 12px 10px;
+}
+
+.ow-bar-metric {
+  display: grid;
+  gap: 6px;
+}
+
+.ow-bar-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8125rem;
+}
+
+.ow-bar-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 92px;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-bar-track {
+  height: 10px;
+  background-color: var(--ow-bg-recessed);
+  border-radius: var(--ow-radius-xs);
+  overflow: hidden;
+  border: 1px solid var(--ow-border-default);
+}
+
+.ow-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--ow-radius-xs);
+  transform-origin: left center;
+  transform: scaleX(var(--bar-scale, 1));
+  transition: transform 420ms var(--ow-ease-out);
+}
+
+.ow-bar-fill-muted { background-color: var(--ow-p-slate-300); }
+.ow-bar-fill-primary { background-color: var(--ow-action-primary); }
+.ow-bar-fill-emerald { background-color: var(--ow-p-emerald-500); }
+
+/* Live Distribution Bar & Staggered Table Rows */
+.ow-dist-box {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background-color: var(--ow-bg-canvas);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-sm);
+}
+
+.ow-dist-bar {
+  display: flex;
+  height: 8px;
+  border-radius: var(--ow-radius-xs);
+  overflow: hidden;
+  background-color: var(--ow-bg-recessed);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.ow-dist-seg {
+  height: 100%;
+  transition: opacity 180ms ease;
+}
+
+.ow-dist-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: var(--ow-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-row-enter {
+  animation: owRowStagger 220ms var(--ow-ease-out) both;
+}
+
+@keyframes owRowStagger {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Inline Tactile Toast / Validation Feedback (Replaces blocking browser alert()) */
+.ow-inline-feedback {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--ow-radius-xs);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ow-inline-feedback.is-visible {
+  display: flex;
+  animation: owPaneReveal 180ms var(--ow-ease-out) both;
+}
+.ow-inline-feedback.is-ok {
+  background-color: var(--ow-p-emerald-50);
+  color: var(--ow-p-emerald-800);
+  border: 1px solid var(--ow-p-emerald-200);
+}
+.ow-inline-feedback.is-warn {
+  background-color: var(--ow-p-amber-50);
+  color: var(--ow-p-amber-800);
+  border: 1px solid var(--ow-p-amber-200);
+}
+.ow-inline-feedback.is-crit {
+  background-color: var(--ow-p-crimson-50);
+  color: var(--ow-p-crimson-800);
+  border: 1px solid var(--ow-p-crimson-200);
+}
+
+/* Step Progress Strip inside Workbench */
+.ow-step-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ow-step-pill {
+  padding: 8px 10px;
+  border-radius: var(--ow-radius-xs);
+  border: 1px solid var(--ow-border-default);
+  background-color: var(--ow-bg-canvas);
+  font-size: 0.75rem;
+  color: var(--ow-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.ow-step-pill.is-done {
+  background-color: var(--ow-p-emerald-50);
+  border-color: var(--ow-p-emerald-200);
+  color: var(--ow-p-emerald-800);
+  font-weight: 600;
+}
+
+.ow-step-pill.is-current {
+  background-color: var(--ow-action-wash);
+  border-color: var(--ow-action-border);
+  color: var(--ow-action-primary);
+  font-weight: 600;
+}
+
 @media (max-width: 980px) {
   .ow-workbench-grid,
   .ow-split-2 {
@@ -810,4 +1088,32 @@ a {
   .ow-header-inner { padding-top: 10px; padding-bottom: 10px; }
   .ow-spec-row { grid-template-columns: 1fr; gap: 3px; }
   .ow-rate-card { padding: 20px; }
+  .ow-bar-row { grid-template-columns: 88px minmax(0, 1fr) 78px; }
+  .ow-step-strip { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ow-flow-path { animation: none; stroke-dasharray: none; }
+  .ow-viz-pane.is-active,
+  .ow-row-enter,
+  .ow-inline-feedback.is-visible {
+    animation: owFadeOnly 150ms ease both;
+  }
+  .ow-btn,
+  .ow-preset-btn,
+  .ow-viz-tab,
+  .ow-bar-fill {
+    transition-duration: 0ms;
+  }
+  .ow-btn:active:not(:disabled),
+  .ow-preset-btn:active,
+  .ow-viz-tab:active {
+    transform: none;
+  }
+}
+
+@keyframes owFadeOnly {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

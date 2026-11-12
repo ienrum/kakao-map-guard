@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>오커 웍스 카카오 지도 교체·폴백 코드 생성기 | 11월 30일 구형 도메인 종료 즉시 복구</title>
-  <meta name="description" content="기존 웹페이지 HTML에서 앱키·위경도 좌표·컨테이너 ID를 자동 추출하여, 11월 30일 구형 daumcdn 종료에 대응하는 신규 카카오 지도 v2 SDK 및 한도초과 자동 폴백 완성 코드를 즉시 생성합니다." />
+  <title>오커 웍스 | 11월 30일 카카오 지도 종료 대비 교체 코드 자동 생성기</title>
+  <meta name="description" content="기존 홈페이지 HTML만 넣으면 내 매장 좌표 그대로 복붙만 하면 끝나는 신규 카카오 지도 코드와 장애 대비 대체 약도를 10초 만에 만들어 드립니다." />
   <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="오커 웍스 | 카카오 지도 신규 SDK 교체·폴백 완성 코드 자동 생성기" />
-  <meta property="og:description" content="내 기존 HTML의 좌표·컨테이너 ID를 그대로 살려 붙여넣기만 하면 끝나는 신규 SDK + 장애 대체 약도 완성 코드를 자동 생성합니다." />
+  <meta property="og:title" content="11월 30일 구형 카카오 지도 종료, 멈추기 전에 10초 만에 교체하세요 | 오커 웍스" />
+  <meta property="og:description" content="외주 의뢰나 서버 비밀번호 공유 없이 기존 HTML을 넣으면 내 좌표 그대로 새 지도 코드를 만들어 드립니다." />
   <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-monitor.jpg" />
   <link rel="icon" type="image/jpeg" href="assets/brand-avatar.jpg" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -46,201 +46,238 @@
   </script>
 </head>
 <body>
-  <!-- 1. Global Operational Telemetry Rail -->
-  <div class="ow-telemetry-rail" role="region" aria-label="시스템 보안 및 가동 상태">
+  <!-- Slim Trust Rail -->
+  <div class="ow-telemetry-rail" role="region" aria-label="보안 상태">
     <div class="ow-telemetry-inner">
       <div class="ow-telemetry-group">
         <span class="ow-telemetry-item">
           <span class="ow-pulse-dot" aria-hidden="true"></span>
-          <span>마이그레이션 코드 합성 엔진 가동 (<span class="ow-mono">OW-MapPatch 2.6</span>)</span>
+          <span>서버 비밀번호 공유 불필요 · 내 브라우저 안에서만 코드 생성 (<span class="ow-mono">0 Byte 전송</span>)</span>
         </span>
-        <span class="ow-telemetry-item ow-mono">보안 규약: 로컬 브라우저 파싱 · 서버 키·코드 전송 0 Byte</span>
       </div>
       <div class="ow-telemetry-group">
-        <a href="seller-converter/">주력 1순위: 6대 마켓 발주서 통합 엔진 바로가기</a>
-        <a href="design-system/">디자인 규격 (OWDS v2.0)</a>
+        <a href="mailto:oker04897@gmail.com">문의·환불: oker04897@gmail.com</a>
       </div>
     </div>
   </div>
 
-  <!-- 2. Institutional Workspace Header -->
+  <!-- Clean Header -->
   <header class="ow-header">
     <div class="ow-header-inner">
       <a class="ow-brand" href="./">
-        <img class="ow-brand-mark" src="assets/brand-avatar.jpg" alt="오커 웍스 모노그램" width="32" height="32" />
+        <img class="ow-brand-mark" src="assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
         <span class="ow-brand-text">
-          <span class="ow-brand-name">오커 웍스 · Ohker Works</span>
-          <span class="ow-brand-sub">B2B COMMERCE &amp; INFRA SUITE</span>
+          <span class="ow-brand-name">오커 웍스</span>
+          <span class="ow-brand-sub">OHKER WORKS</span>
         </span>
       </a>
 
-      <nav class="ow-suite-nav" aria-label="제품군 전환">
-        <a class="ow-suite-link" href="seller-converter/">6대 마켓 발주서 통합 엔진</a>
-        <a class="ow-suite-link" href="./" aria-current="page">카카오 지도 교체 코드 생성기</a>
-        <a class="ow-suite-link" href="kcp-exec-patch/">PHP exec() 결제 복구 생성기</a>
+      <nav class="ow-suite-nav" aria-label="도구 전환">
+        <a class="ow-suite-link" href="seller-converter/">6대 마켓 발주서 통합</a>
+        <a class="ow-suite-link" href="./" aria-current="page">카카오 지도 코드 복구</a>
       </nav>
 
       <div class="ow-header-actions">
-        <a class="ow-btn ow-btn-secondary" href="#patch-spec">출력 코드 규격</a>
-        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">완성 코드 잠금 해제 (4,900원)</a>
+        <a class="ow-btn ow-btn-primary" href="#offer">완성 코드 패스 월 4,900원</a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- 3. Asymmetric Workbench Split -->
+    <!-- 1. HOOK + 2. STORY & INSTANT DIAGNOSTIC -->
     <section class="ow-hero-section">
       <div class="ow-container">
         <div class="ow-workbench-grid">
-          <!-- Left: Problem Diagnosis & Replacement Output Spec -->
+          <!-- Left: Hook + Short Epiphany Story -->
           <div>
-            <h1 class="ow-display-title">카카오 지도 구형 코드 무료 진단 및 맞춤 교체·폴백 완성 코드 자동 생성기</h1>
+            <h1 class="ow-display-title">11월 30일 구형 카카오 지도 종료, 10초 만에 새 코드로 교체하세요</h1>
             <p class="ow-lead">
-              11월 30일 구형 <code class="ow-mono">daumcdn.net</code> 자산 및 12월 31일 구형 JS SDK 종료로 지도가 백지로 멈추기 전에 해결하세요. 기존 HTML을 붙여 넣으면 종료 대상 개수를 무료로 진단하고, <strong>내 기존 좌표·컨테이너 ID가 그대로 이식된 신규 v2 SDK + 한도초과 대체 약도(폴백) 완성 코드</strong>를 즉시 합성합니다.
+              기존 HTML만 붙여 넣으세요. <strong>내 매장 좌표 그대로 복붙용 최신 코드</strong>로 바꿔 드립니다.
             </p>
 
-            <dl class="ow-spec-dl">
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">무료 정밀 진단</dt>
-                <dd class="ow-spec-dd">종료 대상 호출 건수 판독 + 기존 앱키·위경도 좌표·컨테이너 ID 자동 추출</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">유료 산출물 1</dt>
-                <dd class="ow-spec-dd">추출된 좌표·마커가 그대로 반영된 <span class="ow-mono">dapi.kakao.com/v2</span> 교체 완성 코드</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">유료 산출물 2</dt>
-                <dd class="ow-spec-dd">API 쿼터 초과·도메인 오류 시 빈 화면 대신 뜨는 자동 대체 약도 + 길찾기 폴백</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">통합 패스 정가</dt>
-                <dd class="ow-spec-dd">월 4,900원 (즉시 전체 코드 복사 · <span class="ow-mono">.html</span> 패치 다운로드 무제한 · 언제든 해지)</dd>
-              </div>
-            </dl>
+            <div class="ow-spec-dl" style="padding:16px 18px;margin-bottom:20px;font-size:0.875rem;">
+              <p style="margin:0 0 8px;color:var(--ow-text-primary);">
+                <strong>문제:</strong> 구형 <code class="ow-mono">daumcdn.net</code> 지도는 순차 종료되어 고객에게 빈 화면만 뜨게 됩니다.
+              </p>
+              <p style="margin:0 0 8px;color:var(--ow-text-secondary);">
+                <strong>기존 한계:</strong> 외주 수리는 건당 5~10만 원에 호스팅 비밀번호까지 넘겨야 합니다.
+              </p>
+              <p style="margin:0;color:var(--ow-text-primary);">
+                <strong>해결:</strong> 우측에 기존 코드를 넣으면 <strong>무료 진단</strong> 후, 내 좌표를 살린 최신 코드와 길찾기 안전장치를 즉시 생성합니다.
+              </p>
+            </div>
 
-            <div class="ow-visual-frame">
-              <img src="assets/cover-monitor.jpg" alt="레거시 지도 파라미터 추출 및 신규 SDK 폴백 합성 구조" width="1280" height="720" loading="eager" />
+            <div class="ow-viz-card" id="mapVizCard" data-state="idle">
+              <div class="ow-viz-header">
+                <div class="ow-viz-tabs" role="tablist" aria-label="복구 구조 시각화 전환">
+                  <button type="button" class="ow-viz-tab" role="tab" aria-selected="true" aria-controls="mapPaneFlow" id="mapTabFlow">자동 복구 흐름</button>
+                  <button type="button" class="ow-viz-tab" role="tab" aria-selected="false" aria-controls="mapPaneCompare" id="mapTabCompare">교체 전·후 화면</button>
+                </div>
+                <span class="ow-mono" style="font-size:0.75rem;color:var(--ow-p-emerald-500);" id="mapVizTag">Zero-Outage</span>
+              </div>
+
+              <div class="ow-viz-stage">
+                <!-- Pane 1: Animated Patch & Watchdog Fallback SVG -->
+                <div class="ow-viz-pane is-active" id="mapPaneFlow" role="tabpanel" aria-labelledby="mapTabFlow">
+                  <svg class="ow-pipeline-svg" viewBox="0 0 520 196" role="img" aria-label="구형 daumcdn 지도 코드에서 좌표를 추출해 신규 v2 SDK와 4.5초 먹통 방지 길찾기 카드로 자동 전환하는 흐름도">
+                    <!-- Flow paths -->
+                    <path d="M 146 98 L 198 98" fill="none" stroke="#334155" stroke-width="2" />
+                    <path class="ow-flow-path" d="M 146 98 L 198 98" fill="none" stroke="#2563EB" stroke-width="2" />
+
+                    <path d="M 332 74 C 356 74, 356 54, 378 54" fill="none" stroke="#334155" stroke-width="2" />
+                    <path d="M 332 122 C 356 122, 356 142, 378 142" fill="none" stroke="#334155" stroke-width="2" />
+                    <path class="ow-flow-path" d="M 332 74 C 356 74, 356 54, 378 54" fill="none" stroke="#10B981" stroke-width="2" />
+                    <path class="ow-flow-path" d="M 332 122 C 356 122, 356 142, 378 142" fill="none" stroke="#10B981" stroke-width="2" />
+
+                    <!-- Legacy Input Node -->
+                    <rect x="10" y="56" width="136" height="84" rx="8" fill="#131F35" stroke="#991B1B" />
+                    <text x="78" y="84" text-anchor="middle" fill="#FECACA" font-size="12" font-weight="700" font-family="Pretendard, sans-serif">구형 지도 HTML</text>
+                    <text x="78" y="104" text-anchor="middle" fill="#CBD5E1" font-size="12" font-family="JetBrains Mono, monospace">apis.daum.net</text>
+                    <text x="78" y="124" text-anchor="middle" fill="#FDE68A" font-size="12" font-family="Pretendard, sans-serif">11/30 종료 대상</text>
+
+                    <!-- Parser Node -->
+                    <rect x="198" y="48" width="134" height="100" rx="8" fill="#131F35" stroke="#1D4ED8" stroke-width="1.5" />
+                    <text x="265" y="78" text-anchor="middle" fill="#EFF6FF" font-size="12" font-weight="700" font-family="Pretendard, sans-serif">좌표·ID 자동 추출</text>
+                    <text x="265" y="100" text-anchor="middle" fill="#CBD5E1" font-size="12" font-family="JetBrains Mono, monospace" id="svgMapCoord">LatLng · AppKey</text>
+                    <rect x="214" y="114" width="102" height="22" rx="6" fill="#0B1220" stroke="#065F46" />
+                    <text x="265" y="129" text-anchor="middle" fill="#10B981" font-size="12" font-weight="600" font-family="JetBrains Mono, monospace">서버 전송 0 B</text>
+
+                    <!-- Dual Safe Output Nodes -->
+                    <rect x="378" y="20" width="132" height="68" rx="8" fill="#065F46" fill-opacity="0.28" stroke="#10B981" stroke-width="1.5" />
+                    <text x="444" y="46" text-anchor="middle" fill="#ECFDF5" font-size="12" font-weight="700" font-family="Pretendard, sans-serif">신규 v2 비동기 지도</text>
+                    <text x="444" y="68" text-anchor="middle" fill="#A7F3D0" font-size="12" font-family="JetBrains Mono, monospace">dapi.kakao.com</text>
+
+                    <rect x="378" y="108" width="132" height="68" rx="8" fill="#131F35" stroke="#2563EB" stroke-width="1.5" />
+                    <text x="444" y="134" text-anchor="middle" fill="#EFF6FF" font-size="12" font-weight="700" font-family="Pretendard, sans-serif">4.5초 먹통 감시망</text>
+                    <text x="444" y="156" text-anchor="middle" fill="#DBEAFE" font-size="12" font-family="Pretendard, sans-serif">길찾기 버튼 자동 전환</text>
+                  </svg>
+                </div>
+
+                <!-- Pane 2: Before vs After Customer Screen Mockup -->
+                <div class="ow-viz-pane" id="mapPaneCompare" role="tabpanel" aria-labelledby="mapTabCompare">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.75rem;">
+                    <div style="padding:12px;border-radius:var(--ow-radius-xs);background-color:var(--ow-bg-telemetry-raised);border:1px solid var(--ow-p-crimson-800);">
+                      <div style="color:var(--ow-p-crimson-200);font-weight:700;margin-bottom:6px;">방치 시 (11/30 이후)</div>
+                      <div style="min-height:68px;padding:10px 12px;border-radius:var(--ow-radius-xs);background-color:var(--ow-bg-telemetry);border:1px dashed var(--ow-border-on-dark);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ow-text-on-dark-muted);">
+                        빈 회색 화면 노출 (길찾기 불가)
+                      </div>
+                    </div>
+                    <div style="padding:12px;border-radius:var(--ow-radius-xs);background-color:var(--ow-bg-telemetry-raised);border:1px solid var(--ow-p-emerald-800);">
+                      <div style="color:var(--ow-p-emerald-200);font-weight:700;margin-bottom:6px;">교체 후 (상시 정상 작동)</div>
+                      <div style="min-height:68px;padding:10px 12px;border-radius:var(--ow-radius-xs);background-color:var(--ow-bg-telemetry);border:1px solid var(--ow-p-emerald-800);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;">
+                        <span style="color:var(--ow-text-on-dark);font-weight:600;" id="previewPlaceLabel">매장 위치 정상 표시</span>
+                        <span class="ow-mono" style="color:var(--ow-p-emerald-500);font-size:0.75rem;">한도 초과 시 길찾기 자동 연결</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="ow-visual-caption">
-                <span>AST 정규식 파라미터 추출 및 무중단 폴백 래퍼 자동 합성</span>
-                <span class="ow-mono">ZERO-OUTAGE PATCH</span>
+                <span>무료 위험 진단 + 신규 v2 SDK 및 장애 대체 약도 자동 생성</span>
+                <span class="ow-mono">10s Auto-Patch</span>
               </div>
             </div>
           </div>
 
-          <!-- Right: Live Diagnostic + Custom Replacement Code Generator -->
+          <!-- Right: Live Diagnostic & Patch Generator -->
           <div class="ow-console" aria-labelledby="patch-console-title">
             <div class="ow-console-header">
               <span class="ow-console-title" id="patch-console-title">
                 <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg>
-                기존 HTML 진단 및 맞춤 교체 코드 합성 워크벤치
+                내 사이트 지도 코드 무료 진단 및 새 코드 만들기
               </span>
-              <span class="ow-console-meta" id="patchTelemetry">무료 진단 활성 · PRO 코드 잠금 상태</span>
+              <span class="ow-chip ow-chip-neutral" id="auditCountBadge">입력 대기</span>
             </div>
 
             <div class="ow-console-body">
+              <div class="ow-step-strip" aria-label="복구 진행 단계">
+                <div class="ow-step-pill is-current" id="mapStep1">
+                  <span class="ow-mono">1</span><span>기존 HTML 입력</span>
+                </div>
+                <div class="ow-step-pill" id="mapStep2">
+                  <span class="ow-mono">2</span><span>무료 위험 진단</span>
+                </div>
+                <div class="ow-step-pill" id="mapStep3">
+                  <span class="ow-mono">3</span><span>완성 코드 복사</span>
+                </div>
+              </div>
               <div class="ow-console-toolbar">
                 <div class="ow-preset-group">
-                  <button type="button" class="ow-preset-btn" id="btnSampleHospital">병원·매장 구형 약도 HTML 샘플 시연</button>
-                  <button type="button" class="ow-preset-btn" id="btnClearHtml">초기화</button>
+                  <button type="button" class="ow-preset-btn" id="btnSampleHospital">병원·매장 구형 코드로 1초 시연</button>
+                  <button type="button" class="ow-preset-btn" id="btnClearHtml">비우기</button>
                 </div>
-                <span class="ow-chip ow-chip-neutral" id="auditCountBadge">소스 입력 대기</span>
+                <span class="ow-console-meta" id="patchTelemetry">무료 진단 활성</span>
               </div>
 
-              <label for="legacyHtmlInput" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--ow-text-secondary);margin-bottom:6px;">
-                기존 오시는 길 페이지의 지도 영역 HTML·스크립트 붙여넣기
-              </label>
-              <textarea id="legacyHtmlInput" class="ow-code-input" spellcheck="false" placeholder="<div id=&quot;map&quot; style=&quot;width:100%;height:380px;&quot;></div>&#10;<script src=&quot;http://apis.daum.net/maps/maps3.js?apikey=YOUR_APP_KEY&quot;></script>&#10;<script>...new daum.maps.LatLng(37.498095, 127.027610)...</script>"></textarea>
+              <textarea id="legacyHtmlInput" class="ow-code-input" spellcheck="false" placeholder="여기에 기존 오시는 길 페이지의 지도 HTML 코드를 붙여 넣으세요."></textarea>
 
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                <span style="font-size:0.8125rem;color:var(--ow-text-muted);">앱키·좌표·컨테이너 ID를 브라우저 내부에서 추출해 교체 코드를 조립합니다.</span>
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:10px;">
                 <button type="button" class="ow-btn ow-btn-primary" id="btnSynthesize">
-                  무료 진단 및 맞춤 교체 코드 합성
+                  무료 진단하고 새 교체 코드 만들기
                 </button>
               </div>
 
-              <!-- Step 1: Free Extraction & Diagnostic Ledger -->
-              <div style="margin-top:18px;border-top:1px solid var(--ow-border-default);padding-top:16px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
-                  <strong style="font-size:0.875rem;">1단계: 무료 진단 및 추출 파라미터 원장</strong>
-                  <span class="ow-mono" style="color:var(--ow-text-muted);" id="extractedSummary">추출 대기 중</span>
-                </div>
-
-                <div class="ow-ledger-sheet" style="margin-bottom:16px;">
+              <!-- Diagnostic & Output -->
+              <div style="margin-top:16px;border-top:1px solid var(--ow-border-default);padding-top:14px;">
+                <div class="ow-ledger-sheet" style="margin-bottom:14px;">
                   <div class="ow-table-wrap">
                     <table class="ow-table">
                       <thead>
                         <tr>
-                          <th>항목</th>
-                          <th>검출 상태</th>
-                          <th>기존 코드에서 추출된 값</th>
+                          <th>진단 항목</th>
+                          <th>상태</th>
+                          <th>추출 결과</th>
                         </tr>
                       </thead>
                       <tbody id="extractTableBody">
                         <tr>
-                          <td style="font-weight:600;">종료 대상 호출 (<span class="ow-mono">daumcdn / apis.daum</span>)</td>
+                          <td style="font-weight:600;">종료 위험 코드</td>
                           <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td style="color:var(--ow-text-muted);">샘플 버튼 또는 기존 HTML 입력 시 즉시 계산됩니다.</td>
-                        </tr>
-                        <tr>
-                          <td style="font-weight:600;">추출 컨테이너 · 크기</td>
-                          <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td class="ow-mono" style="color:var(--ow-text-muted);">-</td>
-                        </tr>
-                        <tr>
-                          <td style="font-weight:600;">추출 위경도 좌표 · 레벨</td>
-                          <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td class="ow-mono" style="color:var(--ow-text-muted);">-</td>
+                          <td style="color:var(--ow-text-muted);">상단 <strong>[병원·매장 구형 코드로 1초 시연]</strong>을 눌러 보세요.</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
 
-                <!-- Step 2: Generated Replacement + Fallback Bundle (Locked until PASS-2026-PRO) -->
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-                  <strong style="font-size:0.875rem;">2단계: 자동 합성된 신규 SDK + 무중단 폴백 완성 코드</strong>
+                  <strong style="font-size:0.875rem;">자동 완성된 새 지도 + 먹통 방지 코드</strong>
                   <div style="display:flex;gap:8px;">
-                    <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPatch" style="padding:7px 12px;min-height:34px;" disabled>전체 코드 복사</button>
-                    <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPatch" style="padding:7px 12px;min-height:34px;" disabled>.html 패치 다운로드</button>
+                    <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPatch" style="padding:7px 12px;min-height:34px;" disabled>전체 복사</button>
+                    <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPatch" style="padding:7px 12px;min-height:34px;" disabled>.html 저장</button>
                   </div>
                 </div>
 
                 <div class="ow-code-preview-box">
-                  <pre class="ow-code-pre" id="generatedCodePre">&lt;!-- 기존 HTML을 입력하고 [무료 진단 및 맞춤 교체 코드 합성]을 실행하면
-     추출된 앱키·위경도·컨테이너 ID가 적용된 신규 SDK + 폴백 완성 코드가 이곳에 생성됩니다. --&gt;</pre>
+                  <pre class="ow-code-pre" id="generatedCodePre">&lt;!-- 위 버튼을 누르면 내 매장 좌표가 그대로 들어간 새 코드가 여기에 생성됩니다. --&gt;</pre>
 
                   <div class="ow-code-gate-overlay" id="codeGateOverlay">
-                    <div style="font-size:0.8125rem;color:var(--ow-text-on-dark-muted);max-width:52ch;">
-                      <strong style="color:var(--ow-text-on-dark);">전체 완성 코드 잠금 해제 (월 4,900원 통합 패스):</strong>
-                      리틀리 결제 직후 화면에 안내되는 패스 코드를 입력하면 마스킹 없이 전체 교체·폴백 코드 복사 및 <span class="ow-mono">.html</span> 다운로드가 즉시 열립니다.
+                    <div style="font-size:0.8125rem;color:var(--ow-text-on-dark-muted);">
+                      <strong style="color:var(--ow-text-on-dark);">패스 코드 입력 시 전체 완성 코드가 즉시 열립니다.</strong>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                      <input type="text" id="mapPassInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="패스 코드 입력" />
-                      <button type="button" class="ow-btn ow-btn-secondary" id="btnUnlockMapPass" style="min-height:38px;padding:8px 14px;">코드 인증</button>
-                      <a class="ow-btn ow-btn-primary" style="min-height:38px;padding:8px 14px;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">패스 발급받기</a>
+                      <input type="text" id="mapPassInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="패스 코드" />
+                      <button type="button" class="ow-btn ow-btn-secondary" id="btnUnlockMapPass" style="min-height:38px;padding:8px 12px;">잠금 해제</button>
                     </div>
                   </div>
                 </div>
+                <div class="ow-inline-feedback" id="mapFeedback" role="status" aria-live="polite"></div>
               </div>
-            </div>
-
-            <div class="ow-console-footer">
-              <span>포함 기능: HTTPS 비동기 로더 · <span class="ow-mono">kakao.maps.load</span> 래퍼 · 쿼터 초과 시 카카오/네이버 길찾기 카드 자동 전환</span>
-              <span class="ow-mono">외부 전송: 0 B</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. Output Specification & Cost Comparison -->
-    <section class="ow-section" id="patch-spec">
+    <!-- 3. THE OFFER (Clear Offer Stack + Risk Reversal) -->
+    <section class="ow-section" id="offer">
       <div class="ow-container">
         <div class="ow-section-head">
           <div>
-            <h2 class="ow-section-title">외주 수리 의뢰 대비 자동 코드 생성기 비교 명세</h2>
+            <h2 class="ow-section-title">진단은 무료, 완성 코드 복사는 월 4,900원 패스로 끝내세요</h2>
             <p class="ow-section-desc">
-              단순히 고장 났다는 알림만 보내지 않고, 개발자 없이 그대로 복사해 붙여 넣으면 작동하는 완성형 교체 코드와 장애 대비 대체 약도 UI를 직접 만들어 드립니다.
+              외주비 1/10 가격 · 서버 비밀번호 공유 불필요 · 7일 100% 환불 보증
             </p>
           </div>
         </div>
@@ -249,81 +286,113 @@
           <div class="ow-rate-card">
             <div>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <h3 style="margin:0;font-size:1.125rem;font-weight:700;">오커 웍스 통합 패스 (코드 생성 + 발주 통합)</h3>
-                <span class="ow-chip ow-chip-ok">고정 정가 · 즉시 해제</span>
+                <h3 style="margin:0;font-size:1.125rem;font-weight:700;">오커 웍스 무제한 통합 패스</h3>
+                <span class="ow-chip ow-chip-ok">인상 없는 고정 정가</span>
               </div>
+
               <div class="ow-price-figure">
                 <span class="ow-price-amount">월 4,900원</span>
-                <span class="ow-price-unit">/ 도메인·생성 횟수 무제한 (VAT 포함)</span>
+                <span class="ow-price-unit">/ 사이트·지점 수 무제한 (VAT 포함)</span>
               </div>
-              <p style="margin:0;font-size:0.84375rem;color:var(--ow-text-muted);">
-                한 번 패스를 발급받으면 여러 거래처·지점 홈페이지의 지도 교체 코드를 무제한 생성할 수 있으며 언제든 원클릭 해지 가능합니다.
-              </p>
 
               <ul class="ow-check-list">
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span>기존 HTML 내 위경도·컨테이너 크기·마커명을 유지한 신규 v2 SDK 완성 코드 생성</span>
+                  <span><strong>복붙용 최신 지도 코드:</strong> 내 좌표·영역 크기가 이식된 신규 v2 SDK 코드 즉시 복사</span>
                 </li>
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span>일일 쿼터 초과·키 등록 누락 시 빈 박스 대신 뜨는 반응형 대체 약도·길찾기 폴백 내장</span>
+                  <span><strong>먹통 방지 폴백 포함:</strong> API 한도 초과 시 빈 화면 대신 카카오·네이버 길찾기 자동 표시</span>
                 </li>
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span>동일 패스 코드로 <a href="seller-converter/">6대 마켓 발주서 무제한 통합 엔진</a> 동시 사용</span>
+                  <span><strong>보너스 도구 포함:</strong> 동일 패스로 <a href="seller-converter/">6대 마켓 발주서 통합기</a> 동시 이용</span>
                 </li>
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span>적용 후 정상 작동하지 않을 경우 7일 이내 조건 없는 100% 전액 환불 보장</span>
+                  <span><strong>7일 100% 환불 보증:</strong> 적용 후 해결되지 않으면 조건 없이 전액 환불</span>
                 </li>
               </ul>
             </div>
 
             <div>
               <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">
-                월 4,900원 패스로 완성 코드 즉시 내려받기
+                월 4,900원 패스로 완성 코드 바로 복사하기
               </a>
             </div>
           </div>
 
-          <div class="ow-ledger-sheet">
-            <div class="ow-console-header">
-              <span class="ow-console-title">단건 외주 수리 vs 오커 웍스 자동 생성기 원가 비교</span>
-              <span class="ow-console-meta">해결 방식 대조</span>
+          <div class="ow-ledger-sheet" style="display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div class="ow-console-header">
+                <span class="ow-console-title">외주 수리 의뢰 vs 오커 웍스 패스</span>
+                <span class="ow-console-meta">실측 비교</span>
+              </div>
+
+              <!-- Ranked Horizontal Bar Visualization (GPU scaleX) -->
+              <div class="ow-bar-group" aria-label="해결 시간 및 비용 비교 그래프">
+                <div class="ow-bar-metric">
+                  <div class="ow-bar-meta">
+                    <strong style="color:var(--ow-text-primary);">교체 완료까지 걸리는 시간</strong>
+                    <span class="ow-chip ow-chip-ok">즉시 해결</span>
+                  </div>
+                  <div class="ow-bar-row">
+                    <span style="color:var(--ow-text-muted);">프리랜서 외주</span>
+                    <div class="ow-bar-track"><div class="ow-bar-fill ow-bar-fill-muted" style="--bar-scale:1;"></div></div>
+                    <span style="text-align:right;color:var(--ow-text-muted);">1~3일 대기</span>
+                  </div>
+                  <div class="ow-bar-row">
+                    <strong style="color:var(--ow-action-primary);">오커 웍스</strong>
+                    <div class="ow-bar-track"><div class="ow-bar-fill ow-bar-fill-primary" style="--bar-scale:0.04;"></div></div>
+                    <strong style="text-align:right;color:var(--ow-action-primary);">10초 완성</strong>
+                  </div>
+                </div>
+
+                <div class="ow-bar-metric">
+                  <div class="ow-bar-meta">
+                    <strong style="color:var(--ow-text-primary);">수리 비용 (지점 무제한)</strong>
+                    <span class="ow-chip ow-chip-ok">90% 절감</span>
+                  </div>
+                  <div class="ow-bar-row">
+                    <span style="color:var(--ow-text-muted);">건당 외주비</span>
+                    <div class="ow-bar-track"><div class="ow-bar-fill ow-bar-fill-muted" style="--bar-scale:1;"></div></div>
+                    <span style="text-align:right;color:var(--ow-text-muted);">평균 75,000원</span>
+                  </div>
+                  <div class="ow-bar-row">
+                    <strong style="color:var(--ow-p-emerald-800);">오커 웍스</strong>
+                    <div class="ow-bar-track"><div class="ow-bar-fill ow-bar-fill-emerald" style="--bar-scale:0.07;"></div></div>
+                    <strong style="text-align:right;color:var(--ow-p-emerald-800);">월 4,900원</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ow-table-wrap" style="border-top:1px solid var(--ow-border-default);margin-top:8px;padding-top:12px;">
+                <table class="ow-table">
+                  <thead>
+                    <tr>
+                      <th>항목</th>
+                      <th>프리랜서 외주 수리</th>
+                      <th>오커 웍스 코드 생성기</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">계정 보안</td>
+                      <td style="color:var(--ow-text-muted);">호스팅·FTP 비밀번호 전달 필요</td>
+                      <td><strong>비밀번호 공유 0건</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">한도 초과 대비</td>
+                      <td style="color:var(--ow-text-muted);">단순 주소만 교체 (오류 시 빈 화면)</td>
+                      <td><strong>4.5초 먹통 감지 길찾기 폴백 포함</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="ow-table-wrap">
-              <table class="ow-table">
-                <thead>
-                  <tr>
-                    <th>항목</th>
-                    <th>프리랜서 단건 수리 외주</th>
-                    <th>오커 웍스 자동 코드 생성기</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="font-weight:600;">소요 시간</td>
-                    <td style="color:var(--ow-text-muted);">견적 문의 및 작업 완료까지 1~3일</td>
-                    <td>코드 붙여넣기 후 <strong>0.2초 즉시 생성</strong></td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">서버 보안</td>
-                    <td style="color:var(--ow-text-muted);">FTP·호스팅 관리자 비밀번호 전달 필요</td>
-                    <td>비밀번호 공유 0건 (완성 스니펫만 교체)</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">장애 폴백 대비</td>
-                    <td style="color:var(--ow-text-muted);">단순 스크립트 주소만 교체 (쿼터 초과 시 먹통)</td>
-                    <td>자동 타임아웃 감지 + 카카오/네이버 길찾기 폴백 포함</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">지불 비용</td>
-                    <td class="ow-tnum" style="color:var(--ow-text-muted);">건당 50,000원 ~ 150,000원</td>
-                    <td class="ow-tnum" style="font-weight:700;color:var(--ow-action-primary);">월 4,900원 (지점·사이트 무제한 생성)</td>
-                  </tr>
-                </tbody>
-              </table>
+
+            <div style="padding:12px 12px 4px;font-size:0.84375rem;color:var(--ow-text-secondary);">
+              <strong>이용 순서:</strong> 1) 위에서 기존 HTML 무료 진단 → 2) 결제 직후 패스 코드 확인 → 3) 코드 입력 즉시 전체 복사 후 교체
             </div>
           </div>
         </div>
@@ -335,14 +404,13 @@
     <div class="ow-container">
       <div class="ow-footer-grid">
         <div>
-          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 커머스 발주 데이터 정규화 및 웹 인프라 코드 복구 유틸리티<br />
-          <span>고객지원 및 환불 접수: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a> (평일 당일 처리 · 7일 이내 100% 환불 보장)</span>
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
         </div>
         <div class="ow-footer-links">
-          <a href="seller-converter/">6대 마켓 발주서 통합 엔진</a>
-          <a href="./">카카오 지도 교체 코드 생성기</a>
-          <a href="design-system/">디자인 시스템 (OWDS v2.0)</a>
-          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 및 결제 관리</a>
+          <a href="seller-converter/">6대 마켓 발주서 통합</a>
+          <a href="./">카카오 지도 코드 복구</a>
+          <a href="design-system/">디자인 규격</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
         </div>
       </div>
     </div>
@@ -356,7 +424,6 @@
 
       var fullGeneratedCode = '';
       var sampleHtml = [
-        '<!-- 오시는 길 구형 지도 코드 (2026.11.30 / 12.31 종료 대상 포함) -->',
         '<div id="clinic_map" style="width:100%;height:380px;"></div>',
         '<script type="text/javascript" src="http://apis.daum.net/maps/maps3.js?apikey=8f92a10c77b3demo99102"><\/script>',
         '<script>',
@@ -371,13 +438,56 @@
       var input = document.getElementById('legacyHtmlInput');
       var extractTableBody = document.getElementById('extractTableBody');
       var auditCountBadge = document.getElementById('auditCountBadge');
-      var extractedSummary = document.getElementById('extractedSummary');
       var generatedCodePre = document.getElementById('generatedCodePre');
       var codeGateOverlay = document.getElementById('codeGateOverlay');
       var patchTelemetry = document.getElementById('patchTelemetry');
       var mapPassInput = document.getElementById('mapPassInput');
       var btnCopyPatch = document.getElementById('btnCopyPatch');
       var btnDownloadPatch = document.getElementById('btnDownloadPatch');
+      var mapVizCard = document.getElementById('mapVizCard');
+      var svgMapCoord = document.getElementById('svgMapCoord');
+      var mapVizTag = document.getElementById('mapVizTag');
+      var previewPlaceLabel = document.getElementById('previewPlaceLabel');
+      var mapFeedback = document.getElementById('mapFeedback');
+      var mapStep1 = document.getElementById('mapStep1');
+      var mapStep2 = document.getElementById('mapStep2');
+      var mapStep3 = document.getElementById('mapStep3');
+
+      function showMapFeedback(msg, tone) {
+        mapFeedback.className = 'ow-inline-feedback is-visible ' + (tone || 'is-ok');
+        mapFeedback.textContent = msg;
+      }
+
+      /* Accessible Tab Switcher (Click + Arrow Keys) */
+      var mapTabs = [document.getElementById('mapTabFlow'), document.getElementById('mapTabCompare')];
+      var mapPanes = [document.getElementById('mapPaneFlow'), document.getElementById('mapPaneCompare')];
+      function selectMapTab(idx) {
+        mapTabs.forEach(function(t, i) {
+          t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+          mapPanes[i].classList.toggle('is-active', i === idx);
+        });
+      }
+      mapTabs.forEach(function(tab, idx) {
+        tab.addEventListener('click', function() { selectMapTab(idx); });
+        tab.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            var next = idx === 0 ? 1 : 0;
+            selectMapTab(next);
+            mapTabs[next].focus();
+          }
+        });
+      });
+
+      /* Pause SVG flow animation when offscreen */
+      if ('IntersectionObserver' in window && mapVizCard) {
+        var mapIo = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            mapVizCard.setAttribute('data-paused', entry.isIntersecting ? 'false' : 'true');
+          });
+        }, { threshold: 0.05 });
+        mapIo.observe(mapVizCard);
+      }
 
       function escapeHtml(s) {
         return String(s || '').replace(/[&<>"']/g, function(m) {
@@ -387,7 +497,7 @@
 
       function buildReplacementCode(params) {
         return [
-          '<!-- [오커 웍스 자동 생성 패치] 카카오 지도 v2 HTTPS 비동기 SDK + 장애 자동 대체 약도 폴백 -->',
+          '<!-- [오커 웍스 자동 생성] 카카오 지도 v2 비동기 SDK + 먹통 방지 길찾기 폴백 -->',
           '<div id="' + params.containerId + '" style="width:' + params.width + ';height:' + params.height + ';position:relative;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;background:#F8FAFC;"></div>',
           '<script>',
           '(function() {',
@@ -400,27 +510,27 @@
           '    placeName: "' + params.placeName.replace(/"/g, '\\"') + '"',
           '  };',
           '',
-          '  function renderFallbackCard(reason) {',
+          '  function renderFallbackCard() {',
           '    var el = document.getElementById(MAP_CONFIG.containerId);',
           '    if (!el) return;',
           '    var kakaoUrl = "https://map.kakao.com/link/to/" + encodeURIComponent(MAP_CONFIG.placeName) + "," + MAP_CONFIG.lat + "," + MAP_CONFIG.lng;',
           '    var naverUrl = "https://map.naver.com/p/search/" + encodeURIComponent(MAP_CONFIG.placeName);',
           '    el.innerHTML = \'<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:Pretendard,sans-serif;color:#0F172A;">\' +',
-          '      \'<strong style="font-size:18px;margin-bottom:6px;">\' + MAP_CONFIG.placeName + \' 오시는 길 안내</strong>\' +',
-          '      \'<p style="margin:0 0 16px;font-size:13px;color:#475569;">위경도 좌표(\' + MAP_CONFIG.lat + \', \' + MAP_CONFIG.lng + \') 기준 바로 길찾기를 실행할 수 있습니다.</p>\' +',
+          '      \'<strong style="font-size:18px;margin-bottom:6px;">\' + MAP_CONFIG.placeName + \' 오시는 길</strong>\' +',
+          '      \'<p style="margin:0 0 16px;font-size:13px;color:#475569;">아래 버튼을 누르면 바로 길찾기가 연결됩니다.</p>\' +',
           '      \'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">\' +',
-          '      \'<a href="\' + kakaoUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;background:#1D4ED8;color:#FFFFFF;text-decoration:none;font-size:13px;font-weight:600;">카카오맵 길찾기 바로열기</a>\' +',
-          '      \'<a href="\' + naverUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#0F172A;text-decoration:none;font-size:13px;font-weight:600;">네이버지도 검색</a>\' +',
+          '      \'<a href="\' + kakaoUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;background:#1D4ED8;color:#FFFFFF;text-decoration:none;font-size:13px;font-weight:600;">카카오맵 길찾기</a>\' +',
+          '      \'<a href="\' + naverUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#0F172A;text-decoration:none;font-size:13px;font-weight:600;">네이버지도 보기</a>\' +',
           '      \'</div></div>\';',
           '  }',
           '',
-          '  var watchdog = setTimeout(function() { renderFallbackCard("timeout"); }, 4500);',
+          '  var watchdog = setTimeout(renderFallbackCard, 4500);',
           '  var sdk = document.createElement("script");',
           '  sdk.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + encodeURIComponent(MAP_CONFIG.appKey) + "&autoload=false";',
           '  sdk.async = true;',
-          '  sdk.onerror = function() { clearTimeout(watchdog); renderFallbackCard("sdk_error"); };',
+          '  sdk.onerror = function() { clearTimeout(watchdog); renderFallbackCard(); };',
           '  sdk.onload = function() {',
-          '    if (!window.kakao || !window.kakao.maps) { clearTimeout(watchdog); renderFallbackCard("no_maps"); return; }',
+          '    if (!window.kakao || !window.kakao.maps) { clearTimeout(watchdog); renderFallbackCard(); return; }',
           '    window.kakao.maps.load(function() {',
           '      clearTimeout(watchdog);',
           '      var target = document.getElementById(MAP_CONFIG.containerId);',
@@ -444,11 +554,10 @@
           codeGateOverlay.style.display = 'none';
           btnCopyPatch.disabled = false;
           btnDownloadPatch.disabled = false;
-          patchTelemetry.textContent = 'PRO 패스 인증 완료 · 무제한 코드 복사·다운로드 활성';
+          patchTelemetry.textContent = 'PRO 잠금 해제됨';
         } else {
           var lines = fullGeneratedCode.split('\n');
-          var visibleHead = lines.slice(0, 11).join('\n');
-          generatedCodePre.textContent = visibleHead + '\n\n  /* ── 이하 34줄 (쿼터 초과 자동 폴백 카드 + HTTPS 비동기 SDK 로더 + 마커 바인딩) 잠금 상태 ──\n     아래 패스 코드 입력 시 전체 완성 코드가 즉시 표시되며 .html 파일로 내려받을 수 있습니다. */';
+          generatedCodePre.textContent = lines.slice(0, 10).join('\n') + '\n\n  /* ── 이하 35줄 (먹통 방지 길찾기 폴백 + 최신 v2 로더) 잠금 상태 ── */';
           codeGateOverlay.style.display = 'flex';
           btnCopyPatch.disabled = true;
           btnDownloadPatch.disabled = true;
@@ -459,7 +568,7 @@
         var raw = (input.value || '').trim();
         if (!raw) {
           auditCountBadge.className = 'ow-chip ow-chip-warn';
-          auditCountBadge.textContent = '기존 HTML을 입력해 주세요';
+          auditCountBadge.textContent = 'HTML을 넣어 주세요';
           return;
         }
 
@@ -484,23 +593,28 @@
 
         var dangerCount = legacyMatches.length;
         auditCountBadge.className = dangerCount > 0 ? 'ow-chip ow-chip-crit' : 'ow-chip ow-chip-ok';
-        auditCountBadge.textContent = dangerCount > 0 ? ('종료·차단 위험 ' + dangerCount + '건 검출') : '종료 대상 미검출 (폴백 래퍼 생성 완료)';
-        extractedSummary.textContent = '#' + params.containerId + ' · (' + params.lat + ', ' + params.lng + ')';
+        auditCountBadge.textContent = dangerCount > 0 ? ('위험 ' + dangerCount + '건 발견') : '새 코드 준비 완료';
+
+        mapVizCard.setAttribute('data-state', 'active');
+        svgMapCoord.textContent = params.lat + ', ' + params.lng;
+        mapVizTag.textContent = '진단 완료 · 위험 ' + dangerCount + '건';
+        previewPlaceLabel.textContent = params.placeName + ' 정상 연결';
+        mapStep1.className = 'ow-step-pill is-done';
+        mapStep2.className = 'ow-step-pill is-done';
+        mapStep3.className = isPro ? 'ow-step-pill is-done' : 'ow-step-pill is-current';
 
         extractTableBody.innerHTML = [
-          '<tr><td style="font-weight:600;">종료 대상 호출 (<span class="ow-mono">daumcdn / apis.daum / http</span>)</td>' +
-            '<td><span class="ow-chip ' + (dangerCount > 0 ? 'ow-chip-crit' : 'ow-chip-ok') + '">' + (dangerCount > 0 ? (dangerCount + '건 위험') : '0건 정상') + '</span></td>' +
-            '<td>' + (dangerCount > 0 ? ('검출 항목: <code class="ow-mono">' + escapeHtml(legacyMatches.join(', ')) + '</code>') : '구형 도메인 직접 호출 없음') + '</td></tr>',
-          '<tr><td style="font-weight:600;">추출 컨테이너 · 앱키</td>' +
-            '<td><span class="ow-chip ow-chip-ok">이식 완료</span></td>' +
-            '<td class="ow-mono">id="' + escapeHtml(params.containerId) + '" · height:' + escapeHtml(params.height) + ' · key:' + escapeHtml(params.appKey.slice(0, 10)) + '...</td></tr>',
-          '<tr><td style="font-weight:600;">추출 위경도 좌표 · 장소명</td>' +
-            '<td><span class="ow-chip ow-chip-ok">이식 완료</span></td>' +
-            '<td class="ow-mono">LatLng(' + escapeHtml(params.lat) + ', ' + escapeHtml(params.lng) + ') · level ' + escapeHtml(params.level) + ' · "' + escapeHtml(params.placeName) + '"</td></tr>'
+          '<tr class="ow-row-enter" style="animation-delay:0ms;"><td style="font-weight:600;">종료·차단 위험</td>' +
+            '<td><span class="ow-chip ' + (dangerCount > 0 ? 'ow-chip-crit' : 'ow-chip-ok') + '">' + (dangerCount > 0 ? (dangerCount + '건 교체 필요') : '이상 없음') + '</span></td>' +
+            '<td class="ow-mono">' + (dangerCount > 0 ? escapeHtml(legacyMatches.join(', ')) : '구형 호출 없음') + '</td></tr>',
+          '<tr class="ow-row-enter" style="animation-delay:40ms;"><td style="font-weight:600;">추출된 내 매장 정보</td>' +
+            '<td><span class="ow-chip ow-chip-ok">자동 반영됨</span></td>' +
+            '<td class="ow-mono">#' + escapeHtml(params.containerId) + ' · (' + escapeHtml(params.lat) + ', ' + escapeHtml(params.lng) + ') · ' + escapeHtml(params.placeName) + '</td></tr>'
         ].join('');
 
         fullGeneratedCode = buildReplacementCode(params);
         renderCodeOutput();
+        showMapFeedback('진단이 완료되었습니다. 내 매장 좌표(' + params.lat + ', ' + params.lng + ')가 반영된 교체 코드가 준비되었습니다.', 'is-ok');
       }
 
       document.getElementById('btnSampleHospital').addEventListener('click', function() {
@@ -512,8 +626,15 @@
         input.value = '';
         fullGeneratedCode = '';
         auditCountBadge.className = 'ow-chip ow-chip-neutral';
-        auditCountBadge.textContent = '소스 입력 대기';
-        generatedCodePre.textContent = '<!-- 기존 HTML을 입력하고 [무료 진단 및 맞춤 교체 코드 합성]을 실행하세요. -->';
+        auditCountBadge.textContent = '입력 대기';
+        mapVizCard.setAttribute('data-state', 'idle');
+        svgMapCoord.textContent = 'LatLng · AppKey';
+        mapVizTag.textContent = 'Zero-Outage';
+        mapStep1.className = 'ow-step-pill is-current';
+        mapStep2.className = 'ow-step-pill';
+        mapStep3.className = 'ow-step-pill';
+        mapFeedback.className = 'ow-inline-feedback';
+        generatedCodePre.textContent = '<!-- 위 버튼을 누르면 내 매장 좌표가 그대로 들어간 새 코드가 생성됩니다. -->';
       });
 
       document.getElementById('btnSynthesize').addEventListener('click', runSynthesize);
@@ -529,17 +650,20 @@
           } else {
             renderCodeOutput();
           }
-          alert('패스가 인증되어 전체 교체·폴백 완성 코드가 잠금 해제되었습니다.');
+          mapStep3.className = 'ow-step-pill is-done';
+          showMapFeedback('잠금이 해제되었습니다. 이제 전체 코드를 복사해 바로 적용하세요.', 'is-ok');
         } else {
-          alert('유효하지 않은 패스 코드입니다. 리틀리 결제 완료 안내창의 코드를 확인해 주세요.');
+          showMapFeedback('패스 코드를 다시 확인해 주세요. 결제 완료 화면의 코드를 입력하면 즉시 열립니다.', 'is-warn');
+          mapPassInput.focus();
         }
       });
 
       btnCopyPatch.addEventListener('click', function() {
         if (!isPro || !fullGeneratedCode) return;
         navigator.clipboard.writeText(fullGeneratedCode).then(function() {
-          btnCopyPatch.textContent = '복사 완료';
-          setTimeout(function() { btnCopyPatch.textContent = '전체 코드 복사'; }, 1800);
+          btnCopyPatch.textContent = '복사됨';
+          showMapFeedback('완성 코드가 클립보드에 복사되었습니다. 기존 지도 영역에 붙여 넣으세요.', 'is-ok');
+          setTimeout(function() { btnCopyPatch.textContent = '전체 복사'; }, 1800);
         });
       });
 
@@ -548,13 +672,12 @@
         var blob = new Blob([fullGeneratedCode], { type: 'text/html;charset=utf-8;' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'ohker_kakao_map_v2_patch.html';
+        a.download = 'ohker_kakao_map_patch.html';
         a.click();
+        showMapFeedback('ohker_kakao_map_patch.html 파일 저장이 완료되었습니다.', 'is-ok');
       });
 
-      if (isPro) {
-        patchTelemetry.textContent = 'PRO 패스 인증 완료 · 무제한 코드 복사·다운로드 활성';
-      }
+      if (isPro) { patchTelemetry.textContent = 'PRO 잠금 해제됨'; }
     })();
   </script>
 </body>
