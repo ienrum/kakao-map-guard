@@ -55,12 +55,18 @@
       <h2 style="margin:0 0 6px;">무제한 대량 변환 &amp; 도매처별 커스텀 프리셋 패스</h2>
       <div class="price">첫 달 체험 1,900원 <span style="font-size:14px; font-weight:500; color:var(--muted);">/ 이후 월 4,900원 (언제든 해지 · 불만족 100% 환불)</span></div>
       <p style="color:var(--muted); margin:6px 0 14px; font-size:14px;">건수 제한 해제(일 1,000건 이상 일괄 병합), 동일 수취인 자동 합포장 묶기, 도매처 전용 양식 저장 기능을 즉시 잠금 해제합니다.</p>
-      <a id="proBtn" class="cta-btn" href="#pro">첫 달 1,900원 무제한 패스 시작하기</a>
+      <a id="proBtn" class="cta-btn" href="https://litt.ly/ohker" target="_blank" rel="noopener">첫 달 1,900원 무제한 패스 시작하기</a>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <input id="passInput" type="text" placeholder="결제 후 받은 패스 코드 입력 (예: PASS-2026-PRO)" style="flex:1; min-width:220px; background:#0b1120; color:#f8fafc; border:1px solid #334155; border-radius:8px; padding:10px 12px; font-size:14px;" />
+        <button id="unlockBtn" type="button" style="background:#22c55e; color:#052e16; font-weight:800; border:none; border-radius:8px; padding:10px 16px; cursor:pointer;">무제한 활성화</button>
+        <span id="unlockStatus" style="font-size:13px; color:#86efac;"></span>
+      </div>
     </div>
   </div>
 
   <script>
-    const PAYMENT_URL = "";
+    const PAYMENT_URL = "https://litt.ly/ohker";
+    let isProUnlocked = localStorage.getItem("seller_pro_unlocked") === "1";
     const ALIASES = {
       orderId: ["주문번호", "상품주문번호", "묶음배송번호", "주문코드"],
       receiver: ["수취인명", "수령인", "받는분", "받는사람", "수령인명"],
@@ -145,8 +151,31 @@
         `</tbody></table>`;
     });
 
+    function syncProUi() {
+      const st = document.getElementById("unlockStatus");
+      const dlBtn = document.getElementById("downloadFreeBtn");
+      if (isProUnlocked) {
+        st.textContent = "✓ PRO 무제한 패스 활성화됨 (전 행 일괄 다운로드)";
+        if (dlBtn) dlBtn.textContent = "변환 결과 전체 CSV 다운로드 (PRO 무제한)";
+      }
+    }
+    syncProUi();
+
+    document.getElementById("unlockBtn").addEventListener("click", () => {
+      const code = document.getElementById("passInput").value.trim().toUpperCase().replace(/[\[\]]/g, "");
+      const st = document.getElementById("unlockStatus");
+      if (code === "PASS-2026-PRO") {
+        isProUnlocked = true;
+        localStorage.setItem("seller_pro_unlocked", "1");
+        syncProUi();
+      } else {
+        st.style.color = "#fca5a5";
+        st.textContent = "유효하지 않은 패스 코드입니다.";
+      }
+    });
+
     document.getElementById("downloadFreeBtn").addEventListener("click", () => {
-      const rows = latestRows.slice(0, 5);
+      const rows = isProUnlocked ? latestRows : latestRows.slice(0, 5);
       const header = "순번,마켓,주문번호,받는분성명,받는분전화번호,우편번호,받는분주소,품목명,수량,배송메시지";
       const body = rows.map((r, i) => [i + 1, r.market, r.orderId, r.receiver, r.phone, r.zipcode, `"${r.address}"`, `"${r.item}"`, r.qty, `"${r.memo}"`].join(",")).join("\r\n");
       const blob = new Blob(["\uFEFF" + header + "\r\n" + body], { type: "text/csv;charset=utf-8" });
