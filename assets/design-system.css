@@ -1,0 +1,813 @@
+/* ==========================================================================
+   Ohker Works Precision Ledger Design System (OWDS v2.0)
+   References: Toss TDS (Single-Primary Blue) · Stripe (Hairline Ledger)
+               Channel.io Bezier (3-Tier Tokens) · Datadog DRUIDS (Telemetry)
+   ========================================================================== */
+
+:root {
+  /* Layer 1: Primitive Tokens */
+  --ow-p-obsidian-950: #0B1220;
+  --ow-p-obsidian-900: #131F35;
+  --ow-p-obsidian-800: #1E293B;
+  --ow-p-slate-900: #0F172A;
+  --ow-p-slate-700: #334155;
+  --ow-p-slate-600: #475569;
+  --ow-p-slate-300: #CBD5E1;
+  --ow-p-slate-200: #E2E8F0;
+  --ow-p-slate-150: #EDF2F7;
+  --ow-p-slate-100: #F1F5F9;
+  --ow-p-slate-50: #F6F8FB;
+  --ow-p-white: #FFFFFF;
+
+  --ow-p-cobalt-700: #1E40AF;
+  --ow-p-cobalt-600: #1D4ED8;
+  --ow-p-cobalt-500: #2563EB;
+  --ow-p-cobalt-50: #EFF6FF;
+  --ow-p-cobalt-100: #DBEAFE;
+
+  --ow-p-emerald-800: #065F46;
+  --ow-p-emerald-500: #10B981;
+  --ow-p-emerald-50: #ECFDF5;
+  --ow-p-emerald-200: #A7F3D0;
+
+  --ow-p-amber-800: #92400E;
+  --ow-p-amber-50: #FFFBEB;
+  --ow-p-amber-200: #FDE68A;
+
+  --ow-p-crimson-800: #991B1B;
+  --ow-p-crimson-50: #FEF2F2;
+  --ow-p-crimson-200: #FECACA;
+
+  /* Layer 2: Semantic Tokens */
+  --ow-bg-canvas: var(--ow-p-slate-50);
+  --ow-bg-sheet: var(--ow-p-white);
+  --ow-bg-recessed: var(--ow-p-slate-100);
+  --ow-bg-telemetry: var(--ow-p-obsidian-950);
+  --ow-bg-telemetry-raised: var(--ow-p-obsidian-900);
+
+  --ow-text-primary: var(--ow-p-slate-900);
+  --ow-text-secondary: var(--ow-p-slate-700);
+  --ow-text-muted: var(--ow-p-slate-600);
+  --ow-text-on-dark: #F8FAFC;
+  --ow-text-on-dark-muted: var(--ow-p-slate-300);
+
+  --ow-border-strong: var(--ow-p-slate-300);
+  --ow-border-default: var(--ow-p-slate-200);
+  --ow-border-subtle: var(--ow-p-slate-150);
+  --ow-border-on-dark: rgba(203, 213, 225, 0.16);
+
+  --ow-action-primary: var(--ow-p-cobalt-600);
+  --ow-action-primary-hover: var(--ow-p-cobalt-700);
+  --ow-action-wash: var(--ow-p-cobalt-50);
+  --ow-action-border: var(--ow-p-cobalt-100);
+
+  /* Typography & Rhythm */
+  --ow-font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, sans-serif;
+  --ow-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --ow-radius-xs: 6px;
+  --ow-radius-sm: 8px;
+  --ow-radius-md: 12px;
+  --ow-radius-lg: 14px;
+
+  --ow-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Browser Surface Theming */
+*, *::before, *::after { box-sizing: border-box; }
+
+::selection {
+  background-color: var(--ow-p-cobalt-100);
+  color: var(--ow-p-obsidian-950);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--ow-p-slate-300) var(--ow-p-slate-100);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ow-p-slate-100); }
+::-webkit-scrollbar-thumb {
+  background: var(--ow-p-slate-300);
+  border-radius: var(--ow-radius-xs);
+  border: 2px solid var(--ow-p-slate-100);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ow-p-slate-600); }
+
+body {
+  margin: 0;
+  background-color: var(--ow-bg-canvas);
+  color: var(--ow-text-primary);
+  font-family: var(--ow-font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  caret-color: var(--ow-action-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--ow-action-primary);
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ow-action-primary);
+  outline-offset: 2px;
+}
+
+.ow-tnum { font-variant-numeric: tabular-nums; }
+.ow-mono {
+  font-family: var(--ow-font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Layout Shell */
+.ow-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 1. Global Operational Telemetry Rail (Datadog DRUIDS pattern) */
+.ow-telemetry-rail {
+  background-color: var(--ow-bg-telemetry);
+  color: var(--ow-text-on-dark-muted);
+  border-bottom: 1px solid var(--ow-border-on-dark);
+  font-size: 0.75rem;
+}
+
+.ow-telemetry-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 7px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ow-telemetry-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.ow-telemetry-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.ow-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--ow-p-emerald-500);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ow-telemetry-rail a {
+  color: var(--ow-text-on-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+.ow-telemetry-rail a:hover { text-decoration: underline; }
+
+/* 2. Institutional Workspace Header & Product Switcher */
+.ow-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ow-border-default);
+}
+
+.ow-header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ow-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: var(--ow-text-primary);
+}
+
+.ow-brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ow-radius-sm);
+  flex-shrink: 0;
+  display: block;
+  border: 1px solid var(--ow-border-strong);
+}
+
+.ow-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.ow-brand-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ow-text-primary);
+}
+
+.ow-brand-sub {
+  font-size: 0.75rem;
+  color: var(--ow-text-muted);
+  font-family: var(--ow-font-mono);
+}
+
+.ow-suite-nav {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--ow-bg-recessed);
+  padding: 3px;
+  border-radius: var(--ow-radius-sm);
+  border: 1px solid var(--ow-border-default);
+  gap: 2px;
+}
+
+.ow-suite-link {
+  text-decoration: none;
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--ow-text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--ow-radius-xs);
+  transition: background-color 140ms var(--ow-ease-out), color 140ms var(--ow-ease-out);
+  white-space: nowrap;
+}
+
+.ow-suite-link:hover {
+  color: var(--ow-text-primary);
+}
+
+.ow-suite-link[aria-current="page"] {
+  background-color: var(--ow-bg-sheet);
+  color: var(--ow-action-primary);
+  border: 1px solid var(--ow-border-default);
+}
+
+.ow-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 3. Buttons (Toss TDS Single Primary Rule) */
+.ow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--ow-font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: var(--ow-radius-sm);
+  padding: 11px 18px;
+  min-height: 40px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 150ms var(--ow-ease-out), border-color 150ms var(--ow-ease-out), transform 120ms var(--ow-ease-out);
+  white-space: nowrap;
+}
+
+.ow-btn:active { transform: translateY(1px); }
+
+.ow-btn-primary {
+  background-color: var(--ow-action-primary);
+  color: var(--ow-text-on-dark);
+  border: 1px solid var(--ow-action-primary);
+}
+.ow-btn-primary:hover {
+  background-color: var(--ow-action-primary-hover);
+  border-color: var(--ow-action-primary-hover);
+  color: var(--ow-text-on-dark);
+}
+
+.ow-btn-secondary {
+  background-color: var(--ow-bg-sheet);
+  color: var(--ow-text-primary);
+  border: 1px solid var(--ow-border-strong);
+}
+.ow-btn-secondary:hover {
+  background-color: var(--ow-bg-recessed);
+}
+
+.ow-btn-subtle {
+  background-color: var(--ow-action-wash);
+  color: var(--ow-action-primary);
+  border: 1px solid var(--ow-action-border);
+}
+.ow-btn-subtle:hover {
+  background-color: var(--ow-p-cobalt-100);
+}
+
+.ow-btn-lg {
+  font-size: 0.9375rem;
+  padding: 13px 22px;
+  min-height: 46px;
+}
+
+/* 4. Asymmetric Workbench Hero Split */
+.ow-hero-section {
+  padding: 36px 0 44px;
+  border-bottom: 1px solid var(--ow-border-default);
+}
+
+.ow-workbench-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.ow-display-title {
+  margin: 0 0 14px;
+  font-size: clamp(1.875rem, 3vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.24;
+  letter-spacing: -0.03em;
+  color: var(--ow-text-primary);
+  text-wrap: balance;
+}
+
+.ow-lead {
+  margin: 0 0 22px;
+  font-size: 1rem;
+  color: var(--ow-text-secondary);
+  line-height: 1.65;
+  max-width: 62ch;
+}
+
+/* Architectural Spec List inside Left Column */
+.ow-spec-dl {
+  margin: 0 0 22px;
+  padding: 0;
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  overflow: hidden;
+}
+
+.ow-spec-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--ow-border-subtle);
+  font-size: 0.84375rem;
+  align-items: baseline;
+}
+.ow-spec-row:last-child { border-bottom: none; }
+
+.ow-spec-dt {
+  font-weight: 600;
+  color: var(--ow-text-muted);
+}
+
+.ow-spec-dd {
+  margin: 0;
+  color: var(--ow-text-primary);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-visual-frame {
+  border-radius: var(--ow-radius-md);
+  border: 1px solid var(--ow-border-default);
+  overflow: hidden;
+  background-color: var(--ow-bg-telemetry);
+}
+
+.ow-visual-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ow-visual-caption {
+  padding: 9px 14px;
+  font-size: 0.75rem;
+  color: var(--ow-text-on-dark-muted);
+  background-color: var(--ow-bg-telemetry);
+  border-top: 1px solid var(--ow-border-on-dark);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* 5. Interactive Enterprise Console (Right Column) */
+.ow-console {
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-md);
+  overflow: hidden;
+}
+
+.ow-console-header {
+  background-color: var(--ow-bg-recessed);
+  border-bottom: 1px solid var(--ow-border-default);
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ow-console-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84375rem;
+  font-weight: 700;
+  color: var(--ow-text-primary);
+}
+
+.ow-console-meta {
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  color: var(--ow-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-console-body {
+  padding: 20px;
+}
+
+.ow-console-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.ow-preset-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ow-preset-btn {
+  background-color: var(--ow-bg-recessed);
+  color: var(--ow-text-secondary);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-xs);
+  padding: 6px 10px;
+  font-family: var(--ow-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ow-preset-btn:hover {
+  background-color: var(--ow-action-wash);
+  color: var(--ow-action-primary);
+  border-color: var(--ow-action-border);
+}
+
+.ow-code-input {
+  width: 100%;
+  min-height: 152px;
+  padding: 12px 14px;
+  border-radius: var(--ow-radius-sm);
+  border: 1px solid var(--ow-border-strong);
+  background-color: var(--ow-bg-canvas);
+  color: var(--ow-text-primary);
+  font-family: var(--ow-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+.ow-code-input::placeholder { color: var(--ow-text-muted); }
+
+.ow-dropzone {
+  border: 1px dashed var(--ow-border-strong);
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-canvas);
+  padding: 26px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 140ms var(--ow-ease-out), border-color 140ms var(--ow-ease-out);
+}
+.ow-dropzone:hover, .ow-dropzone.is-dragover {
+  background-color: var(--ow-action-wash);
+  border-color: var(--ow-action-primary);
+}
+
+.ow-console-footer {
+  background-color: var(--ow-bg-recessed);
+  border-top: 1px solid var(--ow-border-default);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--ow-text-muted);
+}
+
+/* 6. Status Chips */
+.ow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--ow-radius-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ow-chip-ok {
+  background-color: var(--ow-p-emerald-50);
+  color: var(--ow-p-emerald-800);
+  border: 1px solid var(--ow-p-emerald-200);
+}
+.ow-chip-warn {
+  background-color: var(--ow-p-amber-50);
+  color: var(--ow-p-amber-800);
+  border: 1px solid var(--ow-p-amber-200);
+}
+.ow-chip-crit {
+  background-color: var(--ow-p-crimson-50);
+  color: var(--ow-p-crimson-800);
+  border: 1px solid var(--ow-p-crimson-200);
+}
+.ow-chip-neutral {
+  background-color: var(--ow-bg-recessed);
+  color: var(--ow-text-secondary);
+  border: 1px solid var(--ow-border-default);
+}
+
+/* 7. Sections & Specification Matrix Tables (Stripe / Datadog Hairline Grid) */
+.ow-section {
+  padding: 52px 0;
+  border-bottom: 1px solid var(--ow-border-default);
+}
+
+.ow-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.ow-section-title {
+  margin: 0 0 6px;
+  font-size: clamp(1.35rem, 2vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  color: var(--ow-text-primary);
+  text-wrap: balance;
+}
+
+.ow-section-desc {
+  margin: 0;
+  color: var(--ow-text-secondary);
+  font-size: 0.9375rem;
+  max-width: 68ch;
+}
+
+.ow-ledger-sheet {
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  padding: 12px;
+  overflow: hidden;
+}
+
+.ow-ledger-sheet .ow-console-header {
+  border-radius: var(--ow-radius-sm);
+  border: 1px solid var(--ow-border-default);
+  margin-bottom: 10px;
+}
+
+.ow-code-pre {
+  margin: 0;
+  padding: 14px 16px;
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.ow-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ow-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-table th {
+  background-color: var(--ow-bg-recessed);
+  color: var(--ow-text-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--ow-border-default);
+  white-space: nowrap;
+}
+
+.ow-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--ow-border-subtle);
+  color: var(--ow-text-primary);
+  vertical-align: middle;
+}
+
+.ow-table tbody tr:last-child td { border-bottom: none; }
+.ow-table tbody tr:hover td { background-color: #F8FAFC; }
+
+/* 8. Split Architecture & Pricing Ledger */
+.ow-split-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ow-rate-card {
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-md);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ow-price-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 14px 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-price-amount {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ow-text-primary);
+  line-height: 1.1;
+}
+
+.ow-price-unit {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ow-text-muted);
+}
+
+.ow-check-list {
+  list-style: none;
+  margin: 18px 0 24px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.ow-check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.875rem;
+  color: var(--ow-text-secondary);
+}
+
+.ow-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 9. Locked Output Gate & Pass Unlock Bar */
+.ow-unlock-bar {
+  background-color: var(--ow-bg-recessed);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ow-pass-input {
+  padding: 8px 12px;
+  border-radius: var(--ow-radius-xs);
+  border: 1px solid var(--ow-border-strong);
+  background-color: var(--ow-bg-sheet);
+  color: var(--ow-text-primary);
+  font-family: var(--ow-font-mono);
+  font-size: 0.8125rem;
+  min-width: 170px;
+}
+
+.ow-code-preview-box {
+  position: relative;
+  border: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-telemetry);
+  color: var(--ow-text-on-dark);
+  overflow: hidden;
+}
+
+.ow-code-gate-overlay {
+  padding: 18px 16px;
+  background-color: var(--ow-bg-telemetry-raised);
+  border-top: 1px solid var(--ow-border-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* 10. Footer */
+.ow-footer {
+  background-color: var(--ow-bg-sheet);
+  padding: 36px 0 48px;
+  font-size: 0.8125rem;
+  color: var(--ow-text-muted);
+}
+
+.ow-footer-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ow-footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.ow-footer-links a {
+  color: var(--ow-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.ow-footer-links a:hover {
+  color: var(--ow-action-primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+  .ow-workbench-grid,
+  .ow-split-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-container, .ow-header-inner, .ow-telemetry-inner { padding-left: 16px; padding-right: 16px; }
+  .ow-header-inner { padding-top: 10px; padding-bottom: 10px; }
+  .ow-spec-row { grid-template-columns: 1fr; gap: 3px; }
+  .ow-rate-card { padding: 20px; }
+}

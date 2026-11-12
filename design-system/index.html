@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>오커 웍스 디자인 시스템 레퍼런스 (OWDS v2.0) | Precision Operations Ledger</title>
+  <meta name="description" content="Toss TDS, Stripe Calm Fintech, Channel.io Bezier, Datadog DRUIDS를 참조해 설계한 오커 웍스 B2B 실무 디자인 시스템 토큰 및 보안 아키텍처 명세서입니다." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/design-system/" />
+  <link rel="icon" type="image/jpeg" href="../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../assets/design-system.css" />
+</head>
+<body>
+  <div class="ow-telemetry-rail" role="region" aria-label="디자인 시스템 버전">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>Ohker Works Precision Ledger (<span class="ow-mono">OWDS v2.0.0</span>)</span>
+        </span>
+        <span class="ow-telemetry-item ow-mono">WCAG 2.1 AA/AAA Contrast Verified · Zero-Retention Spec</span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="../seller-converter/">6대 마켓 발주서 통합 엔진</a>
+        <a href="../">카카오 지도 교체 코드 생성기</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../seller-converter/">
+        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스 모노그램" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스 · Ohker Works</span>
+          <span class="ow-brand-sub">DESIGN &amp; SECURITY REFERENCE</span>
+        </span>
+      </a>
+
+      <nav class="ow-suite-nav" aria-label="제품군 전환">
+        <a class="ow-suite-link" href="../seller-converter/">6대 마켓 발주서 통합 엔진</a>
+        <a class="ow-suite-link" href="../">카카오 지도 교체 코드 생성기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">시스템 규격</a>
+      </nav>
+
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-primary" href="../seller-converter/">주력 엔진 실행하기</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <h1 class="ow-display-title">오커 웍스 정밀 운영 원장 디자인 시스템 (OWDS v2.0)</h1>
+        <p class="ow-lead">
+          오커 웍스의 모든 웹 워크벤치는 이커머스 셀러와 웹 운영자가 수백 건의 주문 데이터 및 인프라 코드를 오류 없이 처리하도록 4대 엔터프라이즈 레퍼런스 원칙을 단일 3계층 토큰 체계(<code class="ow-mono">Primitive → Semantic → Component</code>)로 규격화했습니다.
+        </p>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>참조 시스템</th>
+                  <th>핵심 엔지니어링 원칙</th>
+                  <th>OWDS v2.0 구현 토큰 및 규칙</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:700;">Toss Design System (TDS)</td>
+                  <td>브랜드 식별색과 단일 주요 행동색(Primary Action Blue) 엄격 분리</td>
+                  <td>관제 레일은 <code class="ow-mono">#0B1220</code>, 화면당 단일 핵심 실행 버튼에만 <code class="ow-mono">#1D4ED8</code> 채움 허용</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">Stripe Calm Fintech</td>
+                  <td>중첩 그림자(Ghost Shadow) 배제 및 1px 헤어라인 원장 구획</td>
+                  <td><code class="ow-mono">#F6F8FB</code> 지면 위 <code class="ow-mono">#FFFFFF</code> 시트를 <code class="ow-mono">1px solid #E2E8F0</code> 단일 경계선으로 분리</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">Channel.io Bezier</td>
+                  <td>한글·영문 혼용 고밀도 가독성 및 3단계 시멘틱 토큰 매핑</td>
+                  <td><code class="ow-mono">Pretendard Variable</code> 본문 행간 <code class="ow-mono">1.65</code>, 대형 제목 자간 <code class="ow-mono">-0.03em</code> 고정</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">Datadog DRUIDS</td>
+                  <td>상단 운영 텔레메트리 레일 및 고정폭 숫자 정렬 강제</td>
+                  <td>모든 금액·수량·바이트·경과시간에 <code class="ow-mono">font-variant-numeric: tabular-nums</code> 전역 적용</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">시멘틱 컬러 토큰 및 명암비 검증 원장</h2>
+            <p class="ow-section-desc">모든 전경·배경 조합은 실무 장시간 작업 시 눈의 피로를 줄이면서 WCAG AA 이상 명암비를 충족합니다.</p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>시멘틱 토큰</th>
+                  <th>견본</th>
+                  <th>HEX 코드</th>
+                  <th>용도 및 접근성 대비율</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ow-mono">--ow-bg-telemetry</td>
+                  <td><span style="display:inline-block;width:44px;height:20px;border-radius:6px;background:#0B1220;border:1px solid #CBD5E1;vertical-align:middle;"></span></td>
+                  <td class="ow-mono">#0B1220</td>
+                  <td>최상단 인프라 상태 레일 및 코드 출력 터미널 배경 (대비 15.8:1)</td>
+                </tr>
+                <tr>
+                  <td class="ow-mono">--ow-action-primary</td>
+                  <td><span style="display:inline-block;width:44px;height:20px;border-radius:6px;background:#1D4ED8;vertical-align:middle;"></span></td>
+                  <td class="ow-mono">#1D4ED8</td>
+                  <td>뷰포트 내 단일 최우선 실행 버튼 및 활성 탭 강조 (백색 텍스트 대비 6.7:1 AA)</td>
+                </tr>
+                <tr>
+                  <td class="ow-mono">--ow-bg-canvas</td>
+                  <td><span style="display:inline-block;width:44px;height:20px;border-radius:6px;background:#F6F8FB;border:1px solid #CBD5E1;vertical-align:middle;"></span></td>
+                  <td class="ow-mono">#F6F8FB</td>
+                  <td>기본 작업 지면 — 백색 데이터 시트와의 무그림자 명도 분리</td>
+                </tr>
+                <tr>
+                  <td class="ow-mono">--ow-text-primary</td>
+                  <td><span style="display:inline-block;width:44px;height:20px;border-radius:6px;background:#0F172A;vertical-align:middle;"></span></td>
+                  <td class="ow-mono">#0F172A</td>
+                  <td>제목, 핵심 데이터 셀, 가격 수치 본문 잉크 (백색 배경 대비 17.8:1 AAA)</td>
+                </tr>
+                <tr>
+                  <td class="ow-mono">--ow-text-muted</td>
+                  <td><span style="display:inline-block;width:44px;height:20px;border-radius:6px;background:#475569;vertical-align:middle;"></span></td>
+                  <td class="ow-mono">#475569</td>
+                  <td>보조 설명, 플레이스홀더, 테이블 캡션 (백색 배경 대비 7.5:1 AAA)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div>
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · OWDS v2.0 Precision Operations Ledger<br />
+          <span>기술지원: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a></span>
+        </div>
+        <div class="ow-footer-links">
+          <a href="../seller-converter/">6대 마켓 발주서 통합 엔진</a>
+          <a href="../">카카오 지도 교체 코드 생성기</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

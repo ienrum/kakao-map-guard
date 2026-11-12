@@ -1,20 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>6대 오픈마켓 발주서 3초 통합 변환기 (스마트스토어·쿠팡·11번가) — 오커 웍스</title>
-  <meta name="description" content="스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 롯데온 주문 엑셀·CSV를 서버 업로드 없이 내 PC 브라우저 안에서 3초 만에 택배·위탁도매 표준 발주서로 통합 변환합니다." />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="6대 마켓 발주서 3초 통합 변환기 — 서버 전송 0건 안전한 로컬 처리" />
-  <meta property="og:description" content="마켓마다 다른 컬럼 순서를 자동 인식해 CJ대한통운·한진·로젠·도매 공통 양식 CSV로 즉시 병합합니다." />
-  <meta property="og:url" content="https://ienrum.github.io/kakao-map-guard/seller-converter/" />
-  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-converter.jpg" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>오커 웍스 6대 마켓 발주서 통합 엔진 | 스마트스토어·쿠팡·11번가 주문서 3초 정규화</title>
+  <meta name="description" content="스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24 주문 엑셀을 외부 서버 업로드 0바이트로 내 PC 브라우저에서 3초 만에 택배·도매 표준 발주 원장으로 통합합니다." />
   <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/seller-converter/" />
-  <link rel="icon" href="../assets/brand-avatar.jpg" />
-  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="오커 웍스 | 6대 오픈마켓 발주서 통합 정규화 콘솔" />
+  <meta property="og:description" content="고객 개인정보 외부 전송 0 Byte. 6대 마켓 주문서를 택배사·도매처 표준 8열 엑셀로 즉시 병합합니다." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-converter.jpg" />
+  <link rel="icon" type="image/jpeg" href="../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../assets/design-system.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -22,738 +24,627 @@
     gtag('js', new Date());
     gtag('config', 'AW-17208942339');
     function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
       try {
         gtag('event', 'conversion', {
           'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
           'value': 4900.0,
-          'currency': 'KRW'
+          'currency': 'KRW',
+          'event_callback': go
         });
-      } catch (_e) {}
-      window.open(url, '_blank', 'noopener');
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
     }
   </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "오커 웍스 — 6대 오픈마켓 발주서 통합 변환기",
-    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "All",
-    "offers": {
-      "@type": "Offer",
-      "price": "4900",
-      "priceCurrency": "KRW"
-    }
-  }
-  </script>
-
-  <style>
-    :root {
-      --ground: #f4f6fa;
-      --paper: #ffffff;
-      --subtle: #edf1f7;
-      --line: #d8e0ec;
-      --line-strong: #b9c6da;
-      --ink: #0f1e36;
-      --ink-2: #3b4d68;
-      --ink-3: #5b6d88;
-      --brand: #154996;
-      --brand-hover: #0e3673;
-      --brand-tint: #ebf2fc;
-      --ok: #067647;
-      --ok-tint: #ecfdf3;
-      --danger: #b42318;
-      --danger-tint: #fef3f2;
-    }
-
-    * { box-sizing: border-box; }
-    html {
-      scroll-behavior: smooth;
-      font-variant-numeric: tabular-nums;
-    }
-    ::selection {
-      background: #154996;
-      color: #ffffff;
-    }
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--ground); }
-    ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 6px; border: 2px solid var(--ground); }
-
-    body {
-      margin: 0;
-      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
-      background: var(--ground);
-      color: var(--ink);
-      line-height: 1.6;
-      caret-color: var(--brand);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      color: var(--brand);
-      text-underline-offset: 3px;
-    }
-    :focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 2px;
-    }
-
-    .topbar {
-      background: var(--paper);
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-    .topbar-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--ink);
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: -0.02em;
-    }
-    .brand img {
-      width: 30px;
-      height: 30px;
-      border-radius: 7px;
-      display: block;
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 14px;
-      font-weight: 600;
-      flex-wrap: wrap;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--ink-2);
-      padding: 6px 10px;
-      border-radius: 8px;
-      transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), color 180ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .nav-links a:hover {
-      background: var(--subtle);
-      color: var(--ink);
-    }
-    .nav-links a.active {
-      background: var(--brand-tint);
-      color: var(--brand);
-    }
-
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 32px;
-      align-items: center;
-      margin-bottom: 36px;
-    }
-    h1 {
-      font-size: clamp(26px, 3.2vw, 37px);
-      line-height: 1.26;
-      letter-spacing: -0.03em;
-      margin: 0 0 14px;
-      text-wrap: balance;
-    }
-    .lead {
-      font-size: 17px;
-      color: var(--ink-2);
-      max-width: 65ch;
-      margin: 0 0 22px;
-    }
-
-    .privacy-proof {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-      font-size: 13.5px;
-      color: var(--ink-2);
-      font-weight: 600;
-    }
-    .proof-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .icon {
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-      stroke: currentColor;
-      stroke-width: 1.85;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .hero-visual-box {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
-    }
-    .hero-visual-box img {
-      width: 100%;
-      max-height: 230px;
-      object-fit: cover;
-      border-radius: 9px;
-      display: block;
-    }
-    .market-caption {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--ink-2);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .workbench {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 40px;
-    }
-    .workbench-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding-bottom: 18px;
-      margin-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-    }
-    .workbench-head h2 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: -0.02em;
-    }
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    textarea, input[type="text"] {
-      width: 100%;
-      background: var(--ground);
-      color: var(--ink);
-      border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      padding: 13px 14px;
-      font-size: 13.5px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      transition: border-color 150ms ease, background-color 150ms ease;
-    }
-    textarea:focus, input[type="text"]:focus {
-      background: var(--paper);
-      border-color: var(--brand);
-    }
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-      margin-bottom: 14px;
-    }
-
-    button, .btn-primary, .file-label {
-      background: var(--brand);
-      color: #ffffff;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      padding: 11px 20px;
-      font-size: 14.5px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    button:hover, .btn-primary:hover, .file-label:hover {
-      background: var(--brand-hover);
-    }
-    button:active, .btn-primary:active {
-      transform: translateY(1px);
-    }
-    .btn-secondary {
-      background: var(--paper);
-      color: var(--ink-2);
-      border: 1px solid var(--line-strong);
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .btn-secondary:hover {
-      background: var(--subtle);
-      color: var(--ink);
-    }
-    .btn-download {
-      background: var(--ok);
-      color: #ffffff;
-    }
-    .btn-download:hover {
-      background: #055a36;
-    }
-    input[type="file"] {
-      display: none;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin-top: 18px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      background: var(--paper);
-    }
-    th, td {
-      padding: 10px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--subtle);
-    }
-    th {
-      background: var(--ground);
-      color: var(--ink-2);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .status-msg {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      margin-top: 16px;
-    }
-    .status-ok { background: var(--ok-tint); color: var(--ok); }
-    .status-err { background: var(--danger-tint); color: var(--danger); }
-
-    .offer-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 28px;
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 36px;
-      align-items: start;
-    }
-    .offer-grid h2 {
-      margin: 0 0 10px;
-      font-size: 24px;
-      letter-spacing: -0.025em;
-    }
-    .price-lockup {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin: 16px 0 8px;
-    }
-    .price-amount {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-    .price-meta {
-      font-size: 14px;
-      color: var(--ink-2);
-      font-weight: 600;
-    }
-    .reason-why {
-      background: var(--brand-tint);
-      padding: 13px 16px;
-      border-radius: 10px;
-      font-size: 13.5px;
-      margin: 14px 0 18px;
-      line-height: 1.55;
-    }
-    .check-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 22px;
-    }
-    .check-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
-      font-size: 14.5px;
-      color: var(--ink-2);
-    }
-    .check-list li svg {
-      color: var(--ok);
-      margin-top: 3px;
-    }
-
-    .unlock-panel {
-      background: var(--ground);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 22px;
-    }
-    .unlock-panel h3 {
-      margin: 0 0 8px;
-      font-size: 17px;
-    }
-    .unlock-panel p {
-      margin: 0 0 14px;
-      font-size: 13.5px;
-      color: var(--ink-2);
-    }
-    .unlock-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .unlock-row input {
-      flex: 1;
-      min-width: 190px;
-      font-family: inherit;
-    }
-
-    footer {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 28px 24px 56px;
-      border-top: 1px solid var(--line);
-      font-size: 13px;
-      color: var(--ink-3);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    @media (max-width: 860px) {
-      .hero-grid, .offer-grid { grid-template-columns: 1fr; }
-      .container { padding: 28px 16px 56px; }
-      .workbench, .offer-grid { padding: 22px 18px; }
-    }
-  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="brand" href="../">
-        <img src="../assets/brand-avatar.jpg" alt="오커 웍스 로고" />
-        <span>오커 웍스 · 셀러 자동화</span>
+  <!-- 1. Global Operational Telemetry Rail -->
+  <div class="ow-telemetry-rail" role="region" aria-label="시스템 보안 및 가동 상태">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>정규화 엔진 정상 가동 (<span class="ow-mono">OW-OrderSync 3.2</span>)</span>
+        </span>
+        <span class="ow-telemetry-item ow-mono">개인정보 보호 규약: Client-Side Local Memory · 외부 서버 전송 0 Byte</span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="../design-system/">디자인 및 아키텍처 명세 (OWDS v2.0)</a>
+        <a href="mailto:oker04897@gmail.com">기술지원 SLA: oker04897@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Institutional Workspace Header -->
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="./">
+        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스 모노그램" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스 · Ohker Works</span>
+          <span class="ow-brand-sub">B2B COMMERCE &amp; INFRA SUITE</span>
+        </span>
       </a>
-      <nav class="nav-links" aria-label="주요 도구 이동">
-        <a href="../">카카오 지도·SSL 진단</a>
-        <a href="./" class="active">6대 마켓 발주서 통합 변환</a>
-        <a href="mailto:oker04897@gmail.com">고객지원 문의</a>
+
+      <nav class="ow-suite-nav" aria-label="제품군 전환">
+        <a class="ow-suite-link" href="./" aria-current="page">6대 마켓 발주서 통합 엔진</a>
+        <a class="ow-suite-link" href="../">카카오 지도 교체 코드 생성기</a>
+        <a class="ow-suite-link" href="../design-system/">시스템 규격</a>
       </nav>
+
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-secondary" href="#schema-matrix">컬럼 매핑 규격</a>
+        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">무제한 패스 구독 (월 4,900원)</a>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero-grid">
-      <div>
-        <h1>스마트스토어·쿠팡·11번가·지마켓 주문서, 복붙 실수 없이 3초 만에 택배·도매 표준 양식으로 합치세요</h1>
-        <p class="lead">마켓마다 제각각인 컬럼 이름을 자동으로 매핑해 CJ대한통운·한진·로젠·위탁도매 공통 발주 CSV로 즉시 변환합니다. 고객 주소와 연락처는 외부 서버로 단 1바이트도 전송되지 않습니다.</p>
-        <div class="privacy-proof">
-          <span class="proof-item">
-            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            고객 개인정보 서버 전송 0 Byte (100% 내 PC 메모리 처리)
-          </span>
-          <span class="proof-item">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-            한글 엑셀 깨짐 방지(UTF-8 BOM) 자동 적용
-          </span>
+  <main>
+    <!-- 3. Asymmetric Workbench Hero Split -->
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <div class="ow-workbench-grid">
+          <!-- Left Column: Institutional Spec & Visual -->
+          <div>
+            <h1 class="ow-display-title">6대 오픈마켓 주문 엑셀 3초 자동 통합 및 송장 표준 정규화 콘솔</h1>
+            <p class="ow-lead">
+              스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24의 제각각인 주문서 컬럼을 수작업 복사·붙여넣기 없이 단일 표준 발주 원장(8열)으로 즉시 병합합니다. 모든 파일 처리는 현재 PC 브라우저 메모리 내부에서만 실행됩니다.
+            </p>
+
+            <dl class="ow-spec-dl">
+              <div class="ow-spec-row">
+                <dt class="ow-spec-dt">지원 마켓 포맷</dt>
+                <dd class="ow-spec-dd">스마트스토어 · 쿠팡 윙 · 11번가 · G마켓 · 옥션 · 카페24 (<span class="ow-mono">.xlsx / .xls / .csv</span>)</dd>
+              </div>
+              <div class="ow-spec-row">
+                <dt class="ow-spec-dt">출력 원장 규격</dt>
+                <dd class="ow-spec-dd">택배사(CJ·한진·롯데·로젠) 및 도매 위탁 발주 호환 표준 8열 시트</dd>
+              </div>
+              <div class="ow-spec-row">
+                <dt class="ow-spec-dt">개인정보 보안</dt>
+                <dd class="ow-spec-dd">수취인 성명·안심번호·주소 외부 네트워크 전송 <span class="ow-mono">0 Byte</span></dd>
+              </div>
+              <div class="ow-spec-row">
+                <dt class="ow-spec-dt">체험 및 정가</dt>
+                <dd class="ow-spec-dd">회당 5건 즉시 무료 다운로드 · 무제한 패스 월 4,900원 (단일 고정 정가)</dd>
+              </div>
+            </dl>
+
+            <div class="ow-visual-frame">
+              <img src="../assets/cover-converter.jpg" alt="6대 마켓 주문 시트 스키마 정규화 아키텍처" width="1280" height="720" loading="eager" />
+              <div class="ow-visual-caption">
+                <span>다중 마켓 컬럼 자동 매핑 및 전화번호·공백 정제 파이프라인</span>
+                <span class="ow-mono">ZERO-UPLOAD SANDBOX</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Order Normalization Workbench -->
+          <div class="ow-console" aria-labelledby="converter-console-title">
+            <div class="ow-console-header">
+              <span class="ow-console-title" id="converter-console-title">
+                <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+                발주서 다중 병합 및 정규화 워크벤치
+              </span>
+              <span class="ow-console-meta" id="convTelemetry">라이선스: 무료 검증 모드 (회당 5행 출력)</span>
+            </div>
+
+            <div class="ow-console-body">
+              <div class="ow-console-toolbar">
+                <div class="ow-preset-group">
+                  <button type="button" class="ow-preset-btn" id="btnSampleOrders">6대 마켓 혼합 샘플 8건 즉시 시연</button>
+                  <button type="button" class="ow-preset-btn" id="btnResetOrders">목록 비우기</button>
+                </div>
+                <span class="ow-chip ow-chip-ok" id="licenseBadge">무료 5건 즉시 다운로드 활성</span>
+              </div>
+
+              <!-- File Dropzone -->
+              <div class="ow-dropzone" id="dropzone" tabindex="0" role="button" aria-label="마켓 주문 엑셀 또는 CSV 파일 여러 개 선택">
+                <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv" style="display:none;" />
+                <svg class="ow-icon" style="width:24px;height:24px;color:var(--ow-action-primary);margin-bottom:6px;" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div style="font-weight:700;font-size:0.9375rem;color:var(--ow-text-primary);margin-bottom:4px;">
+                  스마트스토어·쿠팡·11번가·G마켓 주문 파일(.xlsx, .csv)을 여기에 드래그하거나 클릭해 선택하세요
+                </div>
+                <div style="font-size:0.8125rem;color:var(--ow-text-muted);">
+                  여러 마켓 파일을 한 번에 올리면 자동으로 컬럼을 인식해 단일 표로 합칩니다 (암호 걸린 엑셀은 해제 후 업로드)
+                </div>
+              </div>
+
+              <!-- Pass Unlock Bar -->
+              <div class="ow-unlock-bar" style="margin-top:14px;">
+                <div style="font-size:0.8125rem;color:var(--ow-text-secondary);">
+                  <strong>무제한 패스 코드 등록:</strong> 결제 완료 안내창의 패스 코드를 입력하면 행 제한이 즉시 해제됩니다.
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <input type="text" id="passInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="무제한 패스 코드" />
+                  <button type="button" class="ow-btn ow-btn-secondary" id="btnApplyPass" style="padding:8px 14px;min-height:36px;">잠금 해제</button>
+                </div>
+              </div>
+
+              <!-- Normalized Output Preview & Download Controls -->
+              <div id="resultPanel" style="margin-top:18px;border-top:1px solid var(--ow-border-default);padding-top:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+                  <div>
+                    <strong style="font-size:0.875rem;" id="summaryHeadline">정규화 결과 미리보기 원장</strong>
+                    <span class="ow-mono" style="margin-left:8px;color:var(--ow-text-muted);" id="summaryCount">0건 로드됨</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <button type="button" class="ow-btn ow-btn-secondary" id="btnDownloadCsv" disabled>표준 CSV 다운로드</button>
+                    <button type="button" class="ow-btn ow-btn-primary" id="btnDownloadXlsx" disabled>표준 통합 엑셀(.xlsx) 다운로드</button>
+                  </div>
+                </div>
+
+                <div id="limitNotice" style="display:none;margin-bottom:12px;padding:12px 14px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.8125rem;color:var(--ow-p-amber-800);">
+                  현재 무료 검증 모드에서는 상위 <strong>5건</strong>까지 엑셀/CSV로 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건을 제한 없이 일괄 내려받으려면 <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" style="color:var(--ow-p-amber-800);font-weight:700;">월 4,900원 무제한 패스</a> 결제 직후 발급되는 코드를 위 입력창에 등록하세요.
+                </div>
+
+                <div class="ow-ledger-sheet">
+                  <div class="ow-table-wrap">
+                    <table class="ow-table" aria-label="정규화된 통합 발주서 미리보기">
+                      <thead>
+                        <tr>
+                          <th>마켓</th>
+                          <th>주문번호</th>
+                          <th>수취인</th>
+                          <th>연락처</th>
+                          <th>상품명 / 옵션</th>
+                          <th>수량</th>
+                          <th>배송지 주소</th>
+                        </tr>
+                      </thead>
+                      <tbody id="previewBody">
+                        <tr>
+                          <td colspan="7" style="text-align:center;color:var(--ow-text-muted);padding:24px 14px;">
+                            위 파일 영역에 주문서를 올리거나 <strong>[6대 마켓 혼합 샘플 8건 즉시 시연]</strong> 버튼을 눌러 결과를 확인하세요.
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ow-console-footer">
+              <span>정규화 규칙: 전화번호 하이픈 표준화 · 우편번호 공백 정제 · 수량 숫자형 강제</span>
+              <span class="ow-mono">네트워크 전송: 0 B</span>
+            </div>
+          </div>
         </div>
       </div>
-
-      <aside class="hero-visual-box">
-        <img src="../assets/cover-converter.jpg" alt="오픈마켓 주문서가 하나의 표준 발주서로 통합되는 과정 일러스트" />
-        <div class="market-caption">
-          <span>지원 마켓: 스마트스토어 · 쿠팡 · 11번가 · 지마켓 · 옥션 · 롯데온</span>
-          <strong>무설치 즉시 실행</strong>
-        </div>
-      </aside>
     </section>
 
-    <section class="workbench" aria-labelledby="converter-heading">
-      <div class="workbench-head">
-        <h2 id="converter-heading">통합 변환 작업대 (5건 무료 다운로드 체험)</h2>
-        <div class="toolbar">
-          <button type="button" class="btn-secondary" id="sampleBtn">스마트스토어+쿠팡 혼합 샘플 넣기</button>
-          <label class="btn-secondary" for="csvFiles" style="margin:0; cursor:pointer;">CSV·TSV 파일 여러 개 불러오기</label>
-          <input type="file" id="csvFiles" accept=".csv,.tsv,.txt" multiple />
+    <!-- 4. 6-Marketplace Column Normalization Matrix -->
+    <section class="ow-section" id="schema-matrix">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">6대 마켓 원본 컬럼 자동 매핑 규격표</h2>
+            <p class="ow-section-desc">
+              마켓마다 다른 엑셀 헤더 이름을 수동으로 바꿀 필요가 없습니다. 엔진이 업로드 즉시 원본 헤더 시그니처를 판별해 표준 8열 송장·발주 스키마로 정규화합니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>표준 출력 열</th>
+                  <th>스마트스토어</th>
+                  <th>쿠팡 윙(Wing)</th>
+                  <th>11번가 셀러오피스</th>
+                  <th>G마켓 · 옥션 (ESM)</th>
+                  <th>카페24</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:700;">주문번호</td>
+                  <td class="ow-mono">상품주문번호 / 주문번호</td>
+                  <td class="ow-mono">주문번호 / 묶음배송번호</td>
+                  <td class="ow-mono">주문번호</td>
+                  <td class="ow-mono">주문번호 / 장바구니번호</td>
+                  <td class="ow-mono">주문번호</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">수취인명</td>
+                  <td class="ow-mono">수취인명</td>
+                  <td class="ow-mono">수취인이름</td>
+                  <td class="ow-mono">수령인 / 받는분</td>
+                  <td class="ow-mono">수령인명</td>
+                  <td class="ow-mono">수령인</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">수취인연락처</td>
+                  <td class="ow-mono">수취인연락처1</td>
+                  <td class="ow-mono">수취인전화번호(안심번호)</td>
+                  <td class="ow-mono">휴대폰번호</td>
+                  <td class="ow-mono">수령인 휴대폰</td>
+                  <td class="ow-mono">수령인 휴대전화</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">통합배송지</td>
+                  <td class="ow-mono">배송지 + 상세주소</td>
+                  <td class="ow-mono">수취인 주소</td>
+                  <td class="ow-mono">주소</td>
+                  <td class="ow-mono">주소</td>
+                  <td class="ow-mono">수령인 주소</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700;">상품명 · 옵션 · 수량</td>
+                  <td class="ow-mono">상품명 / 옵션정보 / 수량</td>
+                  <td class="ow-mono">노출상품명 / 옵션명 / 구매수</td>
+                  <td class="ow-mono">상품명 / 옵션 / 수량</td>
+                  <td class="ow-mono">상품명 / 주문옵션 / 수량</td>
+                  <td class="ow-mono">상품명 / 옵션 / 수량</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-
-      <textarea id="rawInput" placeholder="엑셀에서 주문 목록(첫 줄 컬럼 제목 포함)을 드래그 복사(Ctrl+C)해 그대로 붙여 넣거나 위에서 CSV 파일을 불러오세요. 서로 다른 마켓 주문서를 빈 줄로 이어 붙여도 자동으로 구분해 합쳐 줍니다."></textarea>
-
-      <div class="toolbar">
-        <button type="button" id="convertBtn">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-          통합 변환 미리보기 실행
-        </button>
-        <button type="button" class="btn-download" id="downloadFreeBtn" style="display:none;">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span id="downloadBtnLabel">표준 발주서 CSV 다운로드 (무료 체험 5건)</span>
-        </button>
-        <button type="button" class="btn-secondary" id="resetBtn">비우기</button>
-      </div>
-
-      <div id="previewArea"></div>
     </section>
 
-    <section class="offer-grid" id="pro-pass">
-      <div>
-        <h2>무제한 대량 변환 패스</h2>
-        <p style="color:var(--ink-2); margin:0;">오후 송장 마감 시간마다 반복되는 엑셀 열 맞추기·복사 실수를 없애세요. 결제 완료 즉시 화면에 표시되는 패스 코드로 건수 제한 없이 바로 다운로드됩니다.</p>
-
-        <div class="price-lockup">
-          <span class="price-amount">월 4,900원</span>
-          <span class="price-meta">VAT 포함 · 첫 달 이후 인상 없는 평생 고정 정가</span>
+    <!-- 5. Transparent Rate Schedule & Cost Comparison -->
+    <section class="ow-section" id="pricing">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">단일 고정 정가 요금표 및 통합 솔루션 비용 비교</h2>
+            <p class="ow-section-desc">
+              하루 10분씩 쓰던 엑셀 편집 시간과 월 수만 원대 무거운 통합 솔루션 비용을 동시에 줄입니다. 첫 달 이후에도 요금이 인상되지 않는 월 4,900원 단일 정가입니다.
+            </p>
+          </div>
         </div>
 
-        <div class="reason-why">
-          <strong>왜 월 3만~10만 원대 쇼핑몰 ERP 대신 월 4,900원인가요?</strong><br/>
-          무거운 서버 DB와 불필요한 재고 기능을 빼고 <strong>100% 셀러 PC 브라우저 직접 연산 구조</strong>로 설계해 서버 유지비를 없앴습니다. 개인정보 유출 걱정 없이 네이버플러스 멤버십 수준 요금으로 무제한 이용하세요.
+        <div class="ow-split-2">
+          <div class="ow-rate-card">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <h3 style="margin:0;font-size:1.125rem;font-weight:700;">오커 웍스 무제한 통합 패스</h3>
+                <span class="ow-chip ow-chip-ok">고정 정가 · 건수 무제한</span>
+              </div>
+              <div class="ow-price-figure">
+                <span class="ow-price-amount">월 4,900원</span>
+                <span class="ow-price-unit">/ 건수·파일 수 무제한 (VAT 포함)</span>
+              </div>
+              <p style="margin:0;font-size:0.84375rem;color:var(--ow-text-muted);">
+                리틀리 정기결제 완료 즉시 화면에 표시되는 패스 코드를 입력하면 기다림 없이 바로 무제한 엑셀 다운로드가 열립니다.
+              </p>
+
+              <ul class="ow-check-list">
+                <li>
+                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>6대 마켓 주문 엑셀·CSV 행 수 제한 없는 일괄 병합 및 <span class="ow-mono">.xlsx</span> 출력</span>
+                </li>
+                <li>
+                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>동일 패스 코드로 <a href="../">카카오 지도 신규 SDK 교체·폴백 완성 코드 생성기</a>까지 통합 이용</span>
+                </li>
+                <li>
+                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>신규 마켓 양식 변경 시 추가 비용 없는 컬럼 매핑 규칙 업데이트</span>
+                </li>
+                <li>
+                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>결제 후 7일 이내 불만족 또는 호환 불가 시 조건 없는 100% 전액 환불 보장</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">
+                월 4,900원 무제한 패스 시작하기
+              </a>
+            </div>
+          </div>
+
+          <div class="ow-ledger-sheet" style="display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div class="ow-console-header">
+                <span class="ow-console-title">왜 월 3만~5만 원대 쇼핑몰 ERP 대신 월 4,900원인가요?</span>
+                <span class="ow-console-meta">원가 구조 명세</span>
+              </div>
+              <div class="ow-table-wrap">
+                <table class="ow-table">
+                  <thead>
+                    <tr>
+                      <th>항목</th>
+                      <th>기존 쇼핑몰 통합 ERP</th>
+                      <th>오커 웍스 브라우저 엔진</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">초기 도입</td>
+                      <td style="color:var(--ow-text-muted);">마켓별 API 키 발급·계정 연동 설정</td>
+                      <td>가입·연동 없이 엑셀 드래그 즉시 실행</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">고객 개인정보</td>
+                      <td style="color:var(--ow-text-muted);">외부 중계 서버 DB에 수취인 정보 저장</td>
+                      <td>내 PC 메모리 단독 처리 (서버 전송 <span class="ow-mono">0 B</span>)</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">서버 유지비</td>
+                      <td style="color:var(--ow-text-muted);">대용량 클라우드 DB 과금 전가</td>
+                      <td>클라이언트 연산으로 서버 원가 절감</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">월 이용 요금</td>
+                      <td class="ow-tnum" style="color:var(--ow-text-muted);">월 33,000원 ~ 55,000원 (건수별 할증)</td>
+                      <td class="ow-tnum" style="font-weight:700;color:var(--ow-action-primary);">월 4,900원 (무제한 고정가)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div style="padding:16px 20px;background-color:var(--ow-bg-recessed);border-top:1px solid var(--ow-border-default);font-size:0.8125rem;color:var(--ow-text-secondary);">
+              자사몰 오시는 길 지도가 안 나오거나 11월 30일 구형 SDK 종료 대비가 필요하신가요? <a href="../" style="font-weight:600;">카카오 지도 교체·폴백 코드 자동 생성기 바로가기</a>
+            </div>
+          </div>
         </div>
-
-        <ul class="check-list">
-          <li>
-            <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-            <span><strong>일 1,000건 이상 무제한 일괄 병합:</strong> 여러 마켓 CSV·엑셀 복붙 데이터를 건수 제한 없이 한 번에 다운로드</span>
-          </li>
-          <li>
-            <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-            <span><strong>결제 즉시 패스 코드 자동 발급:</strong> 리틀리 결제 완료 화면에서 즉시 무제한 코드가 안내되어 기다림 없이 바로 사용</span>
-          </li>
-          <li>
-            <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
-            <span><strong>무약정 및 100% 환불 보증:</strong> 우리 마켓 양식이 정상 변환되지 않거나 불만족 시 조건 없이 전액 환불</span>
-          </li>
-        </ul>
-
-        <a id="proBtn" class="btn-primary" href="https://litt.ly/ohker">
-          월 4,900원 무제한 패스 코드 받기
-          <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <div class="unlock-panel">
-        <h3>패스 코드 즉시 활성화</h3>
-        <p>리틀리(<code>litt.ly/ohker</code>) 결제 완료 메시지에 적힌 패스 코드를 아래에 입력하면 이 브라우저에서 즉시 무제한 전체 다운로드가 열립니다.</p>
-        <div class="unlock-row">
-          <input id="passInput" type="text" placeholder="패스 코드 입력" aria-label="패스 코드 입력" />
-          <button id="unlockBtn" type="button">무제한 활성화</button>
-        </div>
-        <div id="unlockStatus" style="margin-top:10px; font-size:13.5px; font-weight:700;"></div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div>
-      <strong>오커 웍스 (Ohker Works)</strong> · 100% 브라우저 로컬 처리 셀러 자동화 도구<br/>
-      결제 및 정산 시스템: 리틀리(litt.ly) 공식 정기결제 연동 · 약정 없음 · 불만족 시 100% 환불 보증
-    </div>
-    <div>
-      고객지원 및 양식 추가 요청: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div>
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 커머스 발주 데이터 정규화 및 웹 인프라 코드 복구 유틸리티<br />
+          <span>고객지원·양식 추가·환불 접수: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a> (평일 당일 처리 · 7일 이내 100% 환불 보장)</span>
+        </div>
+        <div class="ow-footer-links">
+          <a href="./">6대 마켓 발주서 통합 엔진</a>
+          <a href="../">카카오 지도 교체 코드 생성기</a>
+          <a href="../design-system/">디자인 시스템 (OWDS v2.0)</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 및 결제 관리</a>
+        </div>
+      </div>
     </div>
   </footer>
 
   <script>
-    const PAYMENT_URL = "https://litt.ly/ohker";
-    let isProUnlocked = localStorage.getItem("seller_pro_unlocked") === "1";
+    (function() {
+      var VALID_PASS = 'PASS-2026-PRO';
+      var isPro = false;
+      try {
+        isPro = localStorage.getItem('ow_pro_pass') === VALID_PASS;
+      } catch (e) {}
 
-    const ALIASES = {
-      orderId: ["주문번호", "상품주문번호", "묶음배송번호", "주문코드"],
-      receiver: ["수취인명", "수령인", "받는분", "받는사람", "수령인명"],
-      phone: ["수취인연락처1", "수취인전화번호", "연락처", "휴대폰번호", "안심번호"],
-      zipcode: ["우편번호", "배송지우편번호", "새우편번호"],
-      address: ["배송지", "통합배송지", "주소", "수취인주소", "받는분주소"],
-      addressDetail: ["상세주소", "수취인상세주소"],
-      productName: ["상품명", "노출상품명", "주문상품명", "품목명"],
-      optionName: ["옵션정보", "옵션", "등록옵션명", "선택사항"],
-      qty: ["수량", "주문수량", "구매수량"],
-      memo: ["배송메세지", "배송메시지", "배송요청사항", "요청사항"]
-    };
+      var normalizedOrders = [];
+      var dropzone = document.getElementById('dropzone');
+      var fileInput = document.getElementById('fileInput');
+      var passInput = document.getElementById('passInput');
+      var btnApplyPass = document.getElementById('btnApplyPass');
+      var previewBody = document.getElementById('previewBody');
+      var summaryCount = document.getElementById('summaryCount');
+      var limitNotice = document.getElementById('limitNotice');
+      var totalRowsLabel = document.getElementById('totalRowsLabel');
+      var btnDownloadXlsx = document.getElementById('btnDownloadXlsx');
+      var btnDownloadCsv = document.getElementById('btnDownloadCsv');
+      var convTelemetry = document.getElementById('convTelemetry');
+      var licenseBadge = document.getElementById('licenseBadge');
 
-    function escapeHtml(str) {
-      return String(str).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-    }
-
-    function parseBlock(block) {
-      const lines = block.trim().split(/\r?\n/).filter(Boolean);
-      if (lines.length < 2) return [];
-      const sep = lines[0].includes("\t") ? "\t" : ",";
-      const headers = lines[0].split(sep).map(s => s.trim());
-      const joined = headers.join("|");
-      const market = joined.includes("상품주문번호") ? "스마트스토어"
-        : joined.includes("묶음배송번호") ? "쿠팡"
-        : joined.includes("선택사항") ? "11번가"
-        : "오픈마켓";
-
-      const findIdx = (k) => {
-        for (const a of ALIASES[k]) {
-          const idx = headers.findIndex(h => h.replace(/\s+/g, "").includes(a));
-          if (idx !== -1) return idx;
+      function updateLicenseUI() {
+        if (isPro) {
+          convTelemetry.textContent = '라이선스: PRO 무제한 패스 인증됨';
+          licenseBadge.className = 'ow-chip ow-chip-ok';
+          licenseBadge.textContent = 'PRO 무제한 다운로드 활성';
+          passInput.value = VALID_PASS;
         }
-        return -1;
-      };
-      const m = {};
-      Object.keys(ALIASES).forEach(k => m[k] = findIdx(k));
-      return lines.slice(1).map((line) => {
-        const c = line.split(sep).map(s => s.trim());
-        const g = (k) => m[k] >= 0 ? (c[m[k]] || "") : "";
+        renderPreview();
+      }
+
+      function pickField(row, keys) {
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          if (row[k] !== undefined && row[k] !== null && String(row[k]).trim() !== '') {
+            return String(row[k]).trim();
+          }
+        }
+        var rowKeys = Object.keys(row);
+        for (var j = 0; j < keys.length; j++) {
+          var target = keys[j].replace(/\s+/g, '');
+          for (var r = 0; r < rowKeys.length; r++) {
+            if (rowKeys[r].replace(/\s+/g, '').indexOf(target) !== -1 && String(row[rowKeys[r]]).trim() !== '') {
+              return String(row[rowKeys[r]]).trim();
+            }
+          }
+        }
+        return '';
+      }
+
+      function detectMarket(row, fileName) {
+        var keys = Object.keys(row).join('|');
+        if (/상품주문번호|스마트스토어/.test(keys) || /smartstore|네이버/i.test(fileName)) return '스마트스토어';
+        if (/묶음배송번호|노출상품명|수취인이름/.test(keys) || /coupang|쿠팡/i.test(fileName)) return '쿠팡';
+        if (/장바구니번호|수령인명/.test(keys) || /gmarket|auction|esm/i.test(fileName)) return 'G마켓·옥션';
+        if (/수령인 휴대전화/.test(keys) || /cafe24|카페24/i.test(fileName)) return '카페24';
+        if (/11st|11번가/i.test(fileName)) return '11번가';
+        return pickField(row, ['판매채널', '마켓', '쇼핑몰']) || '오픈마켓';
+      }
+
+      function formatPhone(p) {
+        var digits = String(p || '').replace(/[^0-9]/g, '');
+        if (digits.length === 11) return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+        if (digits.length === 10) return digits.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+        if (digits.length === 12 && digits.indexOf('050') === 0) return digits.replace(/(\d{4})(\d{4})(\d{4})/, '$1-$2-$3');
+        return String(p || '').trim();
+      }
+
+      function normalizeRow(raw, fileName) {
+        var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '받는분', '받는사람']);
+        var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명']);
+        if (!recipient && !product) return null;
+
+        var addrBase = pickField(raw, ['통합배송지', '배송지', '수취인 주소', '수령인 주소', '주소', '기본주소']);
+        var addrDetail = pickField(raw, ['상세주소', '수취인 상세주소', '나머지주소']);
+        var fullAddr = (addrBase + (addrDetail && addrBase.indexOf(addrDetail) === -1 ? ' ' + addrDetail : '')).replace(/\s+/g, ' ').trim();
+
+        var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수', '주문수량']) || '1';
+        var qty = parseInt(qtyRaw.replace(/[^0-9]/g, ''), 10) || 1;
+
         return {
-          market,
-          orderId: g("orderId"),
-          receiver: g("receiver"),
-          phone: g("phone"),
-          zipcode: g("zipcode"),
-          address: [g("address"), g("addressDetail")].filter(Boolean).join(" "),
-          item: [g("productName"), g("optionName")].filter(Boolean).join(" / "),
-          qty: g("qty") || "1",
-          memo: g("memo") || "문 앞"
+          '마켓구분': detectMarket(raw, fileName || ''),
+          '주문번호': pickField(raw, ['상품주문번호', '주문번호', '묶음배송번호', '장바구니번호']) || '-',
+          '수취인명': recipient,
+          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '연락처'])),
+          '우편번호': pickField(raw, ['우편번호', '수취인 우편번호']),
+          '통합배송지': fullAddr,
+          '상품및옵션': (product + (pickField(raw, ['옵션정보', '옵션명', '주문옵션', '옵션']) ? ' [' + pickField(raw, ['옵션정보', '옵션명', '주문옵션', '옵션']) + ']' : '')).trim(),
+          '수량': qty,
+          '배송메시지': pickField(raw, ['배송메세지', '배송메시지', '배송요청사항'])
         };
-      }).filter(r => r.receiver || r.address);
-    }
-
-    let latestRows = [];
-
-    document.getElementById("sampleBtn").addEventListener("click", () => {
-      document.getElementById("rawInput").value =
-        "상품주문번호\t수취인명\t수취인연락처1\t우편번호\t통합배송지\t상품명\t옵션정보\t수량\t배송메세지\n" +
-        "2026111201\t김민수\t050-1234-5678\t06236\t서울 강남구 테헤란로 152 3층\t무소음 무선 마우스\t매트블랙\t2\t경비실 보관\n" +
-        "2026111202\t이서연\t050-2233-4455\t04799\t서울 성동구 아차산로 113 501호\t노트북 거치대\t실버 알루미늄\t1\t문 앞\n\n" +
-        "묶음배송번호\t수령인\t안심번호\t우편번호\t수취인주소\t상세주소\t노출상품명\t등록옵션명\t구매수량\t배송메시지\n" +
-        "99887766\t박지연\t0502-999-8888\t13529\t경기 성남시 분당구 판교역로 166\t402호\tC타입 멀티허브\t실버 7포트\t1\t문 앞 부탁드립니다";
-      document.getElementById("convertBtn").click();
-    });
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      document.getElementById("rawInput").value = "";
-      document.getElementById("previewArea").innerHTML = "";
-      document.getElementById("downloadFreeBtn").style.display = "none";
-      latestRows = [];
-    });
-
-    document.getElementById("csvFiles").addEventListener("change", async (e) => {
-      const texts = [];
-      for (const file of e.target.files) {
-        texts.push(await file.text());
       }
-      document.getElementById("rawInput").value = texts.join("\n\n");
-      document.getElementById("convertBtn").click();
-    });
 
-    document.getElementById("convertBtn").addEventListener("click", () => {
-      const raw = document.getElementById("rawInput").value.trim();
-      const blocks = raw.split(/\n\s*\n/);
-      latestRows = blocks.flatMap(parseBlock);
-      const area = document.getElementById("previewArea");
-      const dlBtn = document.getElementById("downloadFreeBtn");
-      if (latestRows.length === 0) {
-        area.innerHTML = `<div class="status-msg status-err">변환 가능한 주문 행을 찾지 못했습니다. 첫 줄에 컬럼 제목(수취인명, 주소, 상품명 등)이 포함되어 있는지 확인해 주세요.</div>`;
-        dlBtn.style.display = "none";
-        return;
+      function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, function(m) {
+          return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+        });
       }
-      dlBtn.style.display = "inline-flex";
-      syncProUi();
-      area.innerHTML =
-        `<div class="status-msg status-ok">총 ${latestRows.length}건 표준 발주 양식으로 정규화 완료 (내 PC 로컬 처리 · 서버 전송 0건)</div>` +
-        `<div class="table-wrap"><table><thead><tr><th>마켓</th><th>주문번호</th><th>수취인</th><th>연락처</th><th>통합주소</th><th>품목 및 옵션</th><th>수량</th></tr></thead><tbody>` +
-        latestRows.slice(0, 10).map(r => `<tr><td>${escapeHtml(r.market)}</td><td>${escapeHtml(r.orderId)}</td><td>${escapeHtml(r.receiver)}</td><td>${escapeHtml(r.phone)}</td><td>${escapeHtml(r.address)}</td><td>${escapeHtml(r.item)}</td><td>${escapeHtml(r.qty)}</td></tr>`).join("") +
-        `</tbody></table></div>`;
-    });
 
-    function syncProUi() {
-      const st = document.getElementById("unlockStatus");
-      const label = document.getElementById("downloadBtnLabel");
-      if (isProUnlocked) {
-        st.style.color = "var(--ok)";
-        st.textContent = "무제한 패스 활성화 완료 — 전 행 일괄 다운로드가 적용됩니다.";
-        if (label) label.textContent = `표준 발주서 전체 CSV 다운로드 (${latestRows.length || "무제한"}건)`;
-      } else if (label) {
-        label.textContent = "표준 발주서 CSV 다운로드 (무료 체험 5건)";
+      function renderPreview() {
+        var total = normalizedOrders.length;
+        summaryCount.textContent = total + '건 정규화됨';
+        btnDownloadXlsx.disabled = total === 0;
+        btnDownloadCsv.disabled = total === 0;
+
+        if (total === 0) {
+          limitNotice.style.display = 'none';
+          previewBody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--ow-text-muted);padding:24px 14px;">위 파일 영역에 주문서를 올리거나 <strong>[6대 마켓 혼합 샘플 8건 즉시 시연]</strong> 버튼을 눌러 결과를 확인하세요.</td></tr>';
+          return;
+        }
+
+        if (!isPro && total > 5) {
+          limitNotice.style.display = 'block';
+          totalRowsLabel.textContent = total;
+        } else {
+          limitNotice.style.display = 'none';
+        }
+
+        previewBody.innerHTML = normalizedOrders.slice(0, 12).map(function(r, idx) {
+          var lockedRow = !isPro && idx >= 5;
+          return '<tr style="' + (lockedRow ? 'opacity:0.58;' : '') + '">' +
+            '<td><span class="ow-chip ow-chip-neutral">' + escapeHtml(r['마켓구분']) + '</span></td>' +
+            '<td class="ow-mono">' + escapeHtml(r['주문번호']) + '</td>' +
+            '<td style="font-weight:600;">' + escapeHtml(r['수취인명']) + '</td>' +
+            '<td class="ow-mono">' + escapeHtml(r['수취인연락처']) + '</td>' +
+            '<td>' + escapeHtml(r['상품및옵션']) + '</td>' +
+            '<td class="ow-tnum" style="font-weight:600;">' + r['수량'] + '</td>' +
+            '<td>' + escapeHtml(r['통합배송지']) + '</td>' +
+          '</tr>';
+        }).join('');
       }
-    }
-    syncProUi();
 
-    document.getElementById("unlockBtn").addEventListener("click", () => {
-      const code = document.getElementById("passInput").value.trim().toUpperCase().replace(/[\[\]]/g, "");
-      const st = document.getElementById("unlockStatus");
-      if (code === "PASS-2026-PRO") {
-        isProUnlocked = true;
-        localStorage.setItem("seller_pro_unlocked", "1");
-        syncProUi();
-      } else {
-        st.style.color = "var(--danger)";
-        st.textContent = "유효하지 않은 패스 코드입니다. 결제 완료 화면의 코드를 다시 확인해 주세요.";
+      function handleFiles(fileList) {
+        var files = Array.prototype.slice.call(fileList || []);
+        if (!files.length) return;
+        var pending = files.length;
+        files.forEach(function(file) {
+          var reader = new FileReader();
+          reader.onload = function(evt) {
+            try {
+              var wb = XLSX.read(evt.target.result, { type: 'array' });
+              var ws = wb.Sheets[wb.SheetNames[0]];
+              var rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+              rows.forEach(function(r) {
+                var norm = normalizeRow(r, file.name);
+                if (norm) normalizedOrders.push(norm);
+              });
+            } catch (err) {
+              alert('파일을 읽는 중 오류가 발생했습니다. 엑셀 문서 암호가 설정되어 있다면 해제 후 다시 올려주세요.');
+            }
+            pending -= 1;
+            if (pending === 0) renderPreview();
+          };
+          reader.readAsArrayBuffer(file);
+        });
       }
-    });
 
-    document.getElementById("downloadFreeBtn").addEventListener("click", () => {
-      const rows = isProUnlocked ? latestRows : latestRows.slice(0, 5);
-      const header = "순번,마켓,주문번호,받는분성명,받는분전화번호,우편번호,받는분주소,품목명,수량,배송메시지";
-      const body = rows.map((r, i) => [
-        i + 1,
-        r.market,
-        r.orderId,
-        r.receiver,
-        r.phone,
-        r.zipcode,
-        `"${String(r.address).replace(/"/g, '""')}"`,
-        `"${String(r.item).replace(/"/g, '""')}"`,
-        r.qty,
-        `"${String(r.memo).replace(/"/g, '""')}"`
-      ].join(",")).join("\r\n");
-      const blob = new Blob(["\uFEFF" + header + "\r\n" + body], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "통합발주서_변환결과.csv";
-      a.click();
-    });
+      function getExportRows() {
+        return isPro ? normalizedOrders : normalizedOrders.slice(0, 5);
+      }
 
-    document.getElementById("proBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      trackSubscribeClick(PAYMENT_URL);
-    });
+      dropzone.addEventListener('click', function() { fileInput.click(); });
+      dropzone.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+      dropzone.addEventListener('dragover', function(e) { e.preventDefault(); dropzone.classList.add('is-dragover'); });
+      dropzone.addEventListener('dragleave', function() { dropzone.classList.remove('is-dragover'); });
+      dropzone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        dropzone.classList.remove('is-dragover');
+        handleFiles(e.dataTransfer.files);
+      });
+      fileInput.addEventListener('change', function(e) { handleFiles(e.target.files); });
+
+      document.getElementById('btnSampleOrders').addEventListener('click', function() {
+        normalizedOrders = [
+          { '마켓구분':'스마트스토어', '주문번호':'20261112884120', '수취인명':'김지훈', '수취인연락처':'010-4821-9031', '우편번호':'06236', '통합배송지':'서울특별시 강남구 테헤란로 152 8층', '상품및옵션':'스테인리스 보온 텀블러 500ml [매트블랙]', '수량':2, '배송메시지':'문 앞에 놓아주세요' },
+          { '마켓구분':'쿠팡', '주문번호':'3100948271102', '수취인명':'박서연', '수취인연락처':'0507-1420-8832', '우편번호':'13529', '통합배송지':'경기도 성남시 분당구 판교역로 166 402호', '상품및옵션':'고밀도 데스크 매트 대형 [딥네이비]', '수량':1, '배송메시지':'경비실 보관 바랍니다' },
+          { '마켓구분':'11번가', '주문번호':'20261112004982', '수취인명':'이민수', '수취인연락처':'010-7732-1194', '우편번호':'48058', '통합배송지':'부산광역시 해운대구 센텀중앙로 97 A동 1204호', '상품및옵션':'케이블 정리 클립 10개입 [화이트]', '수량':3, '배송메시지':'배송 전 연락 바랍니다' },
+          { '마켓구분':'G마켓·옥션', '주문번호':'4491827301', '수취인명':'최유진', '수취인연락처':'010-2948-6610', '우편번호':'34126', '통합배송지':'대전광역시 유성구 대학로 99 연구동 305호', '상품및옵션':'무소음 버티컬 마우스 [차콜그레이]', '수량':1, '배송메시지':'부재 시 문 앞' },
+          { '마켓구분':'카페24', '주문번호':'20261112-00081', '수취인명':'정현우', '수취인연락처':'010-9102-3384', '우편번호':'21999', '통합배송지':'인천광역시 연수구 컨벤시아대로 165 11층', '상품및옵션':'노트북 알루미늄 거치대 [실버]', '수량':1, '배송메시지':'파손 주의' },
+          { '마켓구분':'스마트스토어', '주문번호':'20261112884199', '수취인명':'한소희', '수취인연락처':'010-6321-7740', '우편번호':'04799', '통합배송지':'서울특별시 성동구 아차산로 113 5층', '상품및옵션':'스테인리스 보온 텀블러 500ml [아이보리]', '수량':2, '배송메시지':'택배함 넣어주세요' },
+          { '마켓구분':'쿠팡', '주문번호':'3100948271988', '수취인명':'오태윤', '수취인연락처':'0507-1499-2011', '우편번호':'61945', '통합배송지':'광주광역시 서구 상무중앙로 78 301호', '상품및옵션':'C타입 PD 고속충전 케이블 2m [블랙]', '수량':4, '배송메시지':'문 앞' },
+          { '마켓구분':'G마켓·옥션', '주문번호':'4491827920', '수취인명':'윤채원', '수취인연락처':'010-8450-1928', '우편번호':'41911', '통합배송지':'대구광역시 중구 동성로 26 2층', '상품및옵션':'노트북 알루미늄 거치대 [스페이스그레이]', '수량':1, '배송메시지':'오전 배송 요청' }
+        ];
+        renderPreview();
+      });
+
+      document.getElementById('btnResetOrders').addEventListener('click', function() {
+        normalizedOrders = [];
+        fileInput.value = '';
+        renderPreview();
+      });
+
+      btnApplyPass.addEventListener('click', function() {
+        var code = (passInput.value || '').trim().toUpperCase();
+        if (code === VALID_PASS) {
+          isPro = true;
+          try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
+          updateLicenseUI();
+          alert('PRO 무제한 패스가 인증되었습니다. 이제 행 수 제한 없이 모든 발주서를 내려받을 수 있습니다.');
+        } else {
+          alert('유효하지 않은 패스 코드입니다. 리틀리 결제 완료 메시지에 안내된 코드를 확인해 주세요.');
+        }
+      });
+
+      btnDownloadXlsx.addEventListener('click', function() {
+        var rows = getExportRows();
+        if (!rows.length) return;
+        var ws = XLSX.utils.json_to_sheet(rows);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, '통합발주원장');
+        var stamp = new Date().toISOString().slice(0, 10);
+        XLSX.writeFile(wb, '오커웍스_통합발주서_' + stamp + (isPro ? '_전체' : '_무료5건') + '.xlsx');
+      });
+
+      btnDownloadCsv.addEventListener('click', function() {
+        var rows = getExportRows();
+        if (!rows.length) return;
+        var ws = XLSX.utils.json_to_sheet(rows);
+        var csv = '\uFEFF' + XLSX.utils.sheet_to_csv(ws);
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = '오커웍스_통합발주서_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.csv';
+        a.click();
+      });
+
+      updateLicenseUI();
+    })();
   </script>
 </body>
 </html>
