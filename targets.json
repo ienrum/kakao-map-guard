@@ -15,8 +15,18 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "Daumcdn Map Blank Error Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/daumcdn-map-error/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "PHP exec KCP cURL Patcher",
     "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
+    "name": "Cafe24 YoungCart5 KCP Error Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/cafe24-youngcart-kcp-error/",
     "expectSubstring": "AW-17208942339"
   },
   {
