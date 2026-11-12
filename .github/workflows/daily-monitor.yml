@@ -1,0 +1,27 @@
+name: Daily Unmanned Site & Map Monitor
+
+on:
+  schedule:
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run unmanned batch check
+        run: |
+          node monitor.mjs --batch targets.json > report.json
+          cat report.json
+          UNHEALTHY=$(node -e 'const r=JSON.parse(require("fs").readFileSync("report.json","utf8")); console.log(r.unhealthyCount);')
+          if [ "$UNHEALTHY" -gt 0 ]; then
+            echo "::warning::Unhealthy site detected ($UNHEALTHY)"
+          fi

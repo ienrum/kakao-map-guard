@@ -1,30 +1,43 @@
 #!/usr/bin/env node
 import https from "node:https";
 import http from "node:http";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 /**
  * 무인 일일 웹사이트 지도 스크립트·SSL·HTTP 생존 점검기
- * 사용법: node monitor.mjs https://example.com
+ * 단건 실행: node monitor.mjs https://example.com
+ * 배치 실행: node monitor.mjs --batch targets.json
  */
 export function scanHtmlForLegacyMap(html) {
   const issues = [];
-  if (/daumcdn\.net\/mapjsapi|map\.daum\.net|apis\.daum\.net/i.test(html)) {
+  const scriptSrcs = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
+  const joinedSrcs = scriptSrcs.join("\n");
+  if (/apis\.daum\.net|map\.daum\.net|daumcdn\.net\/(mapjsapi|dmaps\/map_js_init)/i.test(joinedSrcs)) {
     issues.push("LEGACY_DAUMCDN_MAP_SCRIPT");
   }
-  if (/http:\/\/dapi\.kakao\.com/i.test(html)) {
+  if (/^http:\/\/(dapi\.kakao\.com|t1\.daumcdn\.net|ssl\.daumcdn\.net)/im.test(joinedSrcs)) {
     issues.push("INSECURE_HTTP_KAKAO_SDK");
+  }
+  if (/document\.write\s*\([^)]*(daumcdn\.net|dapi\.kakao\.com|apis\.daum\.net)/i.test(html)) {
+    issues.push("SYNC_DOCUMENT_WRITE_LOADER");
   }
   return issues;
 }
 
 export function checkSite(targetUrl, timeoutMs = 10000) {
   return new Promise((resolve) => {
-    const parsed = new URL(targetUrl);
+    let parsed;
+    try {
+      parsed = new URL(targetUrl);
+    } catch {
+      resolve({ url: targetUrl, checkedAt: new Date().toISOString(), statusCode: 0, certDaysLeft: null, issues: ["INVALID_URL"], healthy: false });
+      return;
+    }
     const client = parsed.protocol === "https:" ? https : http;
     const req = client.get(
       targetUrl,
-      { timeout: timeoutMs, headers: { "User-Agent": "PassiveGuardMonitor/1.0" } },
+      { timeout: timeoutMs, headers: { "User-Agent": "KakaoMapGuardMonitor/1.1" } },
       (res) => {
         let certDaysLeft = null;
         if (res.socket && typeof res.socket.getPeerCertificate === "function") {
@@ -64,12 +77,28 @@ export function checkSite(targetUrl, timeoutMs = 10000) {
 }
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  const target = process.argv[2];
-  if (!target) {
-    const sample = `<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script><script src="//apis.daum.net/maps/maps3.js"></script>`;
+  const arg1 = process.argv[2];
+  if (!arg1) {
+    const sample = `<script src="http://dapi.kakao.com/v2/maps/sdk.js"></script><script src="//apis.daum.net/maps/maps3.js"></script>`;
     console.log(JSON.stringify({ selfTest: true, detected: scanHtmlForLegacyMap(sample) }));
     process.exit(0);
   }
-  const report = await checkSite(target);
+  if (arg1 === "--batch") {
+    const filePath = process.argv[3] || "targets.json";
+    const targets = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    const results = [];
+    for (const item of targets) {
+      const r = await checkSite(item.url);
+      results.push({ name: item.name || item.url, notify: item.email || null, ...r });
+    }
+    const summary = {
+      checkedCount: results.length,
+      unhealthyCount: results.filter((r) => !r.healthy).length,
+      results,
+    };
+    console.log(JSON.stringify(summary, null, 2));
+    process.exit(0);
+  }
+  const report = await checkSite(arg1);
   console.log(JSON.stringify(report, null, 2));
 }

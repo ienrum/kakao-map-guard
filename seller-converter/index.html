@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6대 마켓 발주서 3초 무인 통합 변환기 (스마트스토어·쿠팡·11번가·지마켓)</title>
+  <meta name="description" content="스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 롯데온 주문 엑셀/CSV를 서버 업로드 없이 브라우저 안에서 3초 만에 CJ대한통운·한진·도매 발주 표준 양식으로 통합 변환합니다." />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #172033;
+      --border: #2d3b55;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --ok: #22c55e;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Malgun Gothic", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 32px 20px 72px; }
+    .badge { display: inline-block; background: rgba(56, 189, 248, 0.14); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.35); padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+    h1 { font-size: 27px; margin: 12px 0 8px; line-height: 1.32; }
+    .sub { color: var(--muted); margin: 0 0 22px; font-size: 15px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 18px; }
+    textarea { width: 100%; background: #080d1a; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; margin-bottom: 10px; font-family: monospace; }
+    button, .cta-btn { background: var(--accent); color: #082f49; border: none; border-radius: 10px; padding: 11px 18px; font-size: 14px; font-weight: 800; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn-ghost { background: transparent; color: #cbd5e1; border: 1px solid var(--border); font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+    th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+    th { background: #0f172a; color: #bae6fd; }
+    .price { font-size: 26px; font-weight: 800; color: var(--accent); margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">개인정보 서버 전송 0건 · 100% 내 PC 브라우저 내부 즉시 처리</span>
+    <h1>스마트스토어·쿠팡·11번가·지마켓 발주서,<br/>복붙 알바 없이 3초 만에 택배·도매 표준 양식으로 합치세요</h1>
+    <p class="sub">마켓마다 다른 컬럼 순서를 자동으로 인식해 CJ대한통운·한진·로젠·위탁도매 공통 발주 CSV로 즉시 변환합니다.</p>
+
+    <div class="card">
+      <div style="margin-bottom:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <span style="font-size:13px; color:var(--muted);">3초 시연:</span>
+        <button type="button" class="btn-ghost" id="sampleBtn">스마트스토어+쿠팡 혼합 샘플 넣기</button>
+        <input type="file" id="csvFiles" accept=".csv,.tsv,.txt" multiple style="font-size:13px; color:var(--muted);" />
+      </div>
+      <textarea id="rawInput" rows="7" placeholder="엑셀에서 주문 목록(첫 줄 헤더 포함)을 드래그 복사(Ctrl+C)해 그대로 붙여 넣거나 위에서 CSV 파일을 선택하세요. 여러 마켓 블록을 빈 줄로 이어 붙여도 자동 구분됩니다."></textarea>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" id="convertBtn">무료 변환 미리보기 실행</button>
+        <button type="button" class="btn-ghost" id="downloadFreeBtn" style="display:none;">변환 결과 CSV 다운로드 (무료 체험 5건)</button>
+      </div>
+      <div id="previewArea" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 6px;">무제한 대량 변환 &amp; 도매처별 커스텀 프리셋 패스</h2>
+      <div class="price">첫 달 체험 1,900원 <span style="font-size:14px; font-weight:500; color:var(--muted);">/ 이후 월 4,900원 (언제든 해지 · 불만족 100% 환불)</span></div>
+      <p style="color:var(--muted); margin:6px 0 14px; font-size:14px;">건수 제한 해제(일 1,000건 이상 일괄 병합), 동일 수취인 자동 합포장 묶기, 도매처 전용 양식 저장 기능을 즉시 잠금 해제합니다.</p>
+      <a id="proBtn" class="cta-btn" href="#pro">첫 달 1,900원 무제한 패스 시작하기</a>
+    </div>
+  </div>
+
+  <script>
+    const PAYMENT_URL = "";
+    const ALIASES = {
+      orderId: ["주문번호", "상품주문번호", "묶음배송번호", "주문코드"],
+      receiver: ["수취인명", "수령인", "받는분", "받는사람", "수령인명"],
+      phone: ["수취인연락처1", "수취인전화번호", "연락처", "휴대폰번호", "안심번호"],
+      zipcode: ["우편번호", "배송지우편번호", "새우편번호"],
+      address: ["배송지", "통합배송지", "주소", "수취인주소", "받는분주소"],
+      addressDetail: ["상세주소", "수취인상세주소"],
+      productName: ["상품명", "노출상품명", "주문상품명", "품목명"],
+      optionName: ["옵션정보", "옵션", "등록옵션명", "선택사항"],
+      qty: ["수량", "주문수량", "구매수량"],
+      memo: ["배송메세지", "배송메시지", "배송요청사항", "요청사항"]
+    };
+
+    function parseBlock(block) {
+      const lines = block.trim().split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) return [];
+      const sep = lines[0].includes("\t") ? "\t" : ",";
+      const headers = lines[0].split(sep).map(s => s.trim());
+      const joined = headers.join("|");
+      const market = joined.includes("상품주문번호") ? "스마트스토어" : joined.includes("묶음배송번호") ? "쿠팡" : joined.includes("선택사항") ? "11번가" : "오픈마켓";
+      const findIdx = (k) => {
+        for (const a of ALIASES[k]) {
+          const idx = headers.findIndex(h => h.replace(/\s+/g, "").includes(a));
+          if (idx !== -1) return idx;
+        }
+        return -1;
+      };
+      const m = {};
+      Object.keys(ALIASES).forEach(k => m[k] = findIdx(k));
+      return lines.slice(1).map((line) => {
+        const c = line.split(sep).map(s => s.trim());
+        const g = (k) => m[k] >= 0 ? (c[m[k]] || "") : "";
+        return {
+          market,
+          orderId: g("orderId"),
+          receiver: g("receiver"),
+          phone: g("phone"),
+          zipcode: g("zipcode"),
+          address: [g("address"), g("addressDetail")].filter(Boolean).join(" "),
+          item: [g("productName"), g("optionName")].filter(Boolean).join(" / "),
+          qty: g("qty") || "1",
+          memo: g("memo") || "문 앞"
+        };
+      }).filter(r => r.receiver || r.address);
+    }
+
+    let latestRows = [];
+
+    document.getElementById("sampleBtn").addEventListener("click", () => {
+      document.getElementById("rawInput").value =
+        "상품주문번호\t수취인명\t수취인연락처1\t우편번호\t통합배송지\t상품명\t옵션정보\t수량\t배송메세지\n" +
+        "2026111201\t김민수\t050-1234-5678\t06236\t서울 강남구 테헤란로 152 3층\t무소음 마우스\t블랙\t2\t경비실 보관\n\n" +
+        "묶음배송번호\t수령인\t안심번호\t우편번호\t수취인주소\t상세주소\t노출상품명\t등록옵션명\t구매수량\t배송메시지\n" +
+        "99887766\t박지연\t0502-999-8888\t13529\t경기 성남시 분당구 판교역로 166\t402호\tC타입 멀티허브\t실버 7포트\t1\t문 앞 부탁드립니다";
+      document.getElementById("convertBtn").click();
+    });
+
+    document.getElementById("csvFiles").addEventListener("change", async (e) => {
+      const texts = [];
+      for (const file of e.target.files) {
+        texts.push(await file.text());
+      }
+      document.getElementById("rawInput").value = texts.join("\n\n");
+      document.getElementById("convertBtn").click();
+    });
+
+    document.getElementById("convertBtn").addEventListener("click", () => {
+      const raw = document.getElementById("rawInput").value.trim();
+      const blocks = raw.split(/\n\s*\n/);
+      latestRows = blocks.flatMap(parseBlock);
+      const area = document.getElementById("previewArea");
+      const dlBtn = document.getElementById("downloadFreeBtn");
+      if (latestRows.length === 0) {
+        area.innerHTML = "<span style='color:#fca5a5;'>변환할 주문 행을 찾지 못했습니다. 첫 줄에 컬럼 제목(수취인명, 주소, 상품명 등)이 포함되어 있는지 확인해 주세요.</span>";
+        dlBtn.style.display = "none";
+        return;
+      }
+      dlBtn.style.display = "inline-block";
+      area.innerHTML = `<div style="color:#86efac; font-weight:700;">✓ 총 ${latestRows.length}건 통합 정규화 완료</div>` +
+        `<table><thead><tr><th>마켓</th><th>수취인</th><th>연락처</th><th>통합주소</th><th>품목/옵션</th><th>수량</th></tr></thead><tbody>` +
+        latestRows.slice(0, 10).map(r => `<tr><td>${r.market}</td><td>${r.receiver}</td><td>${r.phone}</td><td>${r.address}</td><td>${r.item}</td><td>${r.qty}</td></tr>`).join("") +
+        `</tbody></table>`;
+    });
+
+    document.getElementById("downloadFreeBtn").addEventListener("click", () => {
+      const rows = latestRows.slice(0, 5);
+      const header = "순번,마켓,주문번호,받는분성명,받는분전화번호,우편번호,받는분주소,품목명,수량,배송메시지";
+      const body = rows.map((r, i) => [i + 1, r.market, r.orderId, r.receiver, r.phone, r.zipcode, `"${r.address}"`, `"${r.item}"`, r.qty, `"${r.memo}"`].join(",")).join("\r\n");
+      const blob = new Blob(["\uFEFF" + header + "\r\n" + body], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "통합발주서_변환결과.csv";
+      a.click();
+    });
+
+    document.getElementById("proBtn").addEventListener("click", (e) => {
+      if (PAYMENT_URL) {
+        e.preventDefault();
+        window.open(PAYMENT_URL, "_blank", "noopener");
+      } else {
+        e.preventDefault();
+        alert("무제한 패스 간편결제 링크 개통 준비 중입니다.");
+      }
+    });
+  </script>
+</body>
+</html>
