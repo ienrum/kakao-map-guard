@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>오커 웍스 | 6대 마켓 주문 엑셀 3초 통합기</title>
-  <meta name="description" content="스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24 주문 엑셀을 서버 전송 0바이트로 3초 만에 표준 발주서 1개로 합칩니다." />
+  <title>오커 웍스 | 6대 마켓 주문 엑셀 3초 통합·합포장·택배양식 변환기</title>
+  <meta name="description" content="스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24 주문 엑셀을 서버 전송 0바이트로 3초 만에 합포장 병합하고 CJ대한통운·우체국·한진 택배 및 도매 발주서로 저장합니다." />
   <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/seller-converter/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="6대 마켓 주문 엑셀, 3초 만에 하나로 | 오커 웍스" />
@@ -209,14 +209,33 @@
 
               <div id="resultPanel" style="margin-top:16px;border-top:1px solid var(--ow-border-default);padding-top:14px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
-                  <div>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <strong style="font-size:0.875rem;">통합 결과</strong>
-                    <span class="ow-mono" style="margin-left:6px;color:var(--ow-text-muted);" id="summaryCount">0건</span>
+                    <span class="ow-mono" style="color:var(--ow-text-muted);" id="summaryCount">0건</span>
+                    <span class="ow-chip ow-chip-ok" id="bundleSavingBadge" style="display:none;">합포장 0건 절감</span>
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                     <button type="button" class="ow-btn ow-btn-secondary" id="btnDownloadCsv" disabled>CSV 저장</button>
                     <button type="button" class="ow-btn ow-btn-primary" id="btnDownloadXlsx" disabled>엑셀(.xlsx) 저장</button>
                   </div>
+                </div>
+
+                <!-- Export Preset & Bundle Consolidation Controls -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <label for="exportPresetSelect" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">출고 양식</label>
+                    <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);min-width:196px;padding:6px 10px;">
+                      <option value="standard">표준 통합발주서 (9열)</option>
+                      <option value="cj">CJ대한통운 CNPlus 일괄등록</option>
+                      <option value="epost">우체국택배 계약소포 엑셀접수</option>
+                      <option value="hanjin">한진·롯데·로젠 표준 택배양식</option>
+                      <option value="wholesale">도매꾹·오너클랜 위탁발주서</option>
+                    </select>
+                  </div>
+                  <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:0.75rem;font-weight:600;color:var(--ow-text-secondary);">
+                    <input type="checkbox" id="chkBundleMerge" checked style="accent-color:var(--ow-action-primary);width:15px;height:15px;cursor:pointer;" />
+                    <span>동일 수취인 합포장 자동 병합 (중복 택배비 방지)</span>
+                  </label>
                 </div>
 
                 <!-- Live Market Distribution Bar -->
@@ -226,7 +245,10 @@
                 </div>
 
                 <div id="limitNotice" style="display:none;margin-bottom:10px;padding:10px 12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.75rem;color:var(--ow-p-amber-800);">
-                  무료 버전은 5건까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 저장은 <a href="#offer" style="color:var(--ow-p-amber-800);font-weight:700;">월 4,900원 패스</a>로 해제하세요.
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                    <span>무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
+                    <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
+                  </div>
                 </div>
 
                 <div class="ow-ledger-sheet">
@@ -831,28 +853,170 @@
         return String(p || '').trim();
       }
 
+      var bundleSavingBadge = document.getElementById('bundleSavingBadge');
+      var exportPresetSelect = document.getElementById('exportPresetSelect');
+      var chkBundleMerge = document.getElementById('chkBundleMerge');
+
+      function extractSheetRows(ws) {
+        var matrix = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+        var maxScan = Math.min(matrix.length, 12);
+        var headerIdx = 0;
+        var recvRe = /수취인|수령인|받는분|받는사람/;
+        var orderRe = /상품|품목|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
+        for (var i = 0; i < maxScan; i++) {
+          var joined = (matrix[i] || []).map(function(c) { return String(c || '').replace(/\s+/g, ''); }).join('|');
+          if (recvRe.test(joined) && orderRe.test(joined)) {
+            headerIdx = i;
+            break;
+          }
+        }
+        return XLSX.utils.sheet_to_json(ws, { range: headerIdx, defval: '' });
+      }
+
       function normalizeRow(raw, fileName) {
         var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '받는분', '받는사람']);
         var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명']);
-        if (!recipient && !product) return null;
+        if ((!recipient && !product) || /^(수취인명|수령인|받는분)$/.test(recipient)) return null;
 
         var addrBase = pickField(raw, ['통합배송지', '배송지', '수취인 주소', '수령인 주소', '주소', '기본주소']);
-        var addrDetail = pickField(raw, ['상세주소', '수취인 상세주소', '나머지주소']);
+        var addrDetail = pickField(raw, ['상세주소', '수취인 상세주소', '배송지상세주소', '나머지주소']);
         var fullAddr = (addrBase + (addrDetail && addrBase.indexOf(addrDetail) === -1 ? ' ' + addrDetail : '')).replace(/\s+/g, ' ').trim();
-        var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수', '주문수량']) || '1';
+        var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수량', '구매수', '주문수량']) || '1';
         var qty = parseInt(qtyRaw.replace(/[^0-9]/g, ''), 10) || 1;
+        var opt = pickField(raw, ['옵션정보', '옵션명', '등록옵션명', '주문옵션', '선택사항', '옵션']);
 
         return {
           '마켓구분': detectMarket(raw, fileName || ''),
-          '주문번호': pickField(raw, ['상품주문번호', '주문번호', '묶음배송번호', '장바구니번호']) || '-',
+          '주문번호': pickField(raw, ['상품주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드']) || '-',
           '수취인명': recipient,
-          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '연락처'])),
-          '우편번호': pickField(raw, ['우편번호', '수취인 우편번호']),
+          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '안심번호', '연락처'])),
+          '우편번호': pickField(raw, ['우편번호', '수취인 우편번호', '배송지우편번호', '새우편번호']),
           '통합배송지': fullAddr,
-          '상품및옵션': (product + (pickField(raw, ['옵션정보', '옵션명', '주문옵션', '옵션']) ? ' [' + pickField(raw, ['옵션정보', '옵션명', '주문옵션', '옵션']) + ']' : '')).trim(),
+          '상품및옵션': (product + (opt ? ' [' + opt + ']' : '')).trim(),
           '수량': qty,
-          '배송메시지': pickField(raw, ['배송메세지', '배송메시지', '배송요청사항'])
+          '배송메시지': pickField(raw, ['배송메세지', '배송메시지', '배송요청사항', '배송시요구사항']) || '문 앞'
         };
+      }
+
+      function getProcessedBundle() {
+        if (!chkBundleMerge || !chkBundleMerge.checked) {
+          return { rows: normalizedOrders.slice(), savedWaybills: 0 };
+        }
+        var seen = {};
+        var out = [];
+        var saved = 0;
+        normalizedOrders.forEach(function(r) {
+          var phoneDigits = String(r['수취인연락처'] || '').replace(/[^0-9]/g, '');
+          var cleanAddr = String(r['통합배송지'] || '').replace(/\s+/g, '');
+          var key = (r['수취인명'] && cleanAddr) ? (r['수취인명'] + '|' + phoneDigits + '|' + cleanAddr) : '';
+          if (key && seen[key]) {
+            var prev = seen[key];
+            prev['상품및옵션'] = prev['상품및옵션'] + (prev._merged ? '' : ' (x' + prev['수량'] + ')') + ' + ' + r['상품및옵션'] + ' (x' + r['수량'] + ')';
+            prev._merged = true;
+            prev['수량'] = (prev['수량'] || 1) + (r['수량'] || 1);
+            if (prev['주문번호'].indexOf(r['주문번호']) === -1) prev['주문번호'] += ',' + r['주문번호'];
+            if (prev['마켓구분'].indexOf(r['마켓구분']) === -1) prev['마켓구분'] += '+' + r['마켓구분'];
+            saved += 1;
+          } else {
+            var copy = {
+              '마켓구분': r['마켓구분'],
+              '주문번호': r['주문번호'],
+              '수취인명': r['수취인명'],
+              '수취인연락처': r['수취인연락처'],
+              '우편번호': r['우편번호'],
+              '통합배송지': r['통합배송지'],
+              '상품및옵션': r['상품및옵션'],
+              '수량': r['수량'],
+              '배송메시지': r['배송메시지']
+            };
+            if (key) seen[key] = copy;
+            out.push(copy);
+          }
+        });
+        return { rows: out, savedWaybills: saved };
+      }
+
+      var PRESET_LABELS = {
+        standard: '통합발주서',
+        cj: 'CJ대한통운_CNPlus',
+        epost: '우체국택배_일괄접수',
+        hanjin: '한진롯데로젠_택배양식',
+        wholesale: '도매위탁발주서'
+      };
+
+      function formatRowsByPreset(rows, preset) {
+        return rows.map(function(r, idx) {
+          var itemWithQty = (r['수량'] > 1 && r['상품및옵션'].indexOf('(x') === -1) ? (r['상품및옵션'] + ' (' + r['수량'] + '개)') : r['상품및옵션'];
+          if (preset === 'cj') {
+            return {
+              '받는분성명': r['수취인명'],
+              '받는분전화번호': r['수취인연락처'],
+              '받는분기타연락처': '',
+              '받는분우편번호': r['우편번호'],
+              '받는분주소(전체, 분할)': r['통합배송지'],
+              '기본운임': '선불',
+              '박스타입': '극소',
+              '박수수량': 1,
+              '품목명': itemWithQty,
+              '배송메세지1': r['배송메시지'],
+              '고객주문번호': r['주문번호']
+            };
+          }
+          if (preset === 'epost') {
+            return {
+              '우편번호': r['우편번호'],
+              '주소': r['통합배송지'],
+              '상세주소': '',
+              '수취인명': r['수취인명'],
+              '전화번호': r['수취인연락처'],
+              '휴대전화': r['수취인연락처'],
+              '중량(kg)': 1,
+              '부피(cm)': 60,
+              '내용품코드': '025',
+              '내용품명': itemWithQty,
+              '배송메시지': r['배송메시지']
+            };
+          }
+          if (preset === 'hanjin') {
+            return {
+              '수하인명': r['수취인명'],
+              '수하인전화': r['수취인연락처'],
+              '수하인핸드폰': r['수취인연락처'],
+              '우편번호': r['우편번호'],
+              '수하인주소': r['통합배송지'],
+              '수량': 1,
+              '품목명': itemWithQty,
+              '운임구분': '선불',
+              '배송메세지': r['배송메시지'],
+              '주문번호': r['주문번호']
+            };
+          }
+          if (preset === 'wholesale') {
+            return {
+              '주문번호': r['주문번호'],
+              '판매마켓': r['마켓구분'],
+              '수령인': r['수취인명'],
+              '수령인연락처': r['수취인연락처'],
+              '우편번호': r['우편번호'],
+              '배송지주소': r['통합배송지'],
+              '상품명_옵션': r['상품및옵션'],
+              '주문수량': r['수량'],
+              '배송요청사항': r['배송메시지']
+            };
+          }
+          return {
+            '순번': idx + 1,
+            '마켓구분': r['마켓구분'],
+            '주문번호': r['주문번호'],
+            '수취인명': r['수취인명'],
+            '수취인연락처': r['수취인연락처'],
+            '우편번호': r['우편번호'],
+            '통합배송지': r['통합배송지'],
+            '상품및옵션': r['상품및옵션'],
+            '수량': r['수량'],
+            '배송메시지': r['배송메시지']
+          };
+        });
       }
 
       function escapeHtml(s) {
@@ -870,10 +1034,21 @@
       };
 
       function renderPreview() {
-        var total = normalizedOrders.length;
-        summaryCount.textContent = total + '건';
+        var bundle = getProcessedBundle();
+        var displayOrders = bundle.rows;
+        var total = displayOrders.length;
+        summaryCount.textContent = bundle.savedWaybills > 0 ? (total + '건 (원본 ' + normalizedOrders.length + '건)') : (total + '건');
         btnDownloadXlsx.disabled = total === 0;
         btnDownloadCsv.disabled = total === 0;
+
+        if (bundleSavingBadge) {
+          if (bundle.savedWaybills > 0) {
+            bundleSavingBadge.style.display = 'inline-flex';
+            bundleSavingBadge.textContent = '합포장 ' + bundle.savedWaybills + '건 · 택배비 약 ' + (bundle.savedWaybills * 3000).toLocaleString() + '원 절감';
+          } else {
+            bundleSavingBadge.style.display = 'none';
+          }
+        }
 
         if (total === 0) {
           limitNotice.style.display = 'none';
@@ -902,7 +1077,7 @@
         });
         var mKeys = Object.keys(counts);
         marketDistBar.innerHTML = mKeys.map(function(m) {
-          var pct = Math.max(6, Math.round((counts[m] / total) * 100));
+          var pct = Math.max(6, Math.round((counts[m] / normalizedOrders.length) * 100));
           var col = MARKET_COLORS[m] || '#475569';
           return '<div class="ow-dist-seg" style="width:' + pct + '%;background-color:' + col + ';"></div>';
         }).join('');
@@ -922,7 +1097,7 @@
           limitNotice.style.display = 'none';
         }
 
-        previewBody.innerHTML = normalizedOrders.slice(0, 10).map(function(r, idx) {
+        previewBody.innerHTML = displayOrders.slice(0, 10).map(function(r, idx) {
           var lockedRow = !isPro && idx >= 5;
           var delayMs = Math.min(idx, 6) * 35;
           return '<tr class="ow-row-enter" style="animation-delay:' + delayMs + 'ms;' + (lockedRow ? 'opacity:0.55;' : '') + '">' +
@@ -946,7 +1121,7 @@
             try {
               var wb = XLSX.read(evt.target.result, { type: 'array' });
               var ws = wb.Sheets[wb.SheetNames[0]];
-              var rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+              var rows = extractSheetRows(ws);
               rows.forEach(function(r) {
                 var norm = normalizeRow(r, file.name);
                 if (norm) normalizedOrders.push(norm);
@@ -957,8 +1132,11 @@
             pending -= 1;
             if (pending === 0) {
               renderPreview();
-              if (normalizedOrders.length > 0) {
-                showFeedback(normalizedOrders.length + '건 통합 완료 (외부 전송 0 Byte)', 'is-ok');
+              var b = getProcessedBundle();
+              if (b.rows.length > 0) {
+                showFeedback(b.rows.length + '건 출고 시트 준비 완료' + (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') + ' · 외부 전송 0 Byte', 'is-ok');
+              } else {
+                showFeedback('인식된 주문 행이 없습니다. 주문 발주서 원본 파일인지 확인해 주세요.', 'is-warn');
               }
             }
           };
@@ -969,6 +1147,7 @@
       function loadSampleData() {
         normalizedOrders = [
           { '마켓구분':'스마트스토어', '주문번호':'20261112884120', '수취인명':'김지훈', '수취인연락처':'010-4821-9031', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'보온 텀블러 500ml [블랙]', '수량':2, '배송메시지':'문 앞' },
+          { '마켓구분':'스마트스토어', '주문번호':'20261112884121', '수취인명':'김지훈', '수취인연락처':'010-4821-9031', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'전용 세척솔 세트 [화이트]', '수량':1, '배송메시지':'문 앞' },
           { '마켓구분':'쿠팡', '주문번호':'3100948271102', '수취인명':'박서연', '수취인연락처':'0507-1420-8832', '우편번호':'13529', '통합배송지':'경기 성남시 분당구 판교역로 166 402호', '상품및옵션':'데스크 매트 대형 [네이비]', '수량':1, '배송메시지':'경비실' },
           { '마켓구분':'11번가', '주문번호':'20261112004982', '수취인명':'이민수', '수취인연락처':'010-7732-1194', '우편번호':'48058', '통합배송지':'부산 해운대구 센텀중앙로 97 1204호', '상품및옵션':'케이블 정리 클립 [화이트]', '수량':3, '배송메시지':'연락 바람' },
           { '마켓구분':'G마켓·옥션', '주문번호':'4491827301', '수취인명':'최유진', '수취인연락처':'010-2948-6610', '우편번호':'34126', '통합배송지':'대전 유성구 대학로 99 305호', '상품및옵션':'무소음 버티컬 마우스 [차콜]', '수량':1, '배송메시지':'문 앞' },
@@ -978,12 +1157,23 @@
           { '마켓구분':'G마켓·옥션', '주문번호':'4491827920', '수취인명':'윤채원', '수취인연락처':'010-8450-1928', '우편번호':'41911', '통합배송지':'대구 중구 동성로 26 2층', '상품및옵션':'알루미늄 노트북 거치대 [그레이]', '수량':1, '배송메시지':'오전 배송' }
         ];
         renderPreview();
-        showFeedback('샘플 8건이 통합되었습니다. [엑셀(.xlsx) 저장]을 눌러 확인해 보세요.', 'is-ok');
+        showFeedback('원본 9건 → 합포장 8건 자동 통합 완료 (중복 택배비 약 3,000원 절감). 출고 양식을 골라 저장해 보세요.', 'is-ok');
       }
 
       function getExportRows() {
-        return isPro ? normalizedOrders : normalizedOrders.slice(0, 5);
+        var displayOrders = getProcessedBundle().rows;
+        var sliced = isPro ? displayOrders : displayOrders.slice(0, 5);
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        return formatRowsByPreset(sliced, preset);
       }
+
+      if (chkBundleMerge) chkBundleMerge.addEventListener('change', renderPreview);
+      if (exportPresetSelect) exportPresetSelect.addEventListener('change', function() {
+        if (normalizedOrders.length > 0) {
+          var pName = PRESET_LABELS[exportPresetSelect.value] || '통합발주서';
+          showFeedback('출고 양식이 [' + pName.replace(/_/g, ' ') + '] 규격으로 전환되었습니다.', 'is-ok');
+        }
+      });
 
       dropzone.addEventListener('click', function() { fileInput.click(); });
       dropzone.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
@@ -1022,27 +1212,31 @@
       btnDownloadXlsx.addEventListener('click', function() {
         var rows = getExportRows();
         if (!rows.length) return;
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        var label = PRESET_LABELS[preset] || '통합발주서';
         var ws = XLSX.utils.json_to_sheet(rows);
         var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, '통합발주서');
+        XLSX.utils.book_append_sheet(wb, ws, label.slice(0, 28));
         var stamp = new Date().toISOString().slice(0, 10);
-        XLSX.writeFile(wb, '오커웍스_통합발주서_' + stamp + (isPro ? '_전체' : '_무료5건') + '.xlsx');
+        XLSX.writeFile(wb, '오커웍스_' + label + '_' + stamp + (isPro ? '_전체' : '_무료5건') + '.xlsx');
         convStep3.className = 'ow-step-pill is-done';
-        showFeedback('엑셀 파일(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        showFeedback(label.replace(/_/g, ' ') + ' 엑셀(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
       });
 
       btnDownloadCsv.addEventListener('click', function() {
         var rows = getExportRows();
         if (!rows.length) return;
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        var label = PRESET_LABELS[preset] || '통합발주서';
         var ws = XLSX.utils.json_to_sheet(rows);
         var csv = '\uFEFF' + XLSX.utils.sheet_to_csv(ws);
         var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = '오커웍스_통합발주서_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.csv';
+        a.download = '오커웍스_' + label + '_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.csv';
         a.click();
         convStep3.className = 'ow-step-pill is-done';
-        showFeedback('CSV 파일(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        showFeedback(label.replace(/_/g, ' ') + ' CSV(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
       });
 
       updateLicenseUI();
