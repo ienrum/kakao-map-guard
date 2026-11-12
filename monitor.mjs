@@ -11,7 +11,10 @@ import { fileURLToPath } from "node:url";
  */
 export function scanHtmlForLegacyMap(html) {
   const issues = [];
-  const scriptSrcs = [...html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)].map((m) => m[1]);
+  const strippedInlineScripts = html.replace(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/gi, "");
+  const scriptSrcs = [...strippedInlineScripts.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
+    .map((m) => m[1])
+    .filter((src) => !/\/postcode\//i.test(src));
   const joinedSrcs = scriptSrcs.join("\n");
   if (/apis\.daum\.net|map\.daum\.net|daumcdn\.net\/(mapjsapi|dmaps\/map_js_init)/i.test(joinedSrcs)) {
     issues.push("LEGACY_DAUMCDN_MAP_SCRIPT");
@@ -19,7 +22,7 @@ export function scanHtmlForLegacyMap(html) {
   if (/^http:\/\/(dapi\.kakao\.com|t1\.daumcdn\.net|ssl\.daumcdn\.net)/im.test(joinedSrcs)) {
     issues.push("INSECURE_HTTP_KAKAO_SDK");
   }
-  if (/document\.write\s*\([^)]*(daumcdn\.net|dapi\.kakao\.com|apis\.daum\.net)/i.test(html)) {
+  if (/document\.write\s*\([^)]*(daumcdn\.net|dapi\.kakao\.com|apis\.daum\.net)/i.test(strippedInlineScripts)) {
     issues.push("SYNC_DOCUMENT_WRITE_LOADER");
   }
   return issues;
