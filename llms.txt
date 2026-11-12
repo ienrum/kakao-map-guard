@@ -11,6 +11,7 @@
 - [홈페이지 오시는길 카카오맵·다음지도 백지 복구 가이드](https://ienrum.github.io/kakao-map-guard/daumcdn-map-error/): 구형 다음지도(apis.daum.net) 중단 및 HTTPS 혼합 콘텐츠 차단 복구 절차와 웹에이전시·다점포 유지보수 비용 절감 시뮬레이터.
 - [호스팅 PHP exec() 차단 복구 KCP cURL 어댑터 생성기](https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/): 웹호스팅 `disable_functions=exec` 보안 패치로 멈춘 영카트5·그누보드 NHN KCP(`pp_cli`) 결제를 무바이너리 HTTPS cURL 어댑터 코드로 변환.
 - [카페24·가비아 영카트5 KCP 결제 오류 3분 복구 가이드](https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/cafe24-youngcart-kcp-error/): 호스팅 PHP exec() 차단 증상 10초 판별기 및 프리랜서 긴급 외주(22만원) 대비 비용·보안 비교.
+- [개인정보 무수집 기술 보증·이용약관·7일 100% 환불 규정](https://ienrum.github.io/kakao-map-guard/privacy-terms/): 외부 서버 0 Byte 로컬 처리 검증 안내, 이용약관 및 조건 없는 7일 전액 환불 규정.
 
 ## 요금 및 보증
 

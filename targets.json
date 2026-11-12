@@ -35,6 +35,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "Privacy Zero-Upload and Refund Policy",
+    "url": "https://ienrum.github.io/kakao-map-guard/privacy-terms/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "Littly Checkout Portal",
     "url": "https://litt.ly/ohker"
   }
