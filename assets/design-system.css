@@ -338,16 +338,16 @@ a {
   min-height: 46px;
 }
 
-/* 4. Asymmetric Workbench Hero Split */
+/* 4. Asymmetric Workbench Hero Split (Spacious Editorial Breathing Room) */
 .ow-hero-section {
-  padding: 36px 0 44px;
+  padding: 60px 0 76px;
   border-bottom: 1px solid var(--ow-border-default);
 }
 
 .ow-workbench-grid {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 28px;
+  gap: 40px;
   align-items: start;
 }
 
@@ -578,19 +578,41 @@ a {
   border: 1px solid var(--ow-border-default);
 }
 
-/* 7. Sections & Specification Matrix Tables (Stripe / Datadog Hairline Grid) */
+/* 7. Sections & Specification Matrix Tables (Spacious Scroll Rhythm) */
 .ow-section {
-  padding: 52px 0;
+  padding: 96px 0;
   border-bottom: 1px solid var(--ow-border-default);
+}
+
+.ow-fine {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ow-text-muted);
+}
+
+.ow-fine-dark {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ow-text-on-dark-muted);
+}
+
+.ow-section-alt {
+  background-color: var(--ow-bg-sheet);
+}
+
+.ow-section-dark {
+  background-color: var(--ow-bg-telemetry);
+  color: var(--ow-text-on-dark);
+  border-bottom: 1px solid var(--ow-border-on-dark);
 }
 
 .ow-section-head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .ow-section-title {
@@ -1076,24 +1098,354 @@ a {
   font-weight: 600;
 }
 
+/* 12. Spacious Visual Storytelling, Interactive Simulators & Scroll Choreography */
+
+/* Top Sticky Scroll Progress Line (GPU scaleX only) */
+.ow-scroll-progress {
+  height: 2px;
+  width: 100%;
+  background-color: transparent;
+  overflow: hidden;
+}
+.ow-scroll-progress-bar {
+  height: 100%;
+  width: 100%;
+  background-color: var(--ow-action-primary);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 90ms linear;
+}
+
+/* Progressive-enhancement Scroll Reveal (Always visible if JS fails) */
+html.js-ready .ow-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 480ms var(--ow-ease-out), transform 480ms var(--ow-ease-out);
+}
+html.js-ready .ow-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero Value Metrics Row */
+.ow-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 28px;
+}
+
+.ow-metric-tile {
+  padding: 14px 16px;
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+}
+
+.ow-metric-val {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ow-text-primary);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+
+.ow-metric-lbl {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--ow-text-muted);
+}
+
+/* Story 3-Beat Visual Progression Grid */
+.ow-story-beats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.ow-story-beat {
+  padding: 24px;
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ow-story-beat-highlight {
+  border-color: var(--ow-action-primary);
+  background-color: var(--ow-action-wash);
+}
+
+.ow-beat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Full-Width Interactive Visual Stage */
+.ow-stage-shell {
+  border-radius: var(--ow-radius-lg);
+  border: 1px solid var(--ow-border-strong);
+  background-color: var(--ow-bg-telemetry);
+  color: var(--ow-text-on-dark);
+  overflow: hidden;
+}
+
+.ow-stage-toolbar {
+  padding: 14px 20px;
+  background-color: var(--ow-bg-telemetry-raised);
+  border-bottom: 1px solid var(--ow-border-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ow-stage-body {
+  padding: 28px;
+}
+
+/* Interactive Marketplace Column Mapper */
+.ow-mapper-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.ow-mapper-pill {
+  padding: 8px 14px;
+  min-height: 38px;
+  border-radius: var(--ow-radius-sm);
+  border: 1px solid var(--ow-border-on-dark);
+  background-color: var(--ow-bg-telemetry-raised);
+  color: var(--ow-text-on-dark-muted);
+  font-family: var(--ow-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 140ms var(--ow-ease-out);
+}
+.ow-mapper-pill:active { transform: scale(0.97); }
+.ow-mapper-pill[aria-pressed="true"] {
+  background-color: var(--ow-action-primary);
+  border-color: var(--ow-action-primary);
+  color: var(--ow-text-on-dark);
+}
+
+.ow-mapper-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.ow-schema-box {
+  padding: 18px 20px;
+  border-radius: var(--ow-radius-md);
+  background-color: var(--ow-bg-telemetry-raised);
+  border: 1px solid var(--ow-border-on-dark);
+}
+
+.ow-schema-box-ok {
+  border-color: var(--ow-p-emerald-500);
+}
+
+.ow-schema-tags {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ow-schema-tag {
+  padding: 9px 12px;
+  border-radius: var(--ow-radius-xs);
+  background-color: var(--ow-bg-telemetry);
+  border: 1px solid var(--ow-border-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.8125rem;
+}
+
+/* 3-Step Spacious Visual Walkthrough */
+.ow-walkthrough-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.ow-walk-step {
+  padding: 24px;
+  border-radius: var(--ow-radius-md);
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+}
+
+.ow-walk-illustration {
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-canvas);
+  border: 1px solid var(--ow-border-default);
+}
+
+/* Interactive ROI Calculator & Live Bar Chart */
+.ow-calc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.ow-calc-controls {
+  padding: 28px;
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.ow-slider-field {
+  display: grid;
+  gap: 10px;
+}
+
+.ow-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ow-range-input {
+  flex: 1;
+  accent-color: var(--ow-action-primary);
+  height: 6px;
+  cursor: pointer;
+}
+
+.ow-step-AdjustBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ow-radius-xs);
+  border: 1px solid var(--ow-border-strong);
+  background-color: var(--ow-bg-canvas);
+  color: var(--ow-text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 140ms ease, transform 140ms var(--ow-ease-out);
+}
+.ow-step-AdjustBtn:active { transform: scale(0.95); }
+
+.ow-calc-output {
+  padding: 28px;
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.ow-kpi-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ow-kpi-card {
+  padding: 18px 20px;
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-canvas);
+  border: 1px solid var(--ow-border-default);
+}
+
+.ow-kpi-card-accent {
+  background-color: var(--ow-p-emerald-50);
+  border-color: var(--ow-p-emerald-200);
+}
+
+/* FAQ Disclosure List */
+.ow-faq-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.ow-faq-item {
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  overflow: hidden;
+}
+
+.ow-faq-summary {
+  padding: 18px 22px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ow-text-primary);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ow-faq-summary::-webkit-details-marker { display: none; }
+
+.ow-faq-body {
+  padding: 0 22px 18px;
+  font-size: 0.875rem;
+  color: var(--ow-text-secondary);
+  border-top: 1px solid var(--ow-border-subtle);
+  padding-top: 14px;
+}
+
 @media (max-width: 980px) {
   .ow-workbench-grid,
-  .ow-split-2 {
+  .ow-split-2,
+  .ow-story-beats,
+  .ow-walkthrough-grid,
+  .ow-calc-grid,
+  .ow-mapper-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
+  .ow-hero-section { padding: 40px 0 52px; }
+  .ow-section { padding: 60px 0; }
   .ow-container, .ow-header-inner, .ow-telemetry-inner { padding-left: 16px; padding-right: 16px; }
   .ow-header-inner { padding-top: 10px; padding-bottom: 10px; }
   .ow-spec-row { grid-template-columns: 1fr; gap: 3px; }
-  .ow-rate-card { padding: 20px; }
+  .ow-rate-card, .ow-calc-controls, .ow-calc-output, .ow-stage-body { padding: 20px; }
   .ow-bar-row { grid-template-columns: 88px minmax(0, 1fr) 78px; }
-  .ow-step-strip { grid-template-columns: 1fr; }
+  .ow-step-strip, .ow-hero-metrics, .ow-kpi-pair { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  html.js-ready .ow-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
   .ow-flow-path { animation: none; stroke-dasharray: none; }
   .ow-viz-pane.is-active,
   .ow-row-enter,
@@ -1103,12 +1455,17 @@ a {
   .ow-btn,
   .ow-preset-btn,
   .ow-viz-tab,
-  .ow-bar-fill {
+  .ow-mapper-pill,
+  .ow-step-AdjustBtn,
+  .ow-bar-fill,
+  .ow-scroll-progress-bar {
     transition-duration: 0ms;
   }
   .ow-btn:active:not(:disabled),
   .ow-preset-btn:active,
-  .ow-viz-tab:active {
+  .ow-viz-tab:active,
+  .ow-mapper-pill:active,
+  .ow-step-AdjustBtn:active {
     transform: none;
   }
 }
