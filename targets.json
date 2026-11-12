@@ -1,6 +1,26 @@
 [
   {
-    "name": "KakaoMapGuard Self-Check",
-    "url": "https://ienrum.github.io/kakao-map-guard/"
+    "name": "Seller Converter Workbench",
+    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
+    "name": "Sabangnet Alternative Comparison",
+    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
+    "name": "KakaoMapGuard Code Generator",
+    "url": "https://ienrum.github.io/kakao-map-guard/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
+    "name": "PHP exec KCP cURL Patcher",
+    "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
+    "name": "Littly Checkout Portal",
+    "url": "https://litt.ly/ohker"
   }
 ]

@@ -25,7 +25,7 @@ export function scanHtmlForLegacyMap(html) {
   return issues;
 }
 
-export function checkSite(targetUrl, timeoutMs = 10000) {
+export function checkSite(targetUrl, timeoutMs = 10000, expectSubstring = null) {
   return new Promise((resolve) => {
     let parsed;
     try {
@@ -55,6 +55,7 @@ export function checkSite(targetUrl, timeoutMs = 10000) {
           const issues = scanHtmlForLegacyMap(body);
           if (res.statusCode >= 400) issues.push(`HTTP_STATUS_${res.statusCode}`);
           if (certDaysLeft !== null && certDaysLeft < 14) issues.push(`SSL_EXPIRING_${certDaysLeft}D`);
+          if (expectSubstring && !body.includes(expectSubstring)) issues.push(`MISSING_SUBSTRING:${expectSubstring}`);
           resolve({
             url: targetUrl,
             checkedAt: new Date().toISOString(),
@@ -88,7 +89,7 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
     const targets = JSON.parse(fs.readFileSync(filePath, "utf8"));
     const results = [];
     for (const item of targets) {
-      const r = await checkSite(item.url);
+      const r = await checkSite(item.url, 10000, item.expectSubstring || null);
       results.push({ name: item.name || item.url, notify: item.email || null, ...r });
     }
     const summary = {

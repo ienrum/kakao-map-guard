@@ -1,0 +1,16 @@
+# 오커 웍스 (Ohker Works) — B2B 무인 웹 유틸리티 3종 통합 패스
+
+> 모든 데이터 처리(주문 엑셀 병합, 지도 HTML 좌표 추출, PHP 결제 코드 정적 분석)는 사용자 PC 브라우저 메모리에서만 실행되며 외부 서버 전송량은 0 Byte입니다.
+
+## 주요 제품 및 공개 주소
+
+- [6대 마켓 발주서 3초 통합기](https://ienrum.github.io/kakao-map-guard/seller-converter/): 스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24 주문 엑셀을 택배·도매 표준 8열 시트 1개로 3초 만에 병합 (회당 5건 무료 체험).
+- [사방넷·플레이오토 소량 셀러 경량 대안 비교](https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/): 일 주문 5~100건 위탁·부업 셀러를 위한 월 5~30만원 통합관리 ERP 대비 월 4,900원 경량 대안 안내 및 연간 비용 절감 계산기.
+- [카카오 지도 종료 대비 교체 코드 생성기](https://ienrum.github.io/kakao-map-guard/): 구형 카카오 지도 스크립트를 무료 진단하고 매장 좌표를 유지한 신규 v2 SDK 및 4.5초 먹통 감지 길찾기 폴백 완성 코드를 즉시 합성.
+- [호스팅 PHP exec() 차단 복구 KCP cURL 어댑터 생성기](https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/): 웹호스팅 `disable_functions=exec` 보안 패치로 멈춘 영카트5·그누보드 NHN KCP(`pp_cli`) 결제를 무바이너리 HTTPS cURL 어댑터 코드로 변환.
+
+## 요금 및 보증
+
+- 단일 통합 패스: 월 4,900원 (VAT 포함 고정 정가, 약정 없음, 3종 유틸리티 무제한 동시 잠금 해제)
+- 즉시 발급 창구: https://litt.ly/ohker
+- 환불 보증 및 지원: 결제 후 7일 이내 조건 없는 100% 전액 환불 보장 (oker04897@gmail.com)
