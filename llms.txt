@@ -10,6 +10,7 @@
 - [도매매·오너클랜·도매꾹 위탁판매 대량발주 엑셀 3초 자동 변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/domeme-ownerclan-wholesale/): 스마트스토어 암호 엑셀 Ctrl+V 및 쿠팡 분리주소를 로컬 메모리에서 050 합포장하여 도매처 위탁발주 표준 엑셀(.xlsx)로 변환하는 브릿지.
 - [합포장 운송장 번호 스마트스토어·쿠팡 일괄 발송처리 엑셀 역변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/waybill-upload-split/): CJ 로이스파셀·한진·롯데·로젠·우체국 출력 운송장 엑셀의 콤마 병합 주문번호를 스마트스토어·쿠팡 윙 발송처리 일괄등록 양식으로 3초 만에 자동 분리·역변환.
 - [5대 택배사 일괄접수 엑셀 양식 무료 발급기](https://ienrum.github.io/kakao-map-guard/seller-converter/courier-excel-format/): CJ대한통운 CNPlus, 우체국 계약소포, 한진 H-Focus, 롯데 알짜배기, 로젠 i-LOGEN, 도매 위탁발주서 표준 빈 양식(.xlsx) 무료 다운로드 및 자동 변환 연동.
+- [쇼핑몰 주문 통합관리 무료 시작 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/order-integration-free/): 주문 수집, 합포장, 창고 피킹 검수표, 송장 역변환 4단계를 가입 없이 브라우저에서 처리하는 소량 셀러용 주문 통합관리.
 - [사방넷·플레이오토 소량 셀러 경량 대안 비교](https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/): 일 주문 5~100건 위탁·부업 셀러를 위한 월 5~30만원 통합관리 ERP 대비 월 4,900원 경량 대안 안내 및 연간 비용 절감 계산기.
 - [카카오 지도 종료 대비 교체 코드 생성기](https://ienrum.github.io/kakao-map-guard/): 구형 카카오 지도 스크립트를 무료 진단하고 매장 좌표를 유지한 신규 v2 SDK 및 4.5초 먹통 감지 길찾기 폴백 완성 코드를 즉시 합성.
 - [홈페이지 오시는길 카카오맵·다음지도 백지 복구 가이드](https://ienrum.github.io/kakao-map-guard/daumcdn-map-error/): 구형 다음지도(apis.daum.net) 중단 및 HTTPS 혼합 콘텐츠 차단 복구 절차와 웹에이전시·다점포 유지보수 비용 절감 시뮬레이터.

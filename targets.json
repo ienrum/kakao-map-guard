@@ -35,6 +35,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "Order Integration Free Landing",
+    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/order-integration-free/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "KakaoMapGuard Code Generator",
     "url": "https://ienrum.github.io/kakao-map-guard/",
     "expectSubstring": "AW-17208942339"
