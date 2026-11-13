@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>그누보드5·카페24·아임웹 오시는길 카카오맵 백지 오류 및 11월 30일 구형 SDK 종료 교체 가이드 — 오커 웍스</title>
+  <meta name="description" content="그누보드5 내용관리(content)·카페24 스마트디자인·아임웹 코드위젯에서 구형 다음지도(apis.daum.net) 종료 및 HTTPS 혼합 콘텐츠 차단으로 오시는길 지도가 백지로 멈췄을 때, 기존 매장 좌표를 유지한 v2 비동기 SDK + 4.5초 길찾기 폴백 코드로 1분 만에 교체하세요." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/gnuboard-cafe24-map-fix/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="그누보드5·카페24·아임웹 오시는길 카카오맵 백지 오류 1분 복구 가이드" />
+  <meta property="og:description" content="구형 daum.maps 종료 및 SSL 혼합 콘텐츠 차단 즉시 진단 · 기존 위경도 자동 이식 · 4.5초 먹통 감지 길찾기 폴백 내장." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-map.jpg" />
+  <link rel="icon" type="image/jpeg" href="../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../assets/design-system.css" />
+
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17208942339');
+    function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
+      try {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
+          'value': 4900.0,
+          'currency': 'KRW',
+          'event_callback': go
+        });
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        "name": "그누보드5·카페24·아임웹 오시는길 카카오맵 백지 오류 1분 교체 방법",
+        "description": "구형 다음 지도(apis.daum.net) 호출 또는 http 혼합 콘텐츠 차단으로 빈 화면이 나오는 홈페이지 오시는길 지도를 기존 좌표를 유지한 카카오맵 v2 비동기 SDK 코드로 교체하는 절차.",
+        "totalTime": "PT2M",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "기존 오시는길 HTML 블록 복사",
+            "text": "그누보드5 관리자 내용관리(adm/contentform.php), 카페24 스마트디자인 편집기, 또는 아임웹 코드 위젯에서 기존 지도 div 및 script 영역을 복사합니다."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "구형 호출 진단 및 기존 위·경도 좌표 추출",
+            "text": "오커 웍스 무료 진단기에 HTML을 붙여넣어 apis.daum.net 종료 대상 여부, http 혼합 콘텐츠 차단 여부, 기존 LatLng 좌표를 자동 추출합니다."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "최신 v2 비동기 로더 + 4.5초 길찾기 폴백 코드 덮어쓰기",
+            "text": "생성된 dapi.kakao.com/v2/maps/sdk.js?autoload=false 기반 코드와 4.5초 생존 감시 길찾기 폴백 블록을 그대로 붙여넣고 저장합니다."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "그누보드5 내용관리(content)에 카카오맵 스크립트를 넣었는데 지도가 안 나와요.",
+            "acceptedAnswer": { "@type": "Answer", "text": "첫째, 구형 http://apis.daum.net 스크립트가 SSL(https://) 환경에서 브라우저에 의해 혼합 콘텐츠(Mixed Content)로 차단된 경우가 가장 많습니다. 둘째, 그누보드 에디터나 탭 전환 구조에서 autoload=false 없이 동기 호출하면 컨테이너 크기를 계산하지 못해 회색 빈 화면으로 멈춥니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "카페24나 아임웹에서 도메인 연결 후 지도가 갑자기 백지로 바뀌었습니다.",
+            "acceptedAnswer": { "@type": "Answer", "text": "신규 대표 도메인(www 포함·미포함 모두)이 카카오 개발자 콘솔 [플랫폼 > Web]에 등록되지 않았거나 구형 약도 로더를 사용 중이기 때문입니다. 오커 웍스 교체 코드는 최신 v2 비동기 로더와 함께 4.5초 폴백 카드를 내장해, 도메인 승인 대기 중에도 방문자에게 카카오맵·네이버지도 길찾기 버튼을 자동 표시합니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "유지보수 중인 거래처 사이트가 여러 개인데 사이트마다 결제해야 하나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 월 4,900원 단일 패스로 그누보드5·카페24·아임웹·워드프레스 거래처 사이트 개수 제한 없이 무제한으로 교체 코드를 생성할 수 있으며, 구독 해지 후에도 설치한 코드는 영구 작동합니다." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="ow-theme-map">
+  <div class="ow-telemetry-rail" role="region" aria-label="웹빌더 지도 복구 안내">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>그누보드5 · 카페24 · 아임웹 오시는길 복구 가이드 · 외부 서버 전송 <span class="ow-mono">0 Byte</span></span>
+        </span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="mailto:oker04897@gmail.com">지원·7일 100% 환불: oker04897@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../">
+        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스</span>
+          <span class="ow-brand-sub">OHKER WORKS</span>
+        </span>
+      </a>
+
+      <nav class="ow-suite-nav" aria-label="도구 전환">
+        <a class="ow-suite-link" href="../seller-converter/">6대 마켓 발주서 통합</a>
+        <a class="ow-suite-link" href="../">카카오 지도 생성기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">그누보드·카페24 지도 복구</a>
+        <a class="ow-suite-link" href="../kcp-exec-patch/">PHP exec() 결제 복구</a>
+      </nav>
+
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-subtle" href="../#workbench">무료 코드 변환기</a>
+        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 시작</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <div class="ow-workbench-grid">
+          <div>
+            <h1 class="ow-display-title">그누보드5·카페24·아임웹 오시는길 지도 백지 오류, 구형 SDK 종료 전 1분 교체 가이드</h1>
+            <p class="ow-lead">
+              SSL(<code class="ow-mono">https://</code>) 적용 후 <code class="ow-mono">http://apis.daum.net</code> 혼용 차단이나 구형 약도 스크립트 중단으로 멈춘 오시는길 화면을, <strong>기존 위·경도 좌표를 그대로 살린 최신 <code class="ow-mono">dapi.kakao.com/v2</code> 비동기 코드 + 4.5초 길찾기 폴백</strong>으로 즉시 교체합니다.
+            </p>
+
+            <div class="ow-hero-metrics">
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">5초 진단</span>
+                <span class="ow-metric-lbl">구형 도메인·HTTP 차단 즉시 판별</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">좌표 자동 이식</span>
+                <span class="ow-metric-lbl">기존 LatLng 위·경도 재조사 불필요</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">4.5초 폴백</span>
+                <span class="ow-metric-lbl">앱키 누락 시 길찾기 버튼 자동 노출</span>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+              <a class="ow-btn ow-btn-primary ow-btn-lg" href="../#workbench">내 사이트 지도 HTML 자동 변환하기</a>
+              <a class="ow-btn ow-btn-secondary ow-btn-lg" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 무제한 패스 발급</a>
+            </div>
+          </div>
+
+          <!-- Instant 5-Second Snippet Risk Checker -->
+          <div class="ow-ledger-sheet" style="padding:24px;">
+            <div class="ow-console-header" style="margin-bottom:14px;">
+              <span class="ow-console-title">내 홈페이지 오시는길 5초 자가진단기</span>
+              <span id="quickRiskBadge" class="ow-chip ow-chip-crit">차단 위험 감지됨</span>
+            </div>
+
+            <label for="quickMapInput" class="ow-fine" style="display:block;font-weight:600;margin-bottom:6px;">기존 오시는길 HTML·스크립트 일부를 붙여넣어 보세요 (서버 전송 0B)</label>
+            <textarea id="quickMapInput" class="ow-input ow-mono" rows="5" style="width:100%;font-size:12px;margin-bottom:12px;"><div id="daumRoughmapContainer162001" class="root_daum_roughmap"></div>
+<script src="http://apis.daum.net/maps/maps3.js?apikey=demo_legacy_key"></script>
+<script>var pos = new daum.maps.LatLng(37.501274, 127.039585);</script></textarea>
+
+            <div id="quickDiagBox" style="background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:14px;margin-bottom:14px;font-size:0.875rem;line-height:1.55;">
+              진단 중...
+            </div>
+
+            <a class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../#workbench">추출된 좌표로 최신 v2 + 폴백 코드 생성하기 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">플랫폼별 오시는길 파일 위치 및 교체 주의사항</h2>
+            <p class="ow-fine" style="margin:6px 0 0;">관리자 메뉴에서 아래 경로만 열면 FTP 접속 없이 1분 안에 새 코드로 덮어쓸 수 있습니다.</p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>홈페이지 환경</th>
+                  <th>기존 지도 코드 위치</th>
+                  <th>자주 발생하는 백지 원인 및 해결 포인트</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">그누보드5 · 영카트5</td>
+                  <td><code class="ow-mono">관리자 &gt; 게시판관리 &gt; 내용관리(content)</code> 또는 테마 내 <code class="ow-mono">skin/content/basic/content.skin.php</code></td>
+                  <td>에디터 필터링으로 <code class="ow-mono">&lt;script&gt;</code>가 잘리거나 <code class="ow-mono">http://apis.daum.net</code> 혼합 콘텐츠 차단 발생 → HTML 소스 모드에서 <code class="ow-mono">https://dapi.kakao.com/v2/maps/sdk.js?autoload=false</code> 비동기 코드로 교체</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">카페24 스마트디자인</td>
+                  <td><code class="ow-mono">디자인관리 &gt; 스마트디자인 편집창 &gt; company/location.html</code> (또는 오시는길 모듈)</td>
+                  <td>쇼핑몰 기본 SSL 적용 후 구형 <code class="ow-mono">http://t1.daumcdn.net</code> 약도 로더 차단 및 대표 도메인(<code class="ow-mono">www</code> 유무) 미등록 → 카카오 콘솔에 <code class="ow-mono">https://도메인</code>과 <code class="ow-mono">https://www.도메인</code> 동시 등록</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">아임웹 · 워드프레스</td>
+                  <td>아임웹 <code class="ow-mono">디자인 모드 &gt; 코드(Code) 위젯</code> / 워드프레스 <code class="ow-mono">사용자 정의 HTML</code> 블록</td>
+                  <td>탭(Tab)·모달 내부에 지도가 들어 있을 때 초기 너비가 <code class="ow-mono">0px</code>로 잡혀 회색 깨짐 발생 → 비동기 <code class="ow-mono">kakao.maps.load</code> 완료 후 렌더링 및 4.5초 먹통 폴백 내장 필수</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="ow-split-2" style="margin-top:24px;">
+          <div class="ow-ledger-sheet" style="padding:22px;">
+            <h3 style="margin:0 0 10px;font-size:1rem;">수동 수정 시 빠뜨리기 쉬운 3가지 체크리스트</h3>
+            <ul class="ow-check-list">
+              <li><span><strong>카카오 개발자 콘솔 Web 플랫폼 도메인:</strong> <code class="ow-mono">https://example.com</code>과 <code class="ow-mono">https://www.example.com</code> 두 줄을 모두 등록해야 모바일 유입에서 차단이 발생하지 않습니다.</span></li>
+              <li><span><strong>REST API 키가 아닌 JavaScript 키 사용:</strong> 브라우저 지도 SDK에는 반드시 <strong>JavaScript 키</strong>를 넣어야 정상 로드됩니다.</span></li>
+              <li><span><strong>앱키 한도 초과·도메인 전파 지연 대비:</strong> 스크립트만 교체하면 장애 시 또 빈 박스가 남으므로, 4.5초 내 미로드 시 매장 주소와 카카오맵·네이버지도 길찾기 버튼을 띄우는 폴백 함수를 함께 넣는 것이 안전합니다.</span></li>
+            </ul>
+          </div>
+
+          <div class="ow-ledger-sheet" style="padding:22px;border-color:var(--ow-action-primary);">
+            <h3 style="margin:0 0 10px;font-size:1rem;color:var(--ow-action-primary);">웹에이전시·프리랜서 무제한 거래처 패스 (월 4,900원)</h3>
+            <p class="ow-fine" style="font-size:0.9375rem;line-height:1.6;margin:0 0 16px;">
+              관리 중인 그누보드·카페24·아임웹 거래처가 10곳이든 50곳이든 <strong>월 4,900원 패스 1개</strong>로 개수 제한 없이 교체 코드를 생성할 수 있습니다. <strong>6대 마켓 발주서 통합기 + 영카트5 PHP KCP 결제 복구기</strong>까지 동시 잠금 해제되며 7일 내 100% 환불을 보장합니다.
+            </p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a class="ow-btn ow-btn-subtle" href="../#workbench">무료 진단 및 코드 미리보기</a>
+              <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 패스 즉시 발급</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div class="ow-fine">
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+        </div>
+        <div class="ow-footer-links ow-fine">
+          <a href="../seller-converter/">6대 마켓 발주서 통합</a>
+          <a href="../seller-converter/waybill-upload-split/">합포장 운송장 역변환</a>
+          <a href="../">카카오 지도 코드 복구</a>
+          <a href="../daumcdn-map-error/">다음·카카오 지도 백지 복구</a>
+          <a href="./">그누보드·카페24 지도 복구</a>
+          <a href="../kcp-exec-patch/">PHP exec() 결제 복구</a>
+          <a href="../privacy-terms/">개인정보·이용·환불약관</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var input = document.getElementById('quickMapInput');
+      var badge = document.getElementById('quickRiskBadge');
+      var box = document.getElementById('quickDiagBox');
+
+      function analyze() {
+        var raw = (input.value || '').trim();
+        if (!raw) {
+          badge.className = 'ow-chip ow-chip-neutral';
+          badge.textContent = '입력 대기';
+          box.textContent = '오시는길 HTML 코드를 붙여넣으면 구형 도메인·HTTP 차단 여부와 매장 좌표를 즉시 판별합니다.';
+          return;
+        }
+        var findings = [];
+        if (/apis\.daum\.net/i.test(raw)) findings.push('구형 apis.daum.net 종료 대상 호출');
+        if (/root_daum_roughmap|roughmapLander/i.test(raw)) findings.push('구형 다음 약도 로더(roughmap) 의존');
+        if (/http:\/\/(apis\.daum|dapi\.kakao|t1\.daumcdn|map)/i.test(raw)) findings.push('SSL 사이트 혼합 콘텐츠(http://) 차단 위험');
+        if (/daum\.maps/i.test(raw) && !/autoload\s*=\s*false/i.test(raw)) findings.push('동기식 로더(탭·반응형 백지 유발 가능)');
+
+        var coord = raw.match(/LatLng\(\s*([0-9]{2}\.[0-9]+)\s*,\s*([0-9]{2,3}\.[0-9]+)\s*\)/i);
+        var coordText = coord ? ('기존 좌표 감지됨: ' + coord[1] + ', ' + coord[2]) : '좌표 미포함 약도(주소·매장명 기준 변환 가능)';
+
+        if (findings.length > 0) {
+          badge.className = 'ow-chip ow-chip-crit';
+          badge.textContent = '위험 ' + findings.length + '건 감지';
+          box.innerHTML = '<strong style="color:var(--ow-status-crit);">교체 권장:</strong> ' + findings.join(' · ') + '<br><span class="ow-mono" style="font-size:12px;">' + coordText + '</span>';
+        } else {
+          badge.className = 'ow-chip ow-chip-ok';
+          badge.textContent = '구형 도메인 없음';
+          box.innerHTML = '<strong>점검 결과:</strong> 구형 도메인 문자열이 보이지 않습니다. 앱키·도메인 누락 대비 4.5초 길찾기 폴백 내장 여부를 확인하세요.<br><span class="ow-mono" style="font-size:12px;">' + coordText + '</span>';
+        }
+      }
+
+      input.addEventListener('input', analyze);
+      analyze();
+    })();
+  </script>
+</body>
+</html>

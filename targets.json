@@ -40,6 +40,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "Gnuboard5 Cafe24 Map Fix Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/gnuboard-cafe24-map-fix/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "PHP exec KCP cURL Patcher",
     "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/",
     "expectSubstring": "AW-17208942339"
