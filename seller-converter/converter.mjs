@@ -2,30 +2,63 @@
 import { fileURLToPath } from "node:url";
 
 /**
- * 6대 오픈마켓(스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24/롯데온) 발주서 무인 통합 변환 엔진
- * - 스마트스토어/오픈마켓 상단 개인정보 안내문 행 자동 건너뛰기
- * - 동일 수취인·연락처·주소 합포장 자동 병합(중복 택배비 방지)
- * - 택배사(CJ대한통운 CNPlus, 우체국택배, 한진·롯데·로젠) 및 도매처 전용 양식 변환
+ * 6대 오픈마켓(스마트스토어, 쿠팡 윙, 11번가, G마켓·옥션 ESM+, 카페24, 롯데온·오늘의집) 발주서 무인 통합 변환 엔진
+ * - 스마트스토어/오픈마켓 상단 개인정보 안내문 병합 행(콤마 포함) 뒤 탭 구분자 자동 판별
+ * - 단일상품(옵션정보 빈칸, 옵션가격=0) '[0]' 오매칭 차단 및 배송지우편번호/출고지주소 오매칭 차단
+ * - 취소완료·반품요청·환불 주문 행 자동 제외(취소철회 정상 주문은 보존)
+ * - 050 안심번호가 달라도 성명+정규화 주소 기준 합포장 병합(중복 택배비 방지)
  * 외부 서버 전송 0건 · 브라우저/로컬 즉시 정규화
  */
 const FIELD_ALIASES = {
-  orderId: ["상품주문번호", "주문번호", "묶음배송번호", "장바구니번호", "주문코드", "order_id"],
-  market: ["판매채널", "마켓명", "쇼핑몰", "사이트"],
-  receiver: ["수취인명", "수취인이름", "수령인명", "수령인", "받는분", "받는사람"],
-  phone: ["수취인연락처1", "수취인전화번호", "수령인휴대폰", "수령인휴대전화", "연락처", "휴대폰번호", "받는분전화번호", "수령인연락처", "안심번호"],
-  zipcode: ["우편번호", "배송지우편번호", "수취인우편번호", "새우편번호"],
-  address: ["통합배송지", "배송지", "수취인주소", "수령인주소", "주소", "받는분주소", "기본주소"],
-  addressDetail: ["상세주소", "수취인상세주소", "배송지상세주소", "나머지주소"],
-  productName: ["상품명", "노출상품명", "주문상품명", "품목명"],
-  optionName: ["옵션정보", "옵션명", "등록옵션명", "주문옵션", "선택사항", "옵션", "단품명"],
-  qty: ["수량", "구매수(수량)", "구매수량", "구매수", "주문수량", "출고수량"],
-  memo: ["배송메세지", "배송메시지", "배송요청사항", "배송시요구사항", "요청사항"],
+  orderId: ["상품주문번호", "품목별주문번호", "주문번호", "묶음배송번호", "장바구니번호", "주문코드", "고객주문번호", "order_id"],
+  market: ["판매채널", "마켓명", "쇼핑몰", "사이트", "주문경로"],
+  receiver: ["수취인명", "수취인이름", "수령인명", "수령인", "수령자명", "받는분성명", "받는분", "받는사람", "받으시는분"],
+  phone: ["수취인연락처1", "수취인전화번호", "수령인휴대폰", "수령인휴대전화", "휴대폰번호", "안심번호", "수취인연락처2", "받는분전화번호", "수령인연락처", "연락처", "주문자연락처"],
+  zipcode: ["우편번호", "수취인우편번호", "배송지우편번호", "받는분우편번호", "새우편번호"],
+  address: ["통합배송지", "수취인주소", "수취인기본주소", "수령인주소", "배송지주소", "받는분주소(전체,분할)", "받는분주소", "수하인주소", "배달주소", "기본주소", "배송지", "주소"],
+  addressDetail: ["수취인상세주소", "수령인상세주소", "배송지상세주소", "상세주소", "나머지주소"],
+  productName: ["상품명", "노출상품명", "주문상품명", "품목명", "물품명", "단품명"],
+  optionName: ["옵션정보", "옵션명", "등록옵션명", "주문옵션", "옵션내용", "선택사항", "옵션"],
+  qty: ["수량", "구매수(수량)", "구매수량", "주문수량", "출고수량", "결제수량", "구매수"],
+  memo: ["배송메세지", "배송메시지", "배송요청사항", "배송시요구사항", "배송메세지1", "요청사항"],
+  claimStatus: ["클레임상태", "취소상태", "반품상태"],
+  orderStatus: ["주문상태", "주문상세상태", "발주상태", "배송상태"],
 };
 
+const FIELD_EXCLUDES = {
+  orderId: /우편|전화|연락처|송장|운송장|사업자|주민|통관/,
+  receiver: /연락처|전화|휴대|주소|우편|메시지|메세지|은행|계좌|환불|통관/,
+  phone: /판매자|출고|반품|발송인|보내는|사업자/,
+  zipcode: /출고|반품|판매자/,
+  address: /상세|나머지|우편|번호|메시지|메세지|메모|요청|출고|반품|교환|발송지|판매자|구매자|주문자|이메일|메일|도서|산간|운임|구역/,
+  addressDetail: /출고|반품|교환|판매자|구매자|주문자|우편|번호/,
+  productName: /번호|코드|금액|가격|단가|할인|수수료|배송비|상태|문의|사은품/,
+  optionName: /가격|금액|비용|코드|번호|관리|수량|여부|추가상품|상태|종류/,
+  qty: /재고|취소|반품|환불|교환|가능|한도|최대|최소|박스|묶음|금액|단가|가격|할인|미출고/,
+  memo: /번호|코드/,
+  claimStatus: /번호|일시|일자|사유|금액|수량/,
+  orderStatus: /번호|일시|일자|사유|금액/,
+};
+
+const normHeaderKey = (s) => String(s ?? "").replace(/[\s\r\n\uFEFF]+/g, "").toLowerCase();
+
+export function detectTextDelimiter(cleaned) {
+  const sample = String(cleaned ?? "").split(/\r?\n/).slice(0, 15);
+  let tabRich = 0;
+  let commaRich = 0;
+  for (const line of sample) {
+    if ((line.match(/\t/g) || []).length >= 2) tabRich += 1;
+    if ((line.match(/,/g) || []).length >= 2) commaRich += 1;
+  }
+  if (tabRich > 0) return "\t";
+  if (commaRich > 0) return ",";
+  return String(cleaned ?? "").includes("\t") ? "\t" : ",";
+}
+
 export function findHeaderRowIndex(matrixRows) {
-  const maxScan = Math.min(matrixRows.length, 12);
-  const receiverRe = /수취인|수령인|받는분|받는사람/;
-  const orderRe = /상품|품목|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
+  const maxScan = Math.min(matrixRows.length, 20);
+  const receiverRe = /수취인|수령인|수령자|받는분|받는사람|받으시는분/;
+  const orderRe = /상품|품목|단품|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
   for (let i = 0; i < maxScan; i++) {
     const joined = (matrixRows[i] || []).map((c) => String(c ?? "").replace(/\s+/g, "")).join("|");
     if (receiverRe.test(joined) && orderRe.test(joined)) {
@@ -35,35 +68,57 @@ export function findHeaderRowIndex(matrixRows) {
   return 0;
 }
 
-export function parseDelimited(text) {
-  const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").filter((l) => l.trim().length > 0);
-  if (lines.length < 2) return { headers: [], rows: [] };
-  const sampleForSep = lines.slice(0, Math.min(lines.length, 5)).join("\n");
-  const sep = sampleForSep.includes("\t") ? "\t" : ",";
-  const splitLine = (line) => {
-    const out = [];
-    let cur = "";
-    let inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
+export function parseDelimitedMatrix(text, delim) {
+  const rows = [];
+  let row = [];
+  let cur = "";
+  let inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQ) {
       if (ch === '"') {
-        if (inQuotes && line[i + 1] === '"') {
+        if (text[i + 1] === '"') {
           cur += '"';
           i++;
         } else {
-          inQuotes = !inQuotes;
+          inQ = false;
         }
-      } else if (ch === sep && !inQuotes) {
-        out.push(cur.trim());
-        cur = "";
       } else {
         cur += ch;
       }
+    } else if (ch === '"') {
+      inQ = true;
+    } else if (ch === delim) {
+      row.push(cur.replace(/^\uFEFF/, "").trim());
+      cur = "";
+    } else if (ch === "\r") {
+      if (text[i + 1] === "\n") i++;
+      row.push(cur.replace(/^\uFEFF/, "").trim());
+      if (row.some((c) => c.length > 0)) rows.push(row);
+      row = [];
+      cur = "";
+    } else if (ch === "\n") {
+      row.push(cur.replace(/^\uFEFF/, "").trim());
+      if (row.some((c) => c.length > 0)) rows.push(row);
+      row = [];
+      cur = "";
+    } else {
+      cur += ch;
     }
-    out.push(cur.trim());
-    return out;
-  };
-  const matrix = lines.map((l) => splitLine(l).map((c) => c.replace(/^\uFEFF/, "").trim()));
+  }
+  if (cur.length > 0 || row.length > 0) {
+    row.push(cur.replace(/^\uFEFF/, "").trim());
+    if (row.some((c) => c.length > 0)) rows.push(row);
+  }
+  return rows;
+}
+
+export function parseDelimited(text) {
+  const cleaned = String(text ?? "").replace(/^\uFEFF/, "").trim();
+  if (!cleaned) return { headers: [], rows: [], skippedNoticeRows: 0 };
+  const sep = detectTextDelimiter(cleaned);
+  const matrix = parseDelimitedMatrix(cleaned, sep);
+  if (matrix.length < 2) return { headers: [], rows: [], skippedNoticeRows: 0 };
   const headerIdx = findHeaderRowIndex(matrix);
   const headers = matrix[headerIdx] || [];
   const rows = matrix.slice(headerIdx + 1);
@@ -72,21 +127,58 @@ export function parseDelimited(text) {
 
 function detectMarketFromHeaders(headers) {
   const joined = headers.join("|");
-  if (joined.includes("상품주문번호") && joined.includes("통합배송지")) return "스마트스토어";
-  if (joined.includes("묶음배송번호") || joined.includes("노출상품명")) return "쿠팡";
+  if (joined.includes("상품주문번호") || joined.includes("스마트스토어")) return "스마트스토어";
+  if (joined.includes("묶음배송번호") || joined.includes("노출상품명") || joined.includes("수취인이름")) return "쿠팡";
   if (joined.includes("주문코드") && joined.includes("배송시요구사항")) return "롯데온";
-  if (joined.includes("선택사항")) return "11번가";
-  if (joined.includes("장바구니번호") || joined.includes("안심번호")) return "G마켓·옥션";
-  if (joined.includes("수령인 휴대전화")) return "카페24";
+  if (joined.includes("장바구니번호")) return "G마켓·옥션";
+  if (joined.includes("수령인 휴대전화") || joined.includes("수령인휴대전화")) return "카페24";
+  if (joined.includes("선택사항") || joined.includes("배송지주소")) return "11번가";
   return "자동감지마켓";
 }
 
 export function formatPhone(p) {
-  const digits = String(p || "").replace(/[^0-9]/g, "");
+  let digits = String(p || "").replace(/[^0-9]/g, "");
+  if (digits.length === 10 && /^(10|11|16|17|18|19)/.test(digits)) digits = "0" + digits;
+  if (digits.length === 11 && digits.startsWith("50")) digits = "0" + digits;
+  if (digits.length === 9 && digits.startsWith("2")) digits = "0" + digits;
+  if (digits.length === 9 && digits.startsWith("02")) return digits.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+  if (digits.length === 10 && digits.startsWith("02")) return digits.replace(/(\d{2})(\d{4})(\d{4})/, "$1-$2-$3");
   if (digits.length === 11) return digits.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
   if (digits.length === 10) return digits.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
   if (digits.length === 12 && digits.startsWith("050")) return digits.replace(/(\d{4})(\d{4})(\d{4})/, "$1-$2-$3");
   return String(p || "").trim();
+}
+
+export function formatZip(z) {
+  const digits = String(z || "").replace(/[^0-9]/g, "");
+  if (digits.length === 4) return "0" + digits;
+  return digits || String(z || "").trim();
+}
+
+function pickFromRow(headers, cols, fieldKey) {
+  const aliases = FIELD_ALIASES[fieldKey] || [];
+  const excludeRe = FIELD_EXCLUDES[fieldKey] || null;
+  for (const alias of aliases) {
+    const targetExact = normHeaderKey(alias);
+    for (let i = 0; i < headers.length; i++) {
+      if (normHeaderKey(headers[i]) === targetExact) {
+        const val = String(cols[i] ?? "").trim();
+        if (val !== "") return val;
+      }
+    }
+  }
+  for (const alias of aliases) {
+    const target = normHeaderKey(alias);
+    for (let i = 0; i < headers.length; i++) {
+      const cleanKey = String(headers[i] ?? "").replace(/[\s\r\n\uFEFF]+/g, "");
+      if (excludeRe && excludeRe.test(cleanKey)) continue;
+      if (cleanKey.toLowerCase().includes(target)) {
+        const val = String(cols[i] ?? "").trim();
+        if (val !== "") return val;
+      }
+    }
+  }
+  return "";
 }
 
 export function normalizeOrders(rawText, defaultMarket = "") {
@@ -94,46 +186,45 @@ export function normalizeOrders(rawText, defaultMarket = "") {
   if (headers.length === 0) return [];
   const marketGuess = defaultMarket || detectMarketFromHeaders(headers);
 
-  const idxOf = (key) => {
-    const candidates = FIELD_ALIASES[key] || [];
-    for (const alias of candidates) {
-      const idx = headers.findIndex((h) => h.replace(/\s+/g, "") === alias.replace(/\s+/g, ""));
-      if (idx !== -1) return idx;
-    }
-    for (const alias of candidates) {
-      const idx = headers.findIndex((h) => h.replace(/\s+/g, "").includes(alias.replace(/\s+/g, "")));
-      if (idx !== -1) return idx;
-    }
-    return -1;
-  };
+  const out = [];
+  for (let idx = 0; idx < rows.length; idx++) {
+    const cols = rows[idx];
+    const get = (k) => pickFromRow(headers, cols, k);
+    const receiver = get("receiver");
+    const prod = get("productName");
+    if ((!receiver && !prod) || /^(수취인명|수취인이름|수령인명|수령인|수령자명|받는분|받는분성명)$/.test(receiver)) continue;
 
-  const map = {};
-  for (const k of Object.keys(FIELD_ALIASES)) map[k] = idxOf(k);
+    const statusCombined = `${get("claimStatus")} ${get("orderStatus")}`.trim();
+    if (
+      statusCombined &&
+      !/철회|거부/.test(statusCombined) &&
+      /취소완료|취소요청|취소진행|주문취소|결제취소|직권취소|판매취소|반품요청|반품진행|반품완료|반품접수|환불완료|환불진행|환불요청/.test(statusCombined)
+    ) {
+      continue;
+    }
 
-  return rows
-    .map((cols, idx) => {
-      const get = (k) => (map[k] >= 0 && cols[map[k]] !== undefined ? cols[map[k]].trim() : "");
-      const addrBase = get("address");
-      const addrDetail = get("addressDetail");
-      const fullAddress = (addrBase + (addrDetail && !addrBase.includes(addrDetail) ? " " + addrDetail : "")).replace(/\s+/g, " ").trim();
-      const prod = get("productName");
-      const opt = get("optionName");
-      const itemLabel = (prod + (opt ? ` [${opt}]` : "")).trim();
-      const qty = Number.parseInt(get("qty").replace(/[^0-9]/g, "") || "1", 10) || 1;
-      return {
-        seq: idx + 1,
-        market: get("market") || marketGuess,
-        orderId: get("orderId") || `AUTO-${idx + 1}`,
-        receiver: get("receiver"),
-        phone: formatPhone(get("phone")),
-        zipcode: get("zipcode"),
-        address: fullAddress,
-        item: itemLabel,
-        qty,
-        memo: get("memo") || "문 앞",
-      };
-    })
-    .filter((r) => (r.receiver || r.item) && !/^(수취인명|수령인|받는분)$/.test(r.receiver));
+    const addrBase = get("address");
+    const addrDetail = get("addressDetail");
+    const fullAddress = (addrBase + (addrDetail && !addrBase.includes(addrDetail) ? " " + addrDetail : "")).replace(/\s+/g, " ").trim();
+    let opt = get("optionName");
+    if (/^(-|없음|단일상품|단품|해당없음|none|null)$/i.test(opt)) opt = "";
+    const itemLabel = (prod + (opt ? ` [${opt}]` : "")).trim();
+    const qty = Number.parseInt(get("qty").replace(/[^0-9]/g, "") || "1", 10) || 1;
+
+    out.push({
+      seq: out.length + 1,
+      market: get("market") || marketGuess,
+      orderId: get("orderId") || `AUTO-${idx + 1}`,
+      receiver,
+      phone: formatPhone(get("phone")),
+      zipcode: formatZip(get("zipcode")),
+      address: fullAddress,
+      item: itemLabel,
+      qty,
+      memo: (get("memo") || "문 앞").replace(/\s+/g, " ").trim(),
+    });
+  }
+  return out;
 }
 
 export function consolidateBundles(rows) {
@@ -253,30 +344,49 @@ export function toCourierCsv(normalizedRows, preset = "standard") {
 }
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  // 실제 스마트스토어 발주서처럼 1행에 개인정보 보호 안내문이 포함된 케이스 검증
-  const sampleSmartstoreWithNotice = [
-    "본 문서는 개인정보가 포함되어 있으므로 목적 달성 후 즉시 파기하시기 바랍니다.,,,,,,,,",
-    "상품주문번호,수취인명,수취인연락처1,우편번호,통합배송지,상품명,옵션정보,수량,배송메세지",
-    "202611120001,김민수,05012345678,06236,서울특별시 강남구 테헤란로 152 3층,무소음 키보드,블랙/적축,2,경비실에 맡겨주세요",
-    "202611120002,김민수,050-1234-5678,06236,서울특별시 강남구 테헤란로 152 3층,팜레스트,우드,1,경비실에 맡겨주세요",
-  ].join("\n");
-  const sampleCoupang = [
-    "묶음배송번호\t수령인\t안심번호\t우편번호\t수취인주소\t상세주소\t노출상품명\t등록옵션명\t구매수량\t배송메시지",
-    "99887766\t박지연\t05029998888\t13529\t경기도 성남시 분당구 판교역로 166\t402호\tUSB-C 멀티허브\t실버 7포트\t1\t문 앞 부탁드립니다",
+  // 1) 스마트스토어 암호 엑셀 Ctrl+A 복사본: 1행 병합 안내문(콤마 포함, 탭 없음) + 단일상품(옵션정보 빈칸, 옵션가격=0) + 취소완료 행 + 취소철회 행
+  const sampleSmartstoreTsv = [
+    "본 문서는 개인정보가 포함되어 있으므로, 목적 달성 후 즉시 파기하시기 바랍니다.",
+    "상품주문번호\t클레임상태\t수취인명\t수취인연락처1\t배송지우편번호\t통합배송지\t상품명\t옵션정보\t옵션관리코드\t재고수량\t수량\t옵션가격\t배송메세지",
+    "202611130001\t\t김민수\t050712345678\t6236\t서울특별시 강남구 테헤란로 152 3층\t무소음 키보드\t\tOPT-01\t999\t2\t0\t\"문 앞\n벨 누르지 마세요\"",
+    "202611130002\t취소완료\t홍길동\t01099998888\t04799\t서울 성동구 아차산로 113\t취소된 마우스\t블랙\t\t50\t1\t0\t문 앞",
+    "202611130003\t취소철회\t김민수\t050799991111\t06236\t서울특별시 강남구 테헤란로 152, 3층\t전용 팜레스트\t우드\t\t30\t1\t3000\t문 앞",
   ].join("\n");
 
-  const rawMerged = [...normalizeOrders(sampleSmartstoreWithNotice), ...normalizeOrders(sampleCoupang)].map((r, i) => ({ ...r, seq: i + 1 }));
-  const bundled = consolidateBundles(rawMerged);
-  const cjRows = formatRowsByPreset(bundled.rows, "cj");
+  // 2) 11번가 셀러오피스: 배송지우편번호가 배송지주소보다 앞에 있고 출고지주소가 먼저 나오는 경우
+  const sample11stCsv = [
+    "주문번호,주문상태,수령인,휴대폰번호,출고지주소,배송지우편번호,배송지주소,상품명,선택사항,구매수량,배송메시지",
+    "11ST-8801,발송대기,박지연,1029486610,경기도 이천시 물류센터로 1,13529,경기도 성남시 분당구 판교역로 166 402호,USB-C 멀티허브,단일상품,1,경비실",
+  ].join("\n");
+
+  const parsedNaver = normalizeOrders(sampleSmartstoreTsv);
+  const parsed11st = normalizeOrders(sample11stCsv);
+  const bundled = consolidateBundles([...parsedNaver, ...parsed11st]);
+
+  const assertions = [
+    [parsedNaver.length === 2, "취소완료 1건 제외 및 취소철회 1건 보존"],
+    [parsedNaver[0].item === "무소음 키보드", `단일상품 옵션가격 0 오매칭 차단 (실제: ${parsedNaver[0].item})`],
+    [parsedNaver[0].qty === 2, `재고수량(999) 오매칭 차단 (실제: ${parsedNaver[0].qty})`],
+    [parsedNaver[0].zipcode === "06236", `서울 4자리 우편번호 0 복원 (실제: ${parsedNaver[0].zipcode})`],
+    [parsed11st[0].address === "경기도 성남시 분당구 판교역로 166 402호", `배송지우편번호·출고지주소 오매칭 차단 (실제: ${parsed11st[0].address})`],
+    [parsed11st[0].phone === "010-2948-6610", `앞자리 0 누락 휴대폰 복원 (실제: ${parsed11st[0].phone})`],
+    [parsed11st[0].item === "USB-C 멀티허브", `'단일상품' 옵션 텍스트 제거 (실제: ${parsed11st[0].item})`],
+    [bundled.rows.length === 2 && bundled.savedWaybills === 1, "서로 다른 0507 안심번호 동일 주소 합포장 병합"],
+  ];
+
+  const failed = assertions.filter(([ok]) => !ok).map(([, msg]) => msg);
+  if (failed.length > 0) {
+    console.error("SELF_TEST_FAILED:", failed);
+    process.exit(1);
+  }
   console.log(
     JSON.stringify(
       {
-        selfTest: true,
-        rawCount: rawMerged.length,
+        selfTest: "PASS",
+        checksPassed: assertions.length,
         bundledCount: bundled.rows.length,
         savedWaybills: bundled.savedWaybills,
-        savedFeeKrw: bundled.savedFeeKrw,
-        cjFirstRow: cjRows[0],
+        rows: bundled.rows,
       },
       null,
       2

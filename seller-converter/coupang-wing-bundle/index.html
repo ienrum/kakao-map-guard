@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>쿠팡 윙(Wing) 발주서 분리주소 병합·050 안심번호 합포장 및 스마트스토어 통합 변환 — 오커 웍스</title>
+  <meta name="description" content="쿠팡 윙(Wing) 주문조회 엑셀의 수취인 주소·상세주소 분리 문제와 시간차 추가 주문(050 안심번호 불일치) 중복 택배비를 서버 전송 0바이트로 3초 만에 해결하고 CJ 로이스파셀·우체국·한진 양식 및 스마트스토어 주문과 하나로 통합합니다." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/seller-converter/coupang-wing-bundle/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="쿠팡 윙 발주서 분리주소 병합·050 합포장 &amp; 스마트스토어 3초 통합" />
+  <meta property="og:description" content="수식(CONCATENATE) 없이 쿠팡 분리주소 자동 결합 · 0507 안심번호 시간차 주문 합포장 · 취소건 자동 제외 (외부 전송 0 Byte)." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-converter.jpg" />
+  <link rel="icon" type="image/jpeg" href="../../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../../assets/design-system.css" />
+
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17208942339');
+    function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
+      try {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
+          'value': 4900.0,
+          'currency': 'KRW',
+          'event_callback': go
+        });
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        "name": "쿠팡 윙(Wing) 발주서 엑셀의 분리된 주소와 050 안심번호 중복 주문을 택배사 양식으로 3초 합포장하는 법",
+        "step": [
+          { "@type": "HowToStep", "name": "쿠팡 윙 및 오픈마켓 발주서 준비", "text": "쿠팡 윙 배송관리에서 내려받은 발주서 엑셀(및 스마트스토어·11번가 주문서)을 준비하거나 열려 있는 표를 Ctrl+A, Ctrl+C로 복사합니다." },
+          { "@type": "HowToStep", "name": "드래그 앤 드롭 또는 Ctrl+V 투입", "text": "오커 웍스 변환기에 파일을 놓거나 붙여넣으면 수취인 주소+상세주소 병합, 구매수(수량) 숫자 추출, 취소·반품 제외, 0507 안심번호 합포장이 자동 완료됩니다." },
+          { "@type": "HowToStep", "name": "택배사 표준 엑셀 즉시 저장", "text": "CJ대한통운 로이스파셀·CNPlus, 우체국, 한진, 롯데, 로젠 또는 도매 발주서 규격으로 즉시 다운로드합니다." }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "쿠팡 윙 엑셀은 왜 수취인 주소와 상세주소가 두 열로 나뉘어 있나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "쿠팡 윙 기본 발주서는 '수취인 주소'와 '수취인 상세주소'를 별도 열로 분리해 내려주어 CJ 로이스파셀 등 단일 주소 열을 요구하는 택배 프로그램에 바로 넣으면 동·호수가 누락될 수 있습니다. 오커 웍스는 중복 없이 두 열을 한 칸의 통합배송지로 자동 결합합니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "같은 고객이 쿠팡과 스마트스토어에서 각각 주문하거나 시간차로 주문해도 합포장되나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "네. 쿠팡 묶음배송번호가 다르거나 주문마다 서로 다른 0507 안심번호가 부여되어도, 수취인 성명과 정규화 도로명·동호수 주소가 일치하면 1개 운송장으로 자동 합포장하여 건당 약 3,000원의 중복 택배비를 절감합니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "취소요청이나 반품 상태인 주문이 섞여 있으면 어떻게 처리되나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "주문상태·클레임상태 열에서 취소완료·취소요청·반품·환불 행을 자동 감지하여 출고 시트에서 제외하므로 오발송 손실을 막아 줍니다(단, 취소철회 정상 주문은 정상 출고됩니다)." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="ow-telemetry-rail" role="region" aria-label="보안 안내">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>쿠팡 윙 분리주소 병합 · 050 합포장 · 외부 전송 <span class="ow-mono">0 Byte</span></span>
+        </span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="../../privacy-terms/">개인정보 무수집·7일 환불 보증</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../">
+        <img class="ow-brand-mark" src="../../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스 출고 스튜디오</span>
+          <span class="ow-brand-sub">COUPANG WING &amp; MULTI-MARKET</span>
+        </span>
+      </a>
+      <nav class="ow-suite-nav" aria-label="셀러 도구 메뉴">
+        <a class="ow-suite-link" href="../">6대 마켓 발주서 통합기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">쿠팡 윙 분리주소·합포장</a>
+        <a class="ow-suite-link" href="../smartstore-lois-parcel/">스마트스토어 암호·로이스파셀</a>
+        <a class="ow-suite-link" href="../courier-excel-format/">택배 양식 무료 발급</a>
+      </nav>
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-primary" href="../?preset=cj">변환기 바로 열기</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <div class="ow-workbench-grid">
+          <div>
+            <h1 class="ow-display-title">쿠팡 윙 발주서 분리주소 병합·050 합포장, 엑셀 수식 없이 3초 만에</h1>
+            <div style="margin:12px 0 14px;display:flex;gap:8px;flex-wrap:wrap;">
+              <span class="ow-chip ow-chip-ok">수취인 주소 + 상세주소 자동 결합</span>
+              <span class="ow-chip ow-chip-neutral">스마트스토어·11번가 동시 합포장</span>
+            </div>
+            <p class="ow-lead">
+              매일 아침 쿠팡 윙 엑셀에서 <span class="ow-mono">=A2&amp;" "&amp;B2</span> 수식으로 상세주소를 합치고, 시간차 주문으로 나뉜 <span class="ow-mono">0507</span> 안심번호 중복 송장을 눈으로 찾고 계신가요? 파일 드래그나 <span class="ow-mono">Ctrl+V</span> 한 번으로 택배사 출고 양식이 완성됩니다.
+            </p>
+
+            <div class="ow-hero-metrics">
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val">동·호수 무결성</span>
+                <span class="ow-metric-lbl">기본주소 + 상세주소 자동 병합</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val">건당 3,000원</span>
+                <span class="ow-metric-lbl">시간차·타마켓 050 주문 합포장</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val">취소건 차단</span>
+                <span class="ow-metric-lbl">취소·반품 행 자동 필터링</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ow-console" aria-labelledby="coupang-bridge-title">
+            <div class="ow-console-header">
+              <span class="ow-console-title" id="coupang-bridge-title">쿠팡 윙 · 스마트스토어 즉시 변환 브릿지</span>
+              <span class="ow-chip ow-chip-ok">회당 5건 무료</span>
+            </div>
+            <div class="ow-console-body">
+              <p class="ow-fine" style="margin:0 0 10px;">
+                열려 있는 쿠팡 윙·스마트스토어 엑셀 표(제목줄 포함)를 복사한 뒤 아래 칸에 <strong>Ctrl+V</strong>를 누르거나 파일 업로드 화면으로 이동하세요.
+              </p>
+              <label for="bridgePreset" class="ow-fine" style="font-weight:700;display:block;margin-bottom:4px;">출고할 택배·도매 양식 선택</label>
+              <select id="bridgePreset" class="ow-pass-input" style="width:100%;font-family:var(--ow-font-sans);margin-bottom:10px;padding:8px 10px;">
+                <option value="cj">CJ대한통운 로이스파셀(LOIS Parcel) · CNPlus</option>
+                <option value="epost">우체국택배 계약소포 엑셀접수</option>
+                <option value="hanjin">한진택배 H-Focus 일괄출고</option>
+                <option value="lotte">롯데택배 알짜배기 운송장</option>
+                <option value="logen">로젠택배 i-LOGEN 표준양식</option>
+                <option value="wholesale">도매꾹·오너클랜 위탁발주서</option>
+              </select>
+              <textarea id="bridgeTextarea" rows="5" placeholder="여기에 쿠팡 윙·스마트스토어 엑셀 표를 붙여넣으세요 (Ctrl+V)&#10;예: 묶음배송번호   수취인이름   수취인전화번호   우편번호   수취인 주소   수취인 상세주소 ..." style="width:100%;font-family:var(--ow-font-mono);font-size:0.75rem;padding:10px;border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);margin-bottom:10px;resize:vertical;"></textarea>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" id="btnBridgeRun" class="ow-btn ow-btn-primary" style="flex:1;">붙여넣은 주문서 3초 합포장 →</button>
+                <a href="../?preset=cj" class="ow-btn ow-btn-secondary">파일 드래그 화면 열기</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section ow-section-alt">
+      <div class="ow-container">
+        <h2 class="ow-section-title" style="margin-bottom:18px;">쿠팡 셀러가 매일 겪는 출고 사고 3가지를 자동 교정합니다</h2>
+        <div class="ow-story-beats">
+          <div class="ow-story-beat">
+            <div class="ow-beat-head">
+              <strong>1. 수취인 주소·상세주소 분리로 인한 동·호수 누락</strong>
+              <span class="ow-chip ow-chip-crit">반송 위험</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              쿠팡 윙 발주서는 도로명 주소와 아파트 동·호수가 두 열로 나뉘어 있어 택배 양식에 한 열만 매핑하면 문 앞 오배송이 발생합니다. 오커 웍스는 중복 문자열 검사 후 한 줄 주소로 깔끔히 병합합니다.
+            </p>
+          </div>
+          <div class="ow-story-beat">
+            <div class="ow-beat-head">
+              <strong>2. 묶음배송번호가 갈린 시간차 추가 주문</strong>
+              <span class="ow-chip ow-chip-warn">택배비 2중 부과</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              같은 고객이 10분 간격으로 추가 결제하거나 스마트스토어와 쿠팡에서 동시 주문하면 <span class="ow-mono">0507</span> 안심번호가 서로 달라집니다. 성명+정규화 주소 기준으로 1박스 합포장 시트를 생성하고 박스수량은 <span class="ow-mono">1</span>로 고정합니다.
+            </p>
+          </div>
+          <div class="ow-story-beat ow-story-beat-highlight">
+            <div class="ow-beat-head">
+              <strong style="color:var(--ow-action-primary);">3. 구매수(수량)·등록옵션명 정규화 및 취소건 제외</strong>
+              <span class="ow-chip ow-chip-ok">오출고 0건</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              쿠팡 특유의 <span class="ow-mono">구매수(수량)</span>, <span class="ow-mono">노출상품명 + 등록옵션명</span> 열을 표준 품목명으로 합치고, 출고 직전 취소·반품 행을 자동 제외합니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet" style="margin-top:24px;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+          <div>
+            <strong style="font-size:1.0625rem;display:block;margin-bottom:4px;">사방넷·플레이오토 월 3~5만 원 없이, 합포장 2건이면 구독료 전액 회수</strong>
+            <span class="ow-fine">회당 5건 영구 무료 체험 · 6대 마켓 무제한 통합 패스 월 4,900원 (VAT 포함 · 7일 100% 환불 보증)</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="../?preset=cj" class="ow-btn ow-btn-secondary">무료 5건 먼저 체험하기</a>
+            <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary">월 4,900원 무제한 패스 발급 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div class="ow-fine">
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+        </div>
+        <div class="ow-footer-links ow-fine">
+          <a href="../">6대 마켓 발주서 통합</a>
+          <a href="./">쿠팡 윙 분리주소·합포장 가이드</a>
+          <a href="../smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
+          <a href="../courier-excel-format/">택배사별 엑셀 양식 모음</a>
+          <a href="../sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
+          <a href="../../">카카오 지도 코드 복구</a>
+          <a href="../../kcp-exec-patch/">PHP exec() 결제 복구</a>
+          <a href="../../privacy-terms/">개인정보·이용·환불약관</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var ta = document.getElementById('bridgeTextarea');
+      var sel = document.getElementById('bridgePreset');
+      var btn = document.getElementById('btnBridgeRun');
+      function goConvert() {
+        var preset = sel ? sel.value : 'cj';
+        var val = ta ? ta.value.trim() : '';
+        if (val) {
+          try { sessionStorage.setItem('ow_pending_tsv', val); } catch (e) {}
+        }
+        window.location.href = '../?preset=' + encodeURIComponent(preset) + '&mode=paste';
+      }
+      if (btn) btn.addEventListener('click', goConvert);
+      if (ta) {
+        ta.addEventListener('paste', function() {
+          setTimeout(goConvert, 80);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

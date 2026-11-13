@@ -343,7 +343,7 @@
 
               <div id="limitNotice" style="display:none;margin-top:12px;padding:10px 12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.75rem;color:var(--ow-p-amber-800);">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-                  <span>무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
+                  <span id="limitNoticeText">무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
                   <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
                 </div>
               </div>
@@ -759,6 +759,7 @@
         <div class="ow-footer-links ow-fine">
           <a href="./">6대 마켓 발주서 통합</a>
           <a href="smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
+          <a href="coupang-wing-bundle/">쿠팡 윙 분리주소·합포장 가이드</a>
           <a href="courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
           <a href="../">카카오 지도 코드 복구</a>
@@ -899,19 +900,30 @@
         renderPreview();
       }
 
-      function pickField(row, keys) {
+      function normHeaderKey(s) {
+        return String(s || '').replace(/[\s\r\n\uFEFF]+/g, '').toLowerCase();
+      }
+
+      function pickField(row, keys, excludeRe) {
+        var rowKeys = Object.keys(row);
         for (var i = 0; i < keys.length; i++) {
-          var k = keys[i];
-          if (row[k] !== undefined && row[k] !== null && String(row[k]).trim() !== '') {
-            return String(row[k]).trim();
+          var targetExact = normHeaderKey(keys[i]);
+          for (var r = 0; r < rowKeys.length; r++) {
+            if (normHeaderKey(rowKeys[r]) === targetExact) {
+              var exactVal = row[rowKeys[r]];
+              if (exactVal !== undefined && exactVal !== null && String(exactVal).trim() !== '') {
+                return String(exactVal).trim();
+              }
+            }
           }
         }
-        var rowKeys = Object.keys(row);
         for (var j = 0; j < keys.length; j++) {
-          var target = keys[j].replace(/\s+/g, '');
-          for (var r = 0; r < rowKeys.length; r++) {
-            if (rowKeys[r].replace(/\s+/g, '').indexOf(target) !== -1 && String(row[rowKeys[r]]).trim() !== '') {
-              return String(row[rowKeys[r]]).trim();
+          var target = normHeaderKey(keys[j]);
+          for (var k = 0; k < rowKeys.length; k++) {
+            var cleanKey = String(rowKeys[k] || '').replace(/[\s\r\n\uFEFF]+/g, '');
+            if (excludeRe && excludeRe.test(cleanKey)) continue;
+            if (cleanKey.toLowerCase().indexOf(target) !== -1 && row[rowKeys[k]] !== undefined && row[rowKeys[k]] !== null && String(row[rowKeys[k]]).trim() !== '') {
+              return String(row[rowKeys[k]]).trim();
             }
           }
         }
@@ -956,7 +968,7 @@
       var chkBundleMerge = document.getElementById('chkBundleMerge');
 
       function matrixToObjects(matrix) {
-        var maxScan = Math.min(matrix.length, 14);
+        var maxScan = Math.min(matrix.length, 20);
         var headerIdx = 0;
         var recvRe = /수취인|수령인|수령자|받는분|받는사람|받으시는분/;
         var orderRe = /상품|품목|단품|주소|배송지|주문번호|묶음배송|장바구니|연락처|전화|휴대/;
@@ -1012,33 +1024,54 @@
         return rows;
       }
 
+      function detectTextDelimiter(cleaned) {
+        var sample = cleaned.split(/\r?\n/).slice(0, 15);
+        var tabRich = 0, commaRich = 0;
+        for (var i = 0; i < sample.length; i++) {
+          if ((sample[i].match(/\t/g) || []).length >= 2) tabRich += 1;
+          if ((sample[i].match(/,/g) || []).length >= 2) commaRich += 1;
+        }
+        if (tabRich > 0) return '\t';
+        if (commaRich > 0) return ',';
+        return cleaned.indexOf('\t') !== -1 ? '\t' : ',';
+      }
+
       function extractSheetRows(ws) {
         var matrix = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
         return matrixToObjects(matrix);
       }
 
       function normalizeRow(raw, fileName) {
-        var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '수령자명', '받는분', '받는사람', '받으시는분']);
-        var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명', '단품명']);
-        if ((!recipient && !product) || /^(수취인명|수령인|수령자명|받는분)$/.test(recipient)) return null;
+        var recipient = pickField(raw, ['수취인명', '수취인이름', '수령인명', '수령인', '수령자명', '받는분성명', '받는분', '받는사람', '받으시는분'], /연락처|전화|휴대|주소|우편|메시지|메세지|은행|계좌|환불|통관/);
+        var product = pickField(raw, ['상품명', '노출상품명', '주문상품명', '품목명', '물품명', '단품명'], /번호|코드|금액|가격|단가|할인|수수료|배송비|상태|문의|사은품/);
+        if ((!recipient && !product) || /^(수취인명|수취인이름|수령인명|수령인|수령자명|받는분|받는분성명)$/.test(recipient)) return null;
 
-        var addrBase = pickField(raw, ['통합배송지', '배송지', '배송지 주소', '수취인 주소', '수취인 기본주소', '수령인 주소', '주소', '기본주소']);
-        var addrDetail = pickField(raw, ['상세주소', '수취인 상세주소', '배송지상세주소', '나머지주소']);
+        var claimOrOrderStatus = [
+          pickField(raw, ['클레임상태', '취소상태', '반품상태'], /번호|일시|일자|사유|금액|수량/),
+          pickField(raw, ['주문상태', '주문상세상태', '발주상태', '배송상태'], /번호|일시|일자|사유|금액/)
+        ].join(' ');
+        if (claimOrOrderStatus && !/철회|거부/.test(claimOrOrderStatus) && /취소완료|취소요청|취소진행|주문취소|결제취소|직권취소|판매취소|반품요청|반품진행|반품완료|반품접수|환불완료|환불진행|환불요청/.test(claimOrOrderStatus)) {
+          return { _skippedCancel: true };
+        }
+
+        var addrBase = pickField(raw, ['통합배송지', '수취인주소', '수취인기본주소', '수령인주소', '배송지주소', '받는분주소(전체,분할)', '받는분주소', '수하인주소', '배달주소', '기본주소', '배송지', '주소'], /상세|나머지|우편|번호|메시지|메세지|메모|요청|출고|반품|교환|발송지|판매자|구매자|주문자|이메일|메일|도서|산간|운임|구역/);
+        var addrDetail = pickField(raw, ['수취인상세주소', '수령인상세주소', '배송지상세주소', '상세주소', '나머지주소'], /출고|반품|교환|판매자|구매자|주문자|우편|번호/);
         var fullAddr = (addrBase + (addrDetail && addrBase.indexOf(addrDetail) === -1 ? ' ' + addrDetail : '')).replace(/\s+/g, ' ').trim();
-        var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수량', '구매수', '주문수량']) || '1';
+        var qtyRaw = pickField(raw, ['수량', '구매수(수량)', '구매수량', '주문수량', '출고수량', '결제수량', '구매수'], /재고|취소|반품|환불|교환|가능|한도|최대|최소|박스|묶음|금액|단가|가격|할인|미출고/) || '1';
         var qty = parseInt(qtyRaw.replace(/[^0-9]/g, ''), 10) || 1;
-        var opt = pickField(raw, ['옵션정보', '옵션명', '등록옵션명', '주문옵션', '옵션내용', '선택사항', '옵션']);
+        var opt = pickField(raw, ['옵션정보', '옵션명', '등록옵션명', '주문옵션', '옵션내용', '선택사항', '옵션'], /가격|금액|비용|코드|번호|관리|수량|여부|추가상품|상태|종류/);
+        if (/^(-|없음|단일상품|단품|해당없음|none|null)$/i.test(opt)) opt = '';
 
         return {
           '마켓구분': detectMarket(raw, fileName || ''),
-          '주문번호': pickField(raw, ['상품주문번호', '품목별 주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드']) || '-',
+          '주문번호': pickField(raw, ['상품주문번호', '품목별주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드', '고객주문번호'], /우편|전화|연락처|송장|운송장|사업자|주민|통관/) || '-',
           '수취인명': recipient,
-          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인 휴대폰', '수령인 휴대전화', '휴대폰번호', '안심번호', '연락처', '주문자연락처'])),
-          '우편번호': formatZip(pickField(raw, ['우편번호', '수취인 우편번호', '수취인우편번호', '배송지우편번호', '새우편번호'])),
+          '수취인연락처': formatPhone(pickField(raw, ['수취인연락처1', '수취인전화번호', '수령인휴대폰', '수령인휴대전화', '휴대폰번호', '안심번호', '수취인연락처2', '받는분전화번호', '수령인연락처', '연락처', '주문자연락처'], /판매자|출고|반품|발송인|보내는|사업자/)),
+          '우편번호': formatZip(pickField(raw, ['우편번호', '수취인우편번호', '배송지우편번호', '받는분우편번호', '새우편번호'], /출고|반품|판매자/)),
           '통합배송지': fullAddr,
           '상품및옵션': (product + (opt ? ' [' + opt + ']' : '')).trim(),
           '수량': qty,
-          '배송메시지': pickField(raw, ['배송메세지', '배송메시지', '배송요청사항', '배송시요구사항']) || '문 앞'
+          '배송메시지': (pickField(raw, ['배송메세지', '배송메시지', '배송요청사항', '배송시요구사항', '배송메세지1'], /번호|코드/) || '문 앞').replace(/\s+/g, ' ').trim()
         };
       }
 
@@ -1325,9 +1358,20 @@
         }).join('');
         marketDistBox.style.display = 'block';
 
+        var limitNoticeText = document.getElementById('limitNoticeText');
         if (!isPro && total > 5) {
           limitNotice.style.display = 'block';
-          totalRowsLabel.textContent = total;
+          if (limitNoticeText) {
+            if (!isDemoSample && bundle.savedWaybills > 0) {
+              limitNoticeText.innerHTML = '방금 합포장만으로 <strong>택배비 약 ' + (bundle.savedWaybills * 3000).toLocaleString() + '원(' + bundle.savedWaybills + '건)</strong>을 아꼈습니다! 전체 <strong>' + total + '건</strong> 무제한 출고는 월 4,900원 패스(7일 100% 환불 보증)로 즉시 해제하세요.';
+            } else if (!isDemoSample) {
+              limitNoticeText.innerHTML = '무료 체험은 <strong>5건</strong>까지 저장됩니다. 대기 중인 나머지 <strong>' + (total - 5) + '건</strong> 포함 전체 <strong>' + total + '건</strong> 즉시 저장은 월 4,900원 패스(7일 100% 환불 보증)로 해제하세요.';
+            } else {
+              limitNoticeText.innerHTML = '무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">' + total + '</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.';
+            }
+          } else if (totalRowsLabel) {
+            totalRowsLabel.textContent = total;
+          }
         } else {
           limitNotice.style.display = 'none';
         }
@@ -1371,13 +1415,15 @@
           showFeedback('붙여넣을 엑셀 표 데이터가 비어 있습니다. 엑셀에서 제목줄을 포함해 복사(Ctrl+C)한 뒤 붙여넣어 주세요.', 'is-warn');
           return;
         }
-        var firstLine = cleaned.split(/\r?\n/)[0] || '';
-        var delim = firstLine.indexOf('\t') !== -1 ? '\t' : ',';
+        var delim = detectTextDelimiter(cleaned);
         var rows = matrixToObjects(parseDelimitedMatrix(cleaned, delim));
         var validNorms = [];
+        var canceledCount = 0;
         rows.forEach(function(r) {
           var n = normalizeRow(r, 'clipboard');
-          if (n) validNorms.push(n);
+          if (!n) return;
+          if (n._skippedCancel) { canceledCount += 1; return; }
+          validNorms.push(n);
         });
         if (validNorms.length > 0) clearDemoIfActive();
         var added = 0, dupCount = 0;
@@ -1391,7 +1437,10 @@
         if (added > 0) {
           showFeedback('클립보드 표 ' + added + '건 투입 → ' + b.rows.length + '건 출고 시트 준비 완료' +
             (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') +
+            (canceledCount > 0 ? ' · 취소·반품 ' + canceledCount + '건 자동 제외' : '') +
             (dupCount > 0 ? ' · 중복 ' + dupCount + '건 자동 제외' : '') + ' · 외부 전송 0 Byte', 'is-ok');
+        } else if (canceledCount > 0) {
+          showFeedback('붙여넣은 주문 ' + canceledCount + '건이 모두 취소·반품 상태로 확인되어 오출고 방지를 위해 제외했습니다.', 'is-warn');
         } else if (dupCount > 0) {
           showFeedback('이미 투입된 중복 주문 ' + dupCount + '건을 자동으로 건너뛰었습니다 (오출고 방지).', 'is-warn');
         } else {
@@ -1405,6 +1454,7 @@
         var pending = files.length;
         var hadEncryptedError = false;
         var dupCount = 0;
+        var canceledCount = 0;
         files.forEach(function(file) {
           var reader = new FileReader();
           reader.onload = function(evt) {
@@ -1418,7 +1468,7 @@
                   text = new TextDecoder('euc-kr').decode(evt.target.result);
                 }
                 text = text.replace(/^\uFEFF/, '');
-                var delim = /\.tsv$/i.test(file.name || '') ? '\t' : ',';
+                var delim = /\.tsv$/i.test(file.name || '') ? '\t' : detectTextDelimiter(text);
                 rows = matrixToObjects(parseDelimitedMatrix(text, delim));
               } else {
                 var wb = XLSX.read(evt.target.result, { type: 'array', codepage: 949 });
@@ -1428,7 +1478,9 @@
               var validNorms = [];
               rows.forEach(function(r) {
                 var n = normalizeRow(r, file.name);
-                if (n) validNorms.push(n);
+                if (!n) return;
+                if (n._skippedCancel) { canceledCount += 1; return; }
+                validNorms.push(n);
               });
               if (validNorms.length > 0) clearDemoIfActive();
               validNorms.forEach(function(n) {
@@ -1448,7 +1500,10 @@
               if (b.rows.length > 0) {
                 showFeedback(b.rows.length + '건 출고 시트 준비 완료' +
                   (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') +
+                  (canceledCount > 0 ? ' · 취소·반품 ' + canceledCount + '건 자동 제외' : '') +
                   (dupCount > 0 ? ' · 중복 ' + dupCount + '건 자동 제외' : '') + ' · 외부 전송 0 Byte', 'is-ok');
+              } else if (canceledCount > 0) {
+                showFeedback('투입한 파일의 주문 ' + canceledCount + '건이 모두 취소·반품 상태로 확인되어 오출고 방지를 위해 제외했습니다.', 'is-warn');
               } else {
                 showFeedback('인식된 주문 행이 없습니다. 주문 발주서 원본 파일(수취인·상품·주소 포함)인지 확인해 주세요.', 'is-warn');
               }
@@ -1650,7 +1705,11 @@
           skipInitialSample = true;
           pastePanel.style.display = 'block';
           if (btnTogglePaste) btnTogglePaste.setAttribute('aria-expanded', 'true');
-          if (pasteInput) setTimeout(function() { pasteInput.focus(); }, 80);
+          setTimeout(function() {
+            var wbEl = document.getElementById('workbench');
+            if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
+            if (pasteInput) pasteInput.focus();
+          }, 80);
         }
         var pendingTsv = sessionStorage.getItem('ow_pending_tsv');
         if (pendingTsv) {
@@ -1658,7 +1717,11 @@
           sessionStorage.removeItem('ow_pending_tsv');
           if (pastePanel) pastePanel.style.display = 'block';
           if (pasteInput) pasteInput.value = pendingTsv;
-          setTimeout(function() { handlePastedText(pendingTsv); }, 50);
+          setTimeout(function() {
+            handlePastedText(pendingTsv);
+            var wbEl = document.getElementById('workbench');
+            if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
         }
       } catch (e) {}
 
