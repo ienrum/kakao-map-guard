@@ -191,20 +191,32 @@
 
               <div class="ow-console-toolbar">
                 <div class="ow-preset-group">
-                  <button type="button" class="ow-preset-btn" id="btnSampleOrders">샘플 8건 불러오기</button>
+                  <button type="button" class="ow-preset-btn" id="btnSampleOrders">샘플 9건 불러오기</button>
+                  <button type="button" class="ow-preset-btn" id="btnTogglePaste" aria-expanded="false">암호 엑셀 Ctrl+V 붙여넣기</button>
                   <button type="button" class="ow-preset-btn" id="btnResetOrders">초기화</button>
                 </div>
                 <span class="ow-console-meta" id="convTelemetry">외부 전송 0 B</span>
+              </div>
+
+              <div id="pastePanel" style="display:none;margin-bottom:12px;padding:12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-bg-recessed);border:1px solid var(--ow-action-primary);">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                  <strong style="font-size:0.8125rem;color:var(--ow-text-primary);">암호 걸린 스마트스토어·쿠팡 엑셀 1초 붙여넣기</strong>
+                  <span class="ow-fine">엑셀에서 <span class="ow-mono">Ctrl+A → Ctrl+C</span> 후 아래 칸에 <span class="ow-mono">Ctrl+V</span></span>
+                </div>
+                <textarea id="pasteInput" rows="3" placeholder="열려 있는 엑셀 표 전체(제목줄 포함)를 복사해 여기에 붙여넣으세요. 암호 해제 재다운로드 없이 즉시 병합됩니다." style="width:100%;font-family:var(--ow-font-mono);font-size:0.75rem;padding:8px 10px;border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);background:#fff;color:var(--ow-text-primary);resize:vertical;"></textarea>
+                <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+                  <button type="button" class="ow-btn ow-btn-primary" id="btnRunPaste" style="min-height:32px;padding:6px 14px;font-size:0.75rem;">붙여넣은 표 즉시 병합</button>
+                </div>
               </div>
 
               <div class="ow-dropzone" id="dropzone" tabindex="0" role="button" aria-label="마켓 주문 엑셀 또는 CSV 파일 선택">
                 <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv" style="display:none;" />
                 <svg class="ow-icon" style="width:24px;height:24px;color:var(--ow-action-primary);margin-bottom:6px;" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <div style="font-weight:700;font-size:0.9375rem;color:var(--ow-text-primary);margin-bottom:8px;">
-                  주문 파일 여러 개를 여기에 놓으세요
+                  주문 파일 여러 개를 놓거나 화면에 바로 Ctrl+V 하세요
                 </div>
                 <span class="ow-btn ow-btn-secondary" style="min-height:36px;padding:7px 14px;font-size:0.8125rem;">파일 직접 선택</span>
-                <div class="ow-fine" style="margin-top:8px;">* 스마트스토어 엑셀은 다운로드창에서 [암호 해제] 체크 후 투입 (EUC-KR 한글 CSV 자동 호환)</div>
+                <div class="ow-fine" style="margin-top:8px;">* 암호 설정된 엑셀은 재다운로드 없이 엑셀 화면 복사 후 <strong>[암호 엑셀 Ctrl+V 붙여넣기]</strong>로 1초 투입</div>
               </div>
 
               <div id="resultPanel" style="margin-top:16px;border-top:1px solid var(--ow-border-default);padding-top:14px;">
@@ -226,7 +238,7 @@
                     <label for="exportPresetSelect" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">출고 양식</label>
                     <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);min-width:206px;padding:6px 10px;">
                       <option value="standard">표준 통합발주서 (10열)</option>
-                      <option value="cj">CJ대한통운 CNPlus 일괄등록</option>
+                      <option value="cj">CJ대한통운 로이스파셀·CNPlus</option>
                       <option value="epost">우체국택배 계약소포 엑셀접수</option>
                       <option value="hanjin">한진택배 H-Focus 일괄출고</option>
                       <option value="lotte">롯데택배 알짜배기 운송장</option>
@@ -682,6 +694,7 @@
         </div>
         <div class="ow-footer-links ow-fine">
           <a href="./">6대 마켓 발주서 통합</a>
+          <a href="smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
           <a href="courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
           <a href="../">카카오 지도 코드 복구</a>
@@ -974,8 +987,11 @@
         var saved = 0;
         normalizedOrders.forEach(function(r) {
           var phoneDigits = String(r['수취인연락처'] || '').replace(/[^0-9]/g, '');
-          var cleanAddr = String(r['통합배송지'] || '').replace(/\s+/g, '');
-          var key = (r['수취인명'] && cleanAddr) ? (r['수취인명'] + '|' + phoneDigits + '|' + cleanAddr) : '';
+          var cleanAddr = String(r['통합배송지'] || '').replace(/[\s,()\-]/g, '');
+          var useAddrKey = phoneDigits.indexOf('050') === 0 || cleanAddr.length >= 6;
+          var key = (r['수취인명'] && cleanAddr)
+            ? (useAddrKey ? (r['수취인명'] + '|' + cleanAddr) : (r['수취인명'] + '|' + phoneDigits + '|' + cleanAddr))
+            : '';
           if (key && seen[key]) {
             var prev = seen[key];
             prev['상품및옵션'] = prev['상품및옵션'] + (prev._merged ? '' : ' (x' + prev['수량'] + ')') + ' + ' + r['상품및옵션'] + ' (x' + r['수량'] + ')';
@@ -1005,7 +1021,7 @@
 
       var PRESET_LABELS = {
         standard: '통합발주서',
-        cj: 'CJ대한통운_CNPlus',
+        cj: 'CJ대한통운_로이스파셀_CNPlus',
         epost: '우체국택배_일괄접수',
         hanjin: '한진택배_HFocus',
         lotte: '롯데택배_알짜배기',
@@ -1023,9 +1039,9 @@
               '받는분기타연락처': '',
               '받는분우편번호': r['우편번호'],
               '받는분주소(전체, 분할)': r['통합배송지'],
-              '기본운임': '선불',
+              '기본운임': '신용',
               '박스타입': '극소',
-              '박수수량': 1,
+              '박스수량': 1,
               '품목명': itemWithQty,
               '배송메세지1': r['배송메시지'],
               '고객주문번호': r['주문번호']
@@ -1208,11 +1224,52 @@
         }).join('');
       }
 
+      var seenExactKeys = {};
+      function pushNormalizedOrder(norm) {
+        if (!norm) return false;
+        if (norm['주문번호'] && norm['주문번호'] !== '-') {
+          var exactKey = norm['마켓구분'] + '|' + norm['주문번호'] + '|' + norm['상품및옵션'];
+          if (seenExactKeys[exactKey]) return 'dup';
+          seenExactKeys[exactKey] = true;
+        }
+        normalizedOrders.push(norm);
+        return true;
+      }
+
+      function handlePastedText(rawText) {
+        var cleaned = String(rawText || '').replace(/^\uFEFF/, '').trim();
+        if (!cleaned) {
+          showFeedback('붙여넣을 엑셀 표 데이터가 비어 있습니다. 엑셀에서 제목줄을 포함해 복사(Ctrl+C)한 뒤 붙여넣어 주세요.', 'is-warn');
+          return;
+        }
+        var firstLine = cleaned.split(/\r?\n/)[0] || '';
+        var delim = firstLine.indexOf('\t') !== -1 ? '\t' : ',';
+        var rows = matrixToObjects(parseDelimitedMatrix(cleaned, delim));
+        var added = 0, dupCount = 0;
+        rows.forEach(function(r) {
+          var res = pushNormalizedOrder(normalizeRow(r, 'clipboard'));
+          if (res === true) added += 1;
+          else if (res === 'dup') dupCount += 1;
+        });
+        renderPreview();
+        var b = getProcessedBundle();
+        if (added > 0) {
+          showFeedback('클립보드 표 ' + added + '건 투입 → ' + b.rows.length + '건 출고 시트 준비 완료' +
+            (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') +
+            (dupCount > 0 ? ' · 중복 ' + dupCount + '건 자동 제외' : '') + ' · 외부 전송 0 Byte', 'is-ok');
+        } else if (dupCount > 0) {
+          showFeedback('이미 투입된 중복 주문 ' + dupCount + '건을 자동으로 건너뛰었습니다 (오출고 방지).', 'is-warn');
+        } else {
+          showFeedback('제목줄(수취인명·상품명·배송지 등)을 포함해 엑셀 표 영역을 복사한 뒤 다시 붙여넣어 주세요.', 'is-warn');
+        }
+      }
+
       function handleFiles(fileList) {
         var files = Array.prototype.slice.call(fileList || []);
         if (!files.length) return;
         var pending = files.length;
         var hadEncryptedError = false;
+        var dupCount = 0;
         files.forEach(function(file) {
           var reader = new FileReader();
           reader.onload = function(evt) {
@@ -1234,19 +1291,23 @@
                 rows = extractSheetRows(ws);
               }
               rows.forEach(function(r) {
-                var norm = normalizeRow(r, file.name);
-                if (norm) normalizedOrders.push(norm);
+                var res = pushNormalizedOrder(normalizeRow(r, file.name));
+                if (res === 'dup') dupCount += 1;
               });
             } catch (err) {
               hadEncryptedError = true;
-              showFeedback('암호 설정된 엑셀입니다. 스마트스토어 다운로드창에서 [엑셀 암호 설정 해제]를 체크하거나 암호 제거 저장 후 다시 올려 주세요.', 'is-crit');
+              var pp = document.getElementById('pastePanel');
+              if (pp) pp.style.display = 'block';
+              showFeedback('암호 걸린 엑셀입니다! 재다운로드할 필요 없이 열려 있는 엑셀에서 Ctrl+A → Ctrl+C 복사 후 위 붙여넣기 칸에 Ctrl+V 하시면 1초 만에 병합됩니다.', 'is-crit');
             }
             pending -= 1;
             if (pending === 0 && !hadEncryptedError) {
               renderPreview();
               var b = getProcessedBundle();
               if (b.rows.length > 0) {
-                showFeedback(b.rows.length + '건 출고 시트 준비 완료' + (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') + ' · 외부 전송 0 Byte', 'is-ok');
+                showFeedback(b.rows.length + '건 출고 시트 준비 완료' +
+                  (b.savedWaybills > 0 ? ' (합포장 ' + b.savedWaybills + '건 병합)' : '') +
+                  (dupCount > 0 ? ' · 중복 ' + dupCount + '건 자동 제외' : '') + ' · 외부 전송 0 Byte', 'is-ok');
               } else {
                 showFeedback('인식된 주문 행이 없습니다. 주문 발주서 원본 파일(수취인·상품·주소 포함)인지 확인해 주세요.', 'is-warn');
               }
@@ -1257,19 +1318,20 @@
       }
 
       function loadSampleData() {
+        seenExactKeys = {};
         normalizedOrders = [
-          { '마켓구분':'스마트스토어', '주문번호':'20261112884120', '수취인명':'김지훈', '수취인연락처':'010-4821-9031', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'보온 텀블러 500ml [블랙]', '수량':2, '배송메시지':'문 앞' },
-          { '마켓구분':'스마트스토어', '주문번호':'20261112884121', '수취인명':'김지훈', '수취인연락처':'010-4821-9031', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'전용 세척솔 세트 [화이트]', '수량':1, '배송메시지':'문 앞' },
+          { '마켓구분':'스마트스토어', '주문번호':'20261113884120', '수취인명':'김지훈', '수취인연락처':'0507-1411-8801', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'보온 텀블러 500ml [블랙]', '수량':2, '배송메시지':'문 앞' },
+          { '마켓구분':'쿠팡', '주문번호':'3100948271055', '수취인명':'김지훈', '수취인연락처':'0507-1492-3309', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'전용 세척솔 세트 [화이트]', '수량':1, '배송메시지':'문 앞' },
           { '마켓구분':'쿠팡', '주문번호':'3100948271102', '수취인명':'박서연', '수취인연락처':'0507-1420-8832', '우편번호':'13529', '통합배송지':'경기 성남시 분당구 판교역로 166 402호', '상품및옵션':'데스크 매트 대형 [네이비]', '수량':1, '배송메시지':'경비실' },
-          { '마켓구분':'11번가', '주문번호':'20261112004982', '수취인명':'이민수', '수취인연락처':'010-7732-1194', '우편번호':'48058', '통합배송지':'부산 해운대구 센텀중앙로 97 1204호', '상품및옵션':'케이블 정리 클립 [화이트]', '수량':3, '배송메시지':'연락 바람' },
+          { '마켓구분':'11번가', '주문번호':'20261113004982', '수취인명':'이민수', '수취인연락처':'010-7732-1194', '우편번호':'48058', '통합배송지':'부산 해운대구 센텀중앙로 97 1204호', '상품및옵션':'케이블 정리 클립 [화이트]', '수량':3, '배송메시지':'연락 바람' },
           { '마켓구분':'G마켓·옥션', '주문번호':'4491827301', '수취인명':'최유진', '수취인연락처':'010-2948-6610', '우편번호':'34126', '통합배송지':'대전 유성구 대학로 99 305호', '상품및옵션':'무소음 버티컬 마우스 [차콜]', '수량':1, '배송메시지':'문 앞' },
-          { '마켓구분':'카페24', '주문번호':'20261112-00081', '수취인명':'정현우', '수취인연락처':'010-9102-3384', '우편번호':'21999', '통합배송지':'인천 연수구 컨벤시아대로 165 11층', '상품및옵션':'알루미늄 노트북 거치대 [실버]', '수량':1, '배송메시지':'파손 주의' },
-          { '마켓구분':'스마트스토어', '주문번호':'20261112884199', '수취인명':'한소희', '수취인연락처':'010-6321-7740', '우편번호':'04799', '통합배송지':'서울 성동구 아차산로 113 5층', '상품및옵션':'보온 텀블러 500ml [아이보리]', '수량':2, '배송메시지':'택배함' },
+          { '마켓구분':'카페24', '주문번호':'20261113-00081', '수취인명':'정현우', '수취인연락처':'010-9102-3384', '우편번호':'21999', '통합배송지':'인천 연수구 컨벤시아대로 165 11층', '상품및옵션':'알루미늄 노트북 거치대 [실버]', '수량':1, '배송메시지':'파손 주의' },
+          { '마켓구분':'스마트스토어', '주문번호':'20261113884199', '수취인명':'한소희', '수취인연락처':'010-6321-7740', '우편번호':'04799', '통합배송지':'서울 성동구 아차산로 113 5층', '상품및옵션':'보온 텀블러 500ml [아이보리]', '수량':2, '배송메시지':'택배함' },
           { '마켓구분':'쿠팡', '주문번호':'3100948271988', '수취인명':'오태윤', '수취인연락처':'0507-1499-2011', '우편번호':'61945', '통합배송지':'광주 서구 상무중앙로 78 301호', '상품및옵션':'PD 고속충전 케이블 2m [블랙]', '수량':4, '배송메시지':'문 앞' },
           { '마켓구분':'G마켓·옥션', '주문번호':'4491827920', '수취인명':'윤채원', '수취인연락처':'010-8450-1928', '우편번호':'41911', '통합배송지':'대구 중구 동성로 26 2층', '상품및옵션':'알루미늄 노트북 거치대 [그레이]', '수량':1, '배송메시지':'오전 배송' }
         ];
         renderPreview();
-        showFeedback('원본 9건 → 합포장 8건 자동 통합 완료 (중복 택배비 약 3,000원 절감). 출고 양식을 골라 저장해 보세요.', 'is-ok');
+        showFeedback('원본 9건(050 안심번호가 다른 동일 수취인 주문 포함) → 합포장 8건 자동 통합 완료 (택배비 약 3,000원 절감).', 'is-ok');
       }
 
       function getExportRows() {
@@ -1303,9 +1365,42 @@
 
       document.getElementById('btnResetOrders').addEventListener('click', function() {
         normalizedOrders = [];
+        seenExactKeys = {};
         fileInput.value = '';
+        var pi = document.getElementById('pasteInput');
+        if (pi) pi.value = '';
         convFeedback.className = 'ow-inline-feedback';
         renderPreview();
+      });
+
+      var btnTogglePaste = document.getElementById('btnTogglePaste');
+      var pastePanel = document.getElementById('pastePanel');
+      var pasteInput = document.getElementById('pasteInput');
+      var btnRunPaste = document.getElementById('btnRunPaste');
+      if (btnTogglePaste && pastePanel) {
+        btnTogglePaste.addEventListener('click', function() {
+          var open = pastePanel.style.display === 'none';
+          pastePanel.style.display = open ? 'block' : 'none';
+          btnTogglePaste.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (open && pasteInput) pasteInput.focus();
+        });
+      }
+      if (btnRunPaste && pasteInput) {
+        btnRunPaste.addEventListener('click', function() { handlePastedText(pasteInput.value); });
+      }
+      window.addEventListener('paste', function(e) {
+        var active = document.activeElement;
+        if (active === passInput) return;
+        var text = (e.clipboardData || window.clipboardData) ? (e.clipboardData || window.clipboardData).getData('text/plain') : '';
+        if (!text || (text.indexOf('\t') === -1 && text.indexOf('\n') === -1)) return;
+        if (active === pasteInput) {
+          setTimeout(function() { handlePastedText(pasteInput.value); }, 30);
+        } else {
+          e.preventDefault();
+          if (pastePanel) pastePanel.style.display = 'block';
+          if (pasteInput) pasteInput.value = text;
+          handlePastedText(text);
+        }
       });
 
       btnApplyPass.addEventListener('click', function() {
@@ -1322,6 +1417,7 @@
       });
 
       btnDownloadXlsx.addEventListener('click', function() {
+        var totalAll = getProcessedBundle().rows.length;
         var rows = getExportRows();
         if (!rows.length) return;
         var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
@@ -1332,10 +1428,15 @@
         var stamp = new Date().toISOString().slice(0, 10);
         XLSX.writeFile(wb, '오커웍스_' + label + '_' + stamp + (isPro ? '_전체' : '_무료5건') + '.xlsx');
         convStep3.className = 'ow-step-pill is-done';
-        showFeedback(label.replace(/_/g, ' ') + ' 엑셀(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        if (!isPro && totalAll > 5) {
+          showFeedback('무료 체험 5건 저장 완료 — 대기 중인 나머지 ' + (totalAll - 5) + '건까지 한 번에 출고하려면 위 [월 4,900원 패스 즉시 발급]으로 잠금을 해제하세요.', 'is-warn');
+        } else {
+          showFeedback(label.replace(/_/g, ' ') + ' 엑셀(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        }
       });
 
       btnDownloadCsv.addEventListener('click', function() {
+        var totalAll = getProcessedBundle().rows.length;
         var rows = getExportRows();
         if (!rows.length) return;
         var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
@@ -1348,13 +1449,39 @@
         a.download = '오커웍스_' + label + '_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.csv';
         a.click();
         convStep3.className = 'ow-step-pill is-done';
-        showFeedback(label.replace(/_/g, ' ') + ' CSV(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        if (!isPro && totalAll > 5) {
+          showFeedback('무료 체험 5건 CSV 저장 완료 — 대기 중인 나머지 ' + (totalAll - 5) + '건까지 한 번에 저장하려면 위 [월 4,900원 패스 즉시 발급]을 이용하세요.', 'is-warn');
+        } else {
+          showFeedback(label.replace(/_/g, ' ') + ' CSV(' + rows.length + '건) 저장이 완료되었습니다.', 'is-ok');
+        }
       });
 
       try {
-        var qp = new URLSearchParams(window.location.search).get('preset');
+        var params = new URLSearchParams(window.location.search);
+        var qp = params.get('preset');
         if (qp && PRESET_LABELS[qp] && exportPresetSelect) {
           exportPresetSelect.value = qp;
+        }
+        var urlPass = (params.get('pass') || '').trim().toUpperCase();
+        if (urlPass === VALID_PASS) {
+          isPro = true;
+          try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
+          params.delete('pass');
+          var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+          window.history.replaceState({}, '', cleanUrl);
+          setTimeout(function() { showFeedback('결제 패스가 원클릭 자동 인증되었습니다! 건수 제한 없이 즉시 저장하세요.', 'is-ok'); }, 60);
+        }
+        if (params.get('mode') === 'paste' && pastePanel) {
+          pastePanel.style.display = 'block';
+          if (btnTogglePaste) btnTogglePaste.setAttribute('aria-expanded', 'true');
+          if (pasteInput) setTimeout(function() { pasteInput.focus(); }, 80);
+        }
+        var pendingTsv = sessionStorage.getItem('ow_pending_tsv');
+        if (pendingTsv) {
+          sessionStorage.removeItem('ow_pending_tsv');
+          if (pastePanel) pastePanel.style.display = 'block';
+          if (pasteInput) pasteInput.value = pendingTsv;
+          setTimeout(function() { handlePastedText(pendingTsv); }, 50);
         }
       } catch (e) {}
 

@@ -567,6 +567,7 @@
         </div>
         <div class="ow-footer-links ow-fine">
           <a href="seller-converter/">6대 마켓 발주서 통합</a>
+          <a href="seller-converter/smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
           <a href="seller-converter/courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="seller-converter/sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
           <a href="./">카카오 지도 코드 복구</a>
@@ -585,7 +586,14 @@
     (function() {
       var VALID_PASS = 'PASS-2026-PRO';
       var isPro = false;
-      try { isPro = localStorage.getItem('ow_pro_pass') === VALID_PASS; } catch (e) {}
+      try {
+        var qPass = (new URLSearchParams(window.location.search).get('pass') || '').trim().toUpperCase();
+        if (qPass === VALID_PASS) {
+          localStorage.setItem('ow_pro_pass', VALID_PASS);
+          window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+        }
+        isPro = localStorage.getItem('ow_pro_pass') === VALID_PASS;
+      } catch (e) {}
 
       var fullGeneratedCode = '';
       var sampleHtml = [

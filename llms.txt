@@ -4,7 +4,8 @@
 
 ## 주요 제품 및 무료 양식·복구 가이드
 
-- [6대 마켓 발주서 3초 통합기](https://ienrum.github.io/kakao-map-guard/seller-converter/): 스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24, 오늘의집, 아임웹, 톡스토어 주문 엑셀·CSV(EUC-KR 호환)를 합포장 병합하고 7종 택배·도매 시트로 저장 (회당 5건 무료).
+- [6대 마켓 발주서 3초 통합기](https://ienrum.github.io/kakao-map-guard/seller-converter/): 스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24, 오늘의집, 아임웹, 톡스토어 주문 엑셀·CSV(EUC-KR 호환) 및 암호 엑셀 Ctrl+V 표를 합포장 병합하고 7종 택배·도매 시트로 저장 (회당 5건 무료).
+- [스마트스토어 암호 엑셀 → CJ 로이스파셀(LOIS Parcel)·택배 양식 3초 변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/smartstore-lois-parcel/): 재다운로드 없는 Ctrl+V 붙여넣기 변환 브릿지 및 050 안심번호 중복 주문 성명+주소 자동 합포장 해결 안내.
 - [5대 택배사 일괄접수 엑셀 양식 무료 발급기](https://ienrum.github.io/kakao-map-guard/seller-converter/courier-excel-format/): CJ대한통운 CNPlus, 우체국 계약소포, 한진 H-Focus, 롯데 알짜배기, 로젠 i-LOGEN, 도매 위탁발주서 표준 빈 양식(.xlsx) 무료 다운로드 및 자동 변환 연동.
 - [사방넷·플레이오토 소량 셀러 경량 대안 비교](https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/): 일 주문 5~100건 위탁·부업 셀러를 위한 월 5~30만원 통합관리 ERP 대비 월 4,900원 경량 대안 안내 및 연간 비용 절감 계산기.
 - [카카오 지도 종료 대비 교체 코드 생성기](https://ienrum.github.io/kakao-map-guard/): 구형 카카오 지도 스크립트를 무료 진단하고 매장 좌표를 유지한 신규 v2 SDK 및 4.5초 먹통 감지 길찾기 폴백 완성 코드를 즉시 합성.

@@ -142,8 +142,10 @@ export function consolidateBundles(rows) {
   let savedWaybills = 0;
   for (const r of rows) {
     const keyPhone = String(r.phone || "").replace(/[^0-9]/g, "");
-    const keyAddr = String(r.address || "").replace(/\s+/g, "");
-    const key = r.receiver && keyAddr ? `${r.receiver}|${keyPhone}|${keyAddr}` : null;
+    const keyAddr = String(r.address || "").replace(/[\s,()\-]/g, "");
+    const key = r.receiver && keyAddr
+      ? (keyPhone.startsWith("050") || keyAddr.length >= 6 ? `${r.receiver}|${keyAddr}` : `${r.receiver}|${keyPhone}|${keyAddr}`)
+      : null;
     if (key && map.has(key)) {
       const existing = map.get(key);
       existing.item = `${existing.item} (x${existing.qty}) + ${r.item} (x${r.qty})`.replace(/\(x1\)\s*\+/g, "+");
@@ -170,9 +172,9 @@ export function formatRowsByPreset(rows, preset = "standard") {
         "받는분기타연락처": "",
         "받는분우편번호": r.zipcode,
         "받는분주소(전체, 분할)": r.address,
-        "기본운임": "선불",
+        "기본운임": "신용",
         "박스타입": "극소",
-        "박수수량": 1,
+        "박스수량": 1,
         "품목명": itemWithQty,
         "배송메세지1": r.memo,
         "고객주문번호": r.orderId,

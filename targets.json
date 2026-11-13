@@ -5,6 +5,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "SmartStore Encrypted Excel & LOIS Parcel Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/smartstore-lois-parcel/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "Courier Excel Format Lead Magnet",
     "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/courier-excel-format/",
     "expectSubstring": "AW-17208942339"
