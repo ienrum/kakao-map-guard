@@ -363,6 +363,80 @@
                 </div>
               </div>
               <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>
+
+              <!-- 5. Afternoon Waybill Tracking Reverse-Splitter (Closes the Morning-to-Afternoon Loop) -->
+              <details id="trackingSplitPanel" class="ow-faq-item" style="margin-top:16px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-strong);border-radius:var(--ow-radius-sm);">
+                <summary class="ow-faq-summary" style="padding:12px 14px;cursor:pointer;">
+                  <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span class="ow-chip ow-chip-ok">오후 2단계</span>
+                    <strong style="font-size:0.875rem;color:var(--ow-text-primary);">택배 운송장 엑셀 → 스마트스토어·쿠팡 발송처리 일괄등록 역변환 (합포장 주문번호 자동 분리)</strong>
+                  </span>
+                  <span class="ow-mono" style="font-weight:700;color:var(--ow-action-primary);">열기 +</span>
+                </summary>
+                <div class="ow-faq-body" style="padding:14px;border-top:1px dashed var(--ow-border-strong);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                    <span class="ow-fine">로이스파셀·한진·롯데 등에서 출력한 운송장 엑셀을 넣으면 합포장으로 묶인 주문번호(<span class="ow-mono">A,B</span>)를 마켓별 송장 등록 양식으로 1초 만에 다시 쪼개 줍니다.</span>
+                    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                      <button type="button" class="ow-preset-btn" id="btnTrackSample">합포장 송장 역변환 시연</button>
+                      <label class="ow-preset-btn" style="cursor:pointer;margin:0;">
+                        <input type="file" id="trackFileInput" accept=".xlsx,.xls,.csv,.tsv" style="display:none;" />
+                        운송장 파일 선택
+                      </label>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                    <select id="trackCourierSelect" class="ow-pass-input" aria-label="기본 택배사 선택" style="font-family:var(--ow-font-sans);font-weight:600;min-width:140px;min-height:38px;padding:6px 10px;">
+                      <option value="CJ대한통운" selected>CJ대한통운</option>
+                      <option value="우체국택배">우체국택배</option>
+                      <option value="한진택배">한진택배</option>
+                      <option value="롯데택배">롯데택배</option>
+                      <option value="로젠택배">로젠택배</option>
+                    </select>
+                    <input type="text" id="trackPasteInput" class="ow-pass-input" placeholder="또는 택배 결과 엑셀(고객주문번호·운송장번호 포함)을 복사해 여기에 Ctrl+V 붙여넣기" style="flex:1;min-width:220px;min-height:38px;font-size:0.75rem;" />
+                    <button type="button" class="ow-btn ow-btn-secondary" id="btnRunTrackSplit" style="min-height:38px;padding:6px 14px;font-size:0.8125rem;">역변환 실행</button>
+                  </div>
+
+                  <div class="ow-ledger-sheet" style="margin-bottom:10px;">
+                    <div class="ow-table-wrap">
+                      <table class="ow-table" aria-label="마켓별 운송장 역변환 미리보기">
+                        <thead>
+                          <tr>
+                            <th>마켓</th>
+                            <th>분리된 주문번호</th>
+                            <th>수취인</th>
+                            <th>택배사</th>
+                            <th>운송장번호(숫자정렬)</th>
+                            <th>구분</th>
+                          </tr>
+                        </thead>
+                        <tbody id="trackPreviewBody">
+                          <tr>
+                            <td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:14px 10px;font-size:0.78125rem;">
+                              위 <strong>[합포장 송장 역변환 시연]</strong>을 누르거나 택배사 운송장 파일을 넣어 보세요.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <label for="trackTargetSelect" class="ow-fine" style="font-weight:700;color:var(--ow-text-secondary);">발송처리 양식</label>
+                      <select id="trackTargetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);font-weight:600;min-width:210px;min-height:40px;padding:6px 10px;">
+                        <option value="all" selected>전체 마켓 통합 송장매칭표</option>
+                        <option value="smartstore">스마트스토어 일괄발송 양식</option>
+                        <option value="coupang">쿠팡 윙 운송장등록 양식</option>
+                        <option value="other">카페24·11번가·ESM+ 송장양식</option>
+                      </select>
+                      <span class="ow-mono" style="font-size:0.75rem;color:var(--ow-text-muted);" id="trackSummaryCount">0건</span>
+                    </div>
+                    <button type="button" class="ow-btn ow-btn-primary" id="btnDownloadTrackXlsx" disabled style="min-height:40px;padding:8px 16px;font-size:0.84375rem;">발송처리 엑셀(.xlsx) 다운로드</button>
+                  </div>
+                  <div class="ow-inline-feedback" id="trackFeedback" role="status" aria-live="polite"></div>
+                </div>
+              </details>
             </div>
           </div>
         </div>
@@ -691,7 +765,7 @@
               <ul class="ow-check-list">
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span><strong>6대 마켓 행 제한 해제</strong> <span class="ow-fine" style="display:block;">스마트스토어·쿠팡·11번가·G마켓·옥션·카페24 무제한 병합</span></span>
+                  <span><strong>오전 발주서 합포장 + 오후 송장 발송처리 왕복 무제한</strong> <span class="ow-fine" style="display:block;">6대 마켓 병합은 물론 합포장 운송장 엑셀을 스마트스토어·쿠팡 발송처리 양식으로 자동 분리</span></span>
                 </li>
                 <li>
                   <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
@@ -743,6 +817,10 @@
                 <summary class="ow-faq-summary"><span>암호 걸린 스마트스토어 엑셀도 바로 되나요?</span><span class="ow-mono">+</span></summary>
                 <div class="ow-faq-body ow-fine">네! 암호를 풀어 다시 저장할 필요 없이, 열려 있는 엑셀 화면에서 전체 선택(Ctrl+A) → 복사(Ctrl+C) 후 워크벤치에서 바로 Ctrl+V를 누르면 1초 만에 병합됩니다.</div>
               </details>
+              <details class="ow-faq-item">
+                <summary class="ow-faq-summary"><span>합포장한 뒤 오후에 마켓별 운송장 번호 일괄등록도 되나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">네! 워크벤치 하단 <strong>[오후 송장 역변환]</strong>에 택배사 출력 엑셀을 넣으면 묶였던 주문번호를 다시 쪼개 스마트스토어·쿠팡 발송처리 양식으로 즉시 뽑아 드립니다.</div>
+              </details>
             </div>
           </div>
         </div>
@@ -760,6 +838,7 @@
           <a href="./">6대 마켓 발주서 통합</a>
           <a href="smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
           <a href="coupang-wing-bundle/">쿠팡 윙 분리주소·합포장 가이드</a>
+          <a href="waybill-upload-split/">합포장 운송장 마켓 역변환 가이드</a>
           <a href="courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
           <a href="../">카카오 지도 코드 복구</a>
@@ -1617,11 +1696,249 @@
       if (btnRunPaste && pasteInput) {
         btnRunPaste.addEventListener('click', function() { handlePastedText(pasteInput.value); });
       }
+      var trackingSplitPanel = document.getElementById('trackingSplitPanel');
+      var trackCourierSelect = document.getElementById('trackCourierSelect');
+      var trackPasteInput = document.getElementById('trackPasteInput');
+      var trackFileInput = document.getElementById('trackFileInput');
+      var btnTrackSample = document.getElementById('btnTrackSample');
+      var btnRunTrackSplit = document.getElementById('btnRunTrackSplit');
+      var trackPreviewBody = document.getElementById('trackPreviewBody');
+      var trackTargetSelect = document.getElementById('trackTargetSelect');
+      var trackSummaryCount = document.getElementById('trackSummaryCount');
+      var btnDownloadTrackXlsx = document.getElementById('btnDownloadTrackXlsx');
+      var trackFeedback = document.getElementById('trackFeedback');
+      var splitTrackRows = [];
+
+      function showTrackFeedback(msg, tone) {
+        if (!trackFeedback) return;
+        trackFeedback.className = 'ow-inline-feedback is-visible ' + (tone || 'is-ok');
+        trackFeedback.innerHTML = msg;
+      }
+
+      function inferMarketByOrderId(orderId) {
+        var id = String(orderId || '').trim();
+        if (/^\d{8}-\d{4,10}$/.test(id)) return '카페24';
+        if (/^20\d{12,14}$/.test(id)) return '스마트스토어';
+        if (/^[1-3]\d{11,12}$/.test(id)) return '쿠팡';
+        if (/^11ST/i.test(id)) return '11번가';
+        if (/^\d{9,10}$/.test(id)) return 'G마켓·옥션';
+        return '오픈마켓';
+      }
+
+      function parseTrackingMatrix(matrix) {
+        if (!matrix || matrix.length < 2) return [];
+        var headerIdx = 0;
+        for (var i = 0; i < Math.min(matrix.length, 15); i++) {
+          var joined = (matrix[i] || []).map(function(c) { return String(c || '').replace(/\s+/g, ''); }).join('|');
+          if (/운송장|송장|등기번호|화물추적/.test(joined) && /주문|참조|받는분|수취인|수하인|수령인/.test(joined)) {
+            headerIdx = i;
+            break;
+          }
+        }
+        var headers = matrix[headerIdx] || [];
+        var knownMap = {};
+        normalizedOrders.forEach(function(ko) {
+          var oid = String(ko['주문번호'] || '').trim();
+          if (oid && oid !== '-') knownMap[oid] = ko;
+        });
+        var defCourier = trackCourierSelect ? trackCourierSelect.value : 'CJ대한통운';
+        function pickT(cols, aliases, excludeRe) {
+          for (var a = 0; a < aliases.length; a++) {
+            var target = normHeaderKey(aliases[a]);
+            for (var c = 0; c < headers.length; c++) {
+              if (normHeaderKey(headers[c]) === target) {
+                var v = String(cols[c] === undefined || cols[c] === null ? '' : cols[c]).trim();
+                if (v !== '') return v;
+              }
+            }
+          }
+          for (var b = 0; b < aliases.length; b++) {
+            var targetSub = normHeaderKey(aliases[b]);
+            for (var d = 0; d < headers.length; d++) {
+              var ck = String(headers[d] || '').replace(/[\s\r\n\uFEFF]+/g, '');
+              if (excludeRe && excludeRe.test(ck)) continue;
+              if (ck.toLowerCase().indexOf(targetSub) !== -1) {
+                var v2 = String(cols[d] === undefined || cols[d] === null ? '' : cols[d]).trim();
+                if (v2 !== '') return v2;
+              }
+            }
+          }
+          return '';
+        }
+        var out = [];
+        var seen = {};
+        for (var r = headerIdx + 1; r < matrix.length; r++) {
+          var cols = matrix[r] || [];
+          var rawIds = pickT(cols, ['고객주문번호', '상품주문번호', '주문번호', '묶음배송번호', '장바구니번호', '주문코드', '참조번호'], /우편|전화|연락처|운송장|송장|등기/);
+          var rawWb = pickT(cols, ['운송장번호', '송장번호', '등기번호', '화물추적번호', '운송장', '송장'], /상태|일자|일시|출력/);
+          var cleanWb = rawWb.replace(/[^0-9]/g, '');
+          if (!rawIds || !cleanWb) continue;
+          var courier = pickT(cols, ['택배사', '택배사명', '배송업체', '운송사'], /번호|코드/) || defCourier;
+          var recv = pickT(cols, ['받는분성명', '받는분', '수취인명', '수하인명', '수령인', '수취인'], /전화|연락처|주소|우편/);
+          var parts = rawIds.split(/[,/|+;\s]+/).map(function(s) { return s.trim(); }).filter(Boolean);
+          var isBundled = parts.length > 1;
+          parts.forEach(function(oid) {
+            var dk = oid + '|' + cleanWb;
+            if (seen[dk]) return;
+            seen[dk] = true;
+            var m = knownMap[oid];
+            out.push({
+              market: m ? m['마켓구분'] : inferMarketByOrderId(oid),
+              orderId: oid,
+              receiver: recv || (m ? m['수취인명'] : '-'),
+              courier: courier,
+              waybillNo: cleanWb,
+              bundled: isBundled
+            });
+          });
+        }
+        return out;
+      }
+
+      function getFilteredTrackRows() {
+        var target = trackTargetSelect ? trackTargetSelect.value : 'all';
+        var filtered = splitTrackRows.filter(function(r) {
+          if (target === 'smartstore') return r.market === '스마트스토어';
+          if (target === 'coupang') return r.market === '쿠팡';
+          if (target === 'other') return r.market !== '스마트스토어' && r.market !== '쿠팡';
+          return true;
+        });
+        return filtered.length > 0 ? filtered : splitTrackRows;
+      }
+
+      function renderTrackPreview() {
+        if (!trackPreviewBody) return;
+        var activeRows = getFilteredTrackRows();
+        var total = activeRows.length;
+        var bundledCnt = activeRows.filter(function(r) { return r.bundled; }).length;
+        if (trackSummaryCount) {
+          trackSummaryCount.textContent = total + '건' + (bundledCnt > 0 ? ' (합포장 분리 ' + bundledCnt + '건)' : '');
+        }
+        if (btnDownloadTrackXlsx) btnDownloadTrackXlsx.disabled = total === 0;
+        if (total === 0) {
+          trackPreviewBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:14px 10px;font-size:0.78125rem;">위 <strong>[합포장 송장 역변환 시연]</strong>을 누르거나 택배사 운송장 파일을 넣어 보세요.</td></tr>';
+          return;
+        }
+        trackPreviewBody.innerHTML = activeRows.slice(0, 6).map(function(r, idx) {
+          var locked = !isPro && idx >= 5;
+          return '<tr style="' + (locked ? 'opacity:0.55;' : '') + '">' +
+            '<td><span class="ow-chip ow-chip-neutral">' + escapeHtml(r.market) + '</span></td>' +
+            '<td class="ow-mono" style="font-weight:700;">' + escapeHtml(r.orderId) + '</td>' +
+            '<td>' + escapeHtml(r.receiver) + '</td>' +
+            '<td>' + escapeHtml(r.courier) + '</td>' +
+            '<td class="ow-mono">' + escapeHtml(r.waybillNo) + '</td>' +
+            '<td>' + (r.bundled ? '<span class="ow-chip ow-chip-ok">합포장 자동분리</span>' : '<span class="ow-fine">단건</span>') + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function loadTrackSample() {
+        var sampleTsv = [
+          '받는분성명\t운송장번호\t고객주문번호',
+          '김지훈\t6512-9910-3381\t20261113884120,3100948271055',
+          '박서연\t6512-9910-3382\t3100948271102',
+          '이민수\t6512-9910-3383\t11ST-20261113004982',
+          '최유진\t6512-9910-3384\t4491827301',
+          '정현우\t6512-9910-3385\t20261113-00081',
+          '한소희\t6512-9910-3386\t20261113884199'
+        ].join('\n');
+        splitTrackRows = parseTrackingMatrix(parseDelimitedMatrix(sampleTsv, '\t'));
+        renderTrackPreview();
+        showTrackFeedback('합포장 운송장 6장 → 마켓별 개별 주문번호 <strong>' + splitTrackRows.length + '건</strong> 자동 분리 완료 (하이픈 제거·마켓 자동 매칭 · 외부 전송 0 Byte).', 'is-ok');
+      }
+
+      if (btnTrackSample) btnTrackSample.addEventListener('click', loadTrackSample);
+      if (trackTargetSelect) trackTargetSelect.addEventListener('click', renderTrackPreview);
+      if (trackTargetSelect) trackTargetSelect.addEventListener('change', renderTrackPreview);
+      if (btnRunTrackSplit && trackPasteInput) {
+        btnRunTrackSplit.addEventListener('click', function() {
+          var raw = String(trackPasteInput.value || '').replace(/^\uFEFF/, '').trim();
+          if (!raw) {
+            showTrackFeedback('택배사 출력 엑셀에서 고객주문번호·운송장번호 열을 포함해 복사한 뒤 붙여넣어 주세요.', 'is-warn');
+            return;
+          }
+          splitTrackRows = parseTrackingMatrix(parseDelimitedMatrix(raw, detectTextDelimiter(raw)));
+          renderTrackPreview();
+          if (splitTrackRows.length > 0) {
+            showTrackFeedback('운송장 역변환 완료: 마켓별 발송처리 <strong>' + splitTrackRows.length + '건</strong> 준비됨 · 외부 전송 0 Byte', 'is-ok');
+          } else {
+            showTrackFeedback('인식된 주문번호·운송장번호 행이 없습니다. 제목줄(고객주문번호·운송장번호 등)을 포함해 복사해 주세요.', 'is-warn');
+          }
+        });
+      }
+      if (trackFileInput) {
+        trackFileInput.addEventListener('change', function(e) {
+          var f = e.target.files && e.target.files[0];
+          if (!f) return;
+          var reader = new FileReader();
+          reader.onload = function(evt) {
+            try {
+              var mat = [];
+              if (/\.(csv|tsv)$/i.test(f.name || '')) {
+                var txt = '';
+                try { txt = new TextDecoder('utf-8', { fatal: true }).decode(evt.target.result); }
+                catch (de) { txt = new TextDecoder('euc-kr').decode(evt.target.result); }
+                txt = txt.replace(/^\uFEFF/, '');
+                mat = parseDelimitedMatrix(txt, /\.tsv$/i.test(f.name || '') ? '\t' : detectTextDelimiter(txt));
+              } else {
+                var wb = XLSX.read(evt.target.result, { type: 'array', codepage: 949 });
+                mat = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '', raw: false });
+              }
+              splitTrackRows = parseTrackingMatrix(mat);
+              renderTrackPreview();
+              if (splitTrackRows.length > 0) {
+                showTrackFeedback('파일 역변환 완료: 마켓별 발송처리 <strong>' + splitTrackRows.length + '건</strong> 준비됨 · 외부 전송 0 Byte', 'is-ok');
+              } else {
+                showTrackFeedback('파일에서 주문번호와 운송장번호 열을 찾지 못했습니다.', 'is-warn');
+              }
+            } catch (err) {
+              showTrackFeedback('암호 걸린 파일은 열려 있는 엑셀에서 Ctrl+A → Ctrl+C 복사 후 위 입력칸에 Ctrl+V 해 주세요.', 'is-warn');
+            }
+          };
+          reader.readAsArrayBuffer(f);
+        });
+      }
+      if (btnDownloadTrackXlsx) {
+        btnDownloadTrackXlsx.addEventListener('click', function() {
+          var activeRows = getFilteredTrackRows();
+          if (!activeRows.length) return;
+          var sliced = isPro ? activeRows : activeRows.slice(0, 5);
+          var target = trackTargetSelect ? trackTargetSelect.value : 'all';
+          var outJson = sliced.map(function(r, idx) {
+            if (target === 'smartstore') return { '상품주문번호': r.orderId, '배송방법': '택배,등기,소포', '택배사': r.courier, '송장번호': r.waybillNo };
+            if (target === 'coupang') return { '번호': idx + 1, '묶음배송번호': r.orderId, '택배사': r.courier, '운송장번호': r.waybillNo, '분리배송 Y/N': 'N' };
+            if (target === 'other') return { '마켓구분': r.market, '주문번호': r.orderId, '택배사': r.courier, '운송장번호': r.waybillNo, '수취인명': r.receiver };
+            return { '순번': idx + 1, '마켓구분': r.market, '주문번호': r.orderId, '수취인명': r.receiver, '택배사': r.courier, '운송장번호': r.waybillNo, '합포장분리': r.bundled ? '합포장자동분리' : '단건' };
+          });
+          var sheetNames = { all: '전체마켓_송장매칭', smartstore: '스마트스토어_일괄발송', coupang: '쿠팡윙_운송장등록', other: '오픈마켓_송장양식' };
+          var sLabel = sheetNames[target] || '발송처리';
+          var ws = XLSX.utils.json_to_sheet(outJson);
+          var wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, sLabel);
+          XLSX.writeFile(wb, '오커웍스_' + sLabel + '_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.xlsx');
+          if (!isPro && activeRows.length > 5) {
+            showTrackFeedback('무료 5건 저장 완료 — 나머지 <strong>' + (activeRows.length - 5) + '건</strong> 포함 무제한 발송처리는 <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick(\'https://litt.ly/ohker\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.', 'is-warn');
+          } else {
+            showTrackFeedback(sLabel.replace(/_/g, ' ') + ' (' + outJson.length + '건) 엑셀 다운로드 완료!', 'is-ok');
+          }
+        });
+      }
+
       window.addEventListener('paste', function(e) {
         var active = document.activeElement;
         if (active === passInput) return;
         var text = (e.clipboardData || window.clipboardData) ? (e.clipboardData || window.clipboardData).getData('text/plain') : '';
         if (!text || (text.indexOf('\t') === -1 && text.indexOf('\n') === -1)) return;
+        if (active === trackPasteInput) {
+          e.preventDefault();
+          trackPasteInput.value = text;
+          splitTrackRows = parseTrackingMatrix(parseDelimitedMatrix(text, detectTextDelimiter(text)));
+          renderTrackPreview();
+          if (splitTrackRows.length > 0) {
+            showTrackFeedback('클립보드 운송장 역변환 완료: 마켓별 발송처리 <strong>' + splitTrackRows.length + '건</strong> 준비됨 · 외부 전송 0 Byte', 'is-ok');
+          }
+          return;
+        }
         if (active === pasteInput) {
           setTimeout(function() { handlePastedText(pasteInput.value); }, 30);
         } else {
@@ -1638,7 +1955,8 @@
           isPro = true;
           try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
           updateLicenseUI();
-          showFeedback('무제한 패스가 인증되었습니다. 전체 행을 저장할 수 있습니다.', 'is-ok');
+          renderTrackPreview();
+          showFeedback('무제한 패스가 인증되었습니다. 발주 합포장 및 송장 역변환 전체 행을 저장할 수 있습니다.', 'is-ok');
         } else {
           showFeedback('패스 코드를 확인해 주세요. 결제 완료 화면의 코드를 입력하면 즉시 해제됩니다.', 'is-warn');
           passInput.focus();
@@ -1710,6 +2028,13 @@
             if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
             if (pasteInput) pasteInput.focus();
           }, 80);
+        }
+        if ((params.get('mode') === 'split' || window.location.hash === '#trackingSplitPanel') && trackingSplitPanel) {
+          trackingSplitPanel.open = true;
+          setTimeout(function() {
+            loadTrackSample();
+            trackingSplitPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 90);
         }
         var pendingTsv = sessionStorage.getItem('ow_pending_tsv');
         if (pendingTsv) {

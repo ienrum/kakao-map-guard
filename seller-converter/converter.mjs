@@ -343,6 +343,153 @@ export function toCourierCsv(normalizedRows, preset = "standard") {
   return "\uFEFF" + lines.join("\r\n");
 }
 
+function inferMarketByOrderId(orderId) {
+  const id = String(orderId || "").trim();
+  if (/^\d{8}-\d{4,10}$/.test(id)) return "카페24";
+  if (/^20\d{12,14}$/.test(id)) return "스마트스토어";
+  if (/^[1-3]\d{11,12}$/.test(id)) return "쿠팡";
+  if (/^11ST/i.test(id)) return "11번가";
+  if (/^\d{9,10}$/.test(id)) return "G마켓·옥션";
+  return "오픈마켓";
+}
+
+export function splitWaybillTracking(rawText, defaultCourier = "CJ대한통운", knownOrders = []) {
+  const cleaned = String(rawText ?? "").replace(/^\uFEFF/, "").trim();
+  if (!cleaned) return [];
+  const sep = detectTextDelimiter(cleaned);
+  const matrix = parseDelimitedMatrix(cleaned, sep);
+  if (matrix.length < 2) return [];
+
+  let headerIdx = 0;
+  for (let i = 0; i < Math.min(matrix.length, 15); i++) {
+    const joined = (matrix[i] || []).map((c) => String(c ?? "").replace(/\s+/g, "")).join("|");
+    if (/운송장|송장|등기번호|화물추적/.test(joined) && /주문|참조|받는분|수취인|수하인|수령인/.test(joined)) {
+      headerIdx = i;
+      break;
+    }
+  }
+  const headers = matrix[headerIdx] || [];
+  const knownMap = new Map();
+  for (const ko of knownOrders) {
+    const oid = String(ko.orderId || ko["주문번호"] || "").trim();
+    if (oid) knownMap.set(oid, ko);
+  }
+
+  const pickTrack = (cols, aliases, excludeRe) => {
+    for (const alias of aliases) {
+      const target = normHeaderKey(alias);
+      for (let i = 0; i < headers.length; i++) {
+        if (normHeaderKey(headers[i]) === target) {
+          const val = String(cols[i] ?? "").trim();
+          if (val !== "") return val;
+        }
+      }
+    }
+    for (const alias of aliases) {
+      const target = normHeaderKey(alias);
+      for (let i = 0; i < headers.length; i++) {
+        const cleanKey = String(headers[i] ?? "").replace(/[\s\r\n\uFEFF]+/g, "");
+        if (excludeRe && excludeRe.test(cleanKey)) continue;
+        if (cleanKey.toLowerCase().includes(target)) {
+          const val = String(cols[i] ?? "").trim();
+          if (val !== "") return val;
+        }
+      }
+    }
+    return "";
+  };
+
+  const out = [];
+  const seenPair = new Set();
+  for (let rIdx = headerIdx + 1; rIdx < matrix.length; rIdx++) {
+    const cols = matrix[rIdx] || [];
+    const rawOrderIds = pickTrack(
+      cols,
+      ["고객주문번호", "상품주문번호", "주문번호", "묶음배송번호", "장바구니번호", "주문코드", "참조번호"],
+      /우편|전화|연락처|운송장|송장|등기/
+    );
+    const rawWaybill = pickTrack(cols, ["운송장번호", "송장번호", "등기번호", "화물추적번호", "운송장", "송장"], /상태|일자|일시|출력/);
+    const cleanWaybill = rawWaybill.replace(/[^0-9]/g, "");
+    if (!rawOrderIds || !cleanWaybill) continue;
+
+    const courier = pickTrack(cols, ["택배사", "택배사명", "배송업체", "운송사"], /번호|코드/) || defaultCourier;
+    const receiver = pickTrack(cols, ["받는분성명", "받는분", "수취인명", "수하인명", "수령인", "수취인"], /전화|연락처|주소|우편/);
+    const splitIds = rawOrderIds
+      .split(/[,/|+;\s]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const isBundled = splitIds.length > 1;
+
+    for (const oid of splitIds) {
+      const dedupeKey = `${oid}|${cleanWaybill}`;
+      if (seenPair.has(dedupeKey)) continue;
+      seenPair.add(dedupeKey);
+      const matched = knownMap.get(oid);
+      const market = matched ? (matched.market || matched["마켓구분"]) : inferMarketByOrderId(oid);
+      const finalReceiver = receiver || (matched ? (matched.receiver || matched["수취인명"]) : "");
+      out.push({
+        market,
+        orderId: oid,
+        receiver: finalReceiver,
+        courier,
+        waybillNo: cleanWaybill,
+        bundled: isBundled,
+      });
+    }
+  }
+  return out;
+}
+
+export function formatTrackingForMarket(splitRows, target = "all") {
+  const filtered =
+    target === "smartstore"
+      ? splitRows.filter((r) => r.market === "스마트스토어")
+      : target === "coupang"
+        ? splitRows.filter((r) => r.market === "쿠팡")
+        : target === "other"
+          ? splitRows.filter((r) => r.market !== "스마트스토어" && r.market !== "쿠팡")
+          : splitRows;
+  const source = filtered.length > 0 ? filtered : splitRows;
+
+  return source.map((r, idx) => {
+    if (target === "smartstore") {
+      return {
+        "상품주문번호": r.orderId,
+        "배송방법": "택배,등기,소포",
+        "택배사": r.courier,
+        "송장번호": r.waybillNo,
+      };
+    }
+    if (target === "coupang") {
+      return {
+        "번호": idx + 1,
+        "묶음배송번호": r.orderId,
+        "택배사": r.courier,
+        "운송장번호": r.waybillNo,
+        "분리배송 Y/N": "N",
+      };
+    }
+    if (target === "other") {
+      return {
+        "마켓구분": r.market,
+        "주문번호": r.orderId,
+        "택배사": r.courier,
+        "운송장번호": r.waybillNo,
+        "수취인명": r.receiver,
+      };
+    }
+    return {
+      "순번": idx + 1,
+      "마켓구분": r.market,
+      "주문번호": r.orderId,
+      "수취인명": r.receiver,
+      "택배사": r.courier,
+      "운송장번호": r.waybillNo,
+      "합포장분리": r.bundled ? "합포장자동분리" : "단건",
+    };
+  });
+}
+
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
   // 1) 스마트스토어 암호 엑셀 Ctrl+A 복사본: 1행 병합 안내문(콤마 포함, 탭 없음) + 단일상품(옵션정보 빈칸, 옵션가격=0) + 취소완료 행 + 취소철회 행
   const sampleSmartstoreTsv = [
@@ -363,6 +510,16 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
   const parsed11st = normalizeOrders(sample11stCsv);
   const bundled = consolidateBundles([...parsedNaver, ...parsed11st]);
 
+  // 3) CJ 로이스파셀 출력 운송장 엑셀(합포장 콤마 병합 주문번호 포함) → 마켓별 발송처리 역변환 검증
+  const sampleLoisTrackingTsv = [
+    "받는분성명\t운송장번호\t고객주문번호",
+    "김민수\t6512-9910-3381\t20261113884120,3100948271055",
+    "박지연\t6512-9910-3382\t11ST-8801",
+  ].join("\n");
+  const splitRows = splitWaybillTracking(sampleLoisTrackingTsv, "CJ대한통운");
+  const smartstoreUpload = formatTrackingForMarket(splitRows, "smartstore");
+  const coupangUpload = formatTrackingForMarket(splitRows, "coupang");
+
   const assertions = [
     [parsedNaver.length === 2, "취소완료 1건 제외 및 취소철회 1건 보존"],
     [parsedNaver[0].item === "무소음 키보드", `단일상품 옵션가격 0 오매칭 차단 (실제: ${parsedNaver[0].item})`],
@@ -372,6 +529,9 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
     [parsed11st[0].phone === "010-2948-6610", `앞자리 0 누락 휴대폰 복원 (실제: ${parsed11st[0].phone})`],
     [parsed11st[0].item === "USB-C 멀티허브", `'단일상품' 옵션 텍스트 제거 (실제: ${parsed11st[0].item})`],
     [bundled.rows.length === 2 && bundled.savedWaybills === 1, "서로 다른 0507 안심번호 동일 주소 합포장 병합"],
+    [splitRows.length === 3 && splitRows[0].waybillNo === "651299103381", "합포장 운송장 주문번호 자동 분리 및 숫자 정규화"],
+    [smartstoreUpload.length === 1 && smartstoreUpload[0]["상품주문번호"] === "20261113884120", "스마트스토어 발송처리 양식 자동 추출"],
+    [coupangUpload.length === 1 && coupangUpload[0]["묶음배송번호"] === "3100948271055", "쿠팡 윙 운송장 등록 양식 자동 추출"],
   ];
 
   const failed = assertions.filter(([ok]) => !ok).map(([, msg]) => msg);

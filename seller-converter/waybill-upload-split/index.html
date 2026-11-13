@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>합포장 운송장 번호 스마트스토어·쿠팡 일괄 발송처리 엑셀 역변환 가이드 — 오커 웍스</title>
+  <meta name="description" content="CJ 로이스파셀·한진·롯데·로젠·우체국에서 합포장으로 뽑은 운송장 엑셀의 콤마 병합 주문번호를 스마트스토어 일괄발송 양식과 쿠팡 윙 운송장 등록 엑셀로 3초 만에 자동 분리·역변환합니다 (서버 전송 0바이트)." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/seller-converter/waybill-upload-split/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="합포장 운송장 엑셀 → 스마트스토어·쿠팡 송장 일괄등록 3초 자동 역변환" />
+  <meta property="og:description" content="합포장으로 묶인 주문번호를 수작업으로 쪼개지 마세요. 하이픈 제거·마켓별 발송처리 엑셀 자동 생성 (외부 전송 0 Byte)." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-converter.jpg" />
+  <link rel="icon" type="image/jpeg" href="../../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../../assets/design-system.css" />
+
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17208942339');
+    function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
+      try {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
+          'value': 4900.0,
+          'currency': 'KRW',
+          'event_callback': go
+        });
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        "name": "합포장 운송장 번호 엑셀을 스마트스토어·쿠팡 발송처리 일괄등록 양식으로 3초 역변환하는 방법",
+        "step": [
+          { "@type": "HowToStep", "name": "택배 프로그램 출력 운송장 엑셀 준비", "text": "CJ대한통운 로이스파셀·CNPlus, 한진 H-Focus, 롯데 알짜배기, 로젠, 우체국에서 송장 출력 후 내려받은 결과 엑셀(고객주문번호·운송장번호 포함)을 준비합니다." },
+          { "@type": "HowToStep", "name": "오커 웍스 오후 송장 역변환 패널에 투입", "text": "파일을 선택하거나 표를 Ctrl+V로 붙여넣으면 콤마(,)로 묶인 합포장 주문번호가 개별 행으로 분리되고 송장번호 하이픈(-)이 자동 제거됩니다." },
+          { "@type": "HowToStep", "name": "스마트스토어·쿠팡 발송처리 양식 다운로드", "text": "스마트스토어 일괄발송(상품주문번호·배송방법·택배사·송장번호) 또는 쿠팡 윙 운송장등록 양식을 골라 즉시 다운로드해 마켓에 업로드합니다." }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "합포장하면 왜 오후 마켓 발송처리 때 주문번호를 다시 쪼개야 하나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "오전 출고 시 중복 택배비를 아끼려고 2개 이상의 주문번호를 한 줄로 병합해 운송장 1장을 뽑으면, 택배 결과 파일의 고객주문번호 칸에 '주문번호A,주문번호B'가 함께 들어갑니다. 스마트스토어와 쿠팡 일괄발송 엑셀은 1행당 1개 주문번호만 인식하므로 동일한 운송장 번호를 각 주문번호 행으로 복제·분리해야 합니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "운송장 번호에 하이픈(-)이나 공백이 들어가 있어도 스마트스토어·쿠팡 업로드 오류가 안 나나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "네. 오커 웍스 역변환기는 운송장 번호에서 하이픈과 공백을 제거해 숫자 10~13자리 텍스트로 정규화하므로 마켓 업로드 시 '유효하지 않은 송장번호' 오류를 예방합니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "플레이오토나 사방넷 없이도 오전 발주 합포장부터 오후 송장 일괄등록까지 모두 가능한가요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "네. API 연동이나 월 5만원대 고정비 없이, 내 PC 브라우저 메모리(외부 전송 0바이트)만으로 오전 6대 마켓 합포장 변환과 오후 마켓별 운송장 발송처리 역변환을 월 4,900원에 무제한 이용할 수 있습니다." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="ow-telemetry-rail" role="region" aria-label="보안 안내">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>합포장 운송장 역변환 · 마켓 일괄발송 양식 · 외부 전송 <span class="ow-mono">0 Byte</span></span>
+        </span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="../../privacy-terms/">개인정보 무수집·7일 환불 보증</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../">
+        <img class="ow-brand-mark" src="../../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스 출고 스튜디오</span>
+          <span class="ow-brand-sub">WAYBILL REVERSE SPLITTER</span>
+        </span>
+      </a>
+      <nav class="ow-suite-nav" aria-label="셀러 도구 메뉴">
+        <a class="ow-suite-link" href="../">6대 마켓 발주서 통합기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">합포장 송장 역변환</a>
+        <a class="ow-suite-link" href="../smartstore-lois-parcel/">스마트스토어 암호·로이스파셀</a>
+        <a class="ow-suite-link" href="../sabangnet-alternative/">사방넷·플레이오토 대안</a>
+      </nav>
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-primary" href="../?mode=split">송장 역변환기 바로 열기</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-studio-hero">
+      <div class="ow-container">
+        <div style="max-width:780px;">
+          <div class="ow-compare-pill" style="margin-bottom:14px;">
+            <span>오전 합포장 출고 → 오후 마켓 송장등록 완결</span>
+            <span style="color:var(--ow-border-strong);">|</span>
+            <span style="color:var(--ow-p-emerald-800);">외부 전송 0 Byte · 첫 5건 무료</span>
+          </div>
+          <h1 class="ow-studio-headline" style="font-size:clamp(1.75rem,3.4vw,2.5rem);">
+            합포장으로 묶은 운송장 번호,<br />스마트스토어·쿠팡 발송처리 양식으로 3초 분리
+          </h1>
+          <p class="ow-lead">
+            오전에 중복 택배비를 아끼려고 합포장 출고했다가, 오후에 콤마(<span class="ow-mono">,</span>)로 묶인 주문번호를 다시 한 줄씩 쪼개 송장번호를 복사하고 계신가요? 로이스파셀·한진·롯데·우체국 결과 엑셀만 넣으면 마켓별 일괄발송 엑셀로 자동 역변환됩니다.
+          </p>
+          <div class="ow-hero-cta-row">
+            <a class="ow-btn ow-btn-primary ow-btn-lg" href="../?mode=split">무료 송장 역변환 시연 바로 열기 →</a>
+            <a class="ow-btn ow-btn-secondary ow-btn-lg" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 왕복 무제한 패스</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section ow-section-alt">
+      <div class="ow-container">
+        <h2 class="ow-section-title" style="margin-bottom:18px;">오후 3시 발송처리에서 반복되는 3가지 엑셀 오류와 자동 해결</h2>
+        <div class="ow-story-beats">
+          <div class="ow-story-beat">
+            <div class="ow-beat-head">
+              <strong>1. 합포장 병합 주문번호 분리</strong>
+              <span class="ow-chip ow-chip-ok">1:N 자동 복제</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              택배 결과 시트의 <span class="ow-mono">20261113884120,3100948271055</span> 셀을 인식해 동일한 운송장 번호를 각 주문번호 행에 정확히 배분합니다.
+            </p>
+          </div>
+          <div class="ow-story-beat">
+            <div class="ow-beat-head">
+              <strong>2. 하이픈(-) 및 지수 표기 정화</strong>
+              <span class="ow-chip ow-chip-ok">숫자열 정렬</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              <span class="ow-mono">6512-9910-3381</span>처럼 하이픈이 섞인 송장번호를 순수 숫자 텍스트로 정돈해 스마트스토어·쿠팡 업로드 반려를 차단합니다.
+            </p>
+          </div>
+          <div class="ow-story-beat ow-story-beat-highlight">
+            <div class="ow-beat-head">
+              <strong style="color:var(--ow-action-primary);">3. 마켓별 필수 열 즉시 매핑</strong>
+              <span class="ow-chip ow-chip-ok">즉시 업로드</span>
+            </div>
+            <p class="ow-fine" style="margin:8px 0 0;">
+              스마트스토어(<span class="ow-mono">상품주문번호·배송방법·택배사·송장번호</span>)와 쿠팡 윙(<span class="ow-mono">묶음배송번호·택배사·운송장번호·분리배송 N</span>) 규격으로 각각 내보냅니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section">
+      <div class="ow-container">
+        <h2 class="ow-section-title" style="margin-bottom:14px;">마켓별 일괄 발송처리 출력 열 규격</h2>
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table" aria-label="마켓별 발송처리 엑셀 규격 비교">
+              <thead>
+                <tr>
+                  <th>대상 마켓</th>
+                  <th>자동 생성되는 엑셀 열 구성</th>
+                  <th>핵심 자동 처리</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>스마트스토어</strong></td>
+                  <td class="ow-mono">상품주문번호 | 배송방법(택배,등기,소포) | 택배사 | 송장번호</td>
+                  <td>14~16자리 상품주문번호 자동 필터링 및 하이픈 제거</td>
+                </tr>
+                <tr>
+                  <td><strong>쿠팡 윙 (Wing)</strong></td>
+                  <td class="ow-mono">번호 | 묶음배송번호 | 택배사 | 운송장번호 | 분리배송 Y/N(N)</td>
+                  <td>순번 자동 부여 및 분리배송 기본값 N 세팅</td>
+                </tr>
+                <tr>
+                  <td><strong>카페24 · 11번가 · ESM+</strong></td>
+                  <td class="ow-mono">마켓구분 | 주문번호 | 택배사 | 운송장번호 | 수취인명</td>
+                  <td>오전 통합 세션과 주문번호 대조 시 마켓명·수취인 자동 복원</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;padding:22px;border-radius:var(--ow-radius-md);background:var(--ow-bg-recessed);border:1px solid var(--ow-border-strong);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+          <div>
+            <strong style="font-size:1.0625rem;display:block;margin-bottom:4px;">지금 샘플 운송장 6장으로 1초 분리를 직접 확인해 보세요</strong>
+            <span class="ow-fine">회원가입 없이 5건 무료 저장 · 월 4,900원 고정가로 오전 발주 합포장 + 오후 송장 역변환 무제한 · 7일 100% 환불 보증</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="ow-btn ow-btn-primary" href="../?mode=split">송장 역변환 워크벤치 열기 →</a>
+            <a class="ow-btn ow-btn-secondary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 패스 발급</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div class="ow-fine">
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+        </div>
+        <div class="ow-footer-links ow-fine">
+          <a href="../">6대 마켓 발주서 통합기</a>
+          <a href="../smartstore-lois-parcel/">스마트스토어 암호·로이스파셀</a>
+          <a href="../coupang-wing-bundle/">쿠팡 윙 분리주소·합포장</a>
+          <a href="../courier-excel-format/">택배사별 엑셀 양식</a>
+          <a href="../sabangnet-alternative/">사방넷·플레이오토 대안</a>
+          <a href="../../privacy-terms/">개인정보·이용·환불약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
