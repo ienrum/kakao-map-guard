@@ -368,6 +368,7 @@ a {
   color: var(--ow-text-secondary);
   line-height: 1.65;
   max-width: 62ch;
+  word-break: keep-all;
 }
 
 /* Architectural Spec List inside Left Column */
@@ -1529,9 +1530,10 @@ html.js-ready .ow-reveal.is-visible {
   margin: 0 0 18px;
   font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 800;
-  line-height: 1.22;
+  line-height: 1.24;
   letter-spacing: -0.032em;
   color: var(--ow-text-primary);
+  word-break: keep-all;
   text-wrap: balance;
 }
 
@@ -1664,6 +1666,7 @@ html.js-ready .ow-reveal.is-visible {
   line-height: 1.26;
   letter-spacing: -0.03em;
   color: var(--ow-text-primary);
+  word-break: keep-all;
   text-wrap: balance;
 }
 
@@ -1862,4 +1865,564 @@ html.js-ready .ow-reveal.is-visible {
   .ow-workbench-card { padding: 18px 16px; }
   .ow-courier-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ow-market-convergence { justify-content: center; text-align: center; }
+}
+
+/* ==========================================================================
+   14. Domain Theme 2 — Kakao Map Recovery: Cartographic Storefront Studio
+       Scoped via <body class="ow-theme-map">
+   ========================================================================== */
+body.ow-theme-map {
+  --ow-p-obsidian-950: #0F172A;
+  --ow-p-obsidian-900: #1E293B;
+  --ow-p-obsidian-800: #334155;
+  --ow-p-slate-900: #0F172A;
+  --ow-p-slate-700: #334155;
+  --ow-p-slate-600: #475569;
+  --ow-p-slate-300: #CBD5E1;
+  --ow-p-slate-200: #E2E8F0;
+  --ow-p-slate-150: #EDF2F7;
+  --ow-p-slate-100: #EEF2F7;
+  --ow-p-slate-50: #F5F7FA;
+
+  --ow-p-cobalt-700: #1E40AF;
+  --ow-p-cobalt-600: #1D4ED8;
+  --ow-p-cobalt-500: #2563EB;
+  --ow-p-cobalt-50: #EFF6FF;
+  --ow-p-cobalt-100: #BFDBFE;
+
+  --ow-bg-canvas: #F5F7FA;
+  --ow-bg-sheet: #FFFFFF;
+  --ow-bg-recessed: #EEF2F7;
+  --ow-bg-tab-inactive: #E4EBF3;
+  --ow-bg-telemetry: #0F172A;
+  --ow-bg-telemetry-raised: #1E293B;
+
+  --ow-text-primary: #0F172A;
+  --ow-text-secondary: #334155;
+  --ow-text-muted: #475569;
+  --ow-text-on-dark: #F8FAFC;
+  --ow-text-on-dark-muted: #CBD5E1;
+
+  --ow-border-strong: #CBD5E1;
+  --ow-border-default: #E2E8F0;
+  --ow-border-subtle: #EDF2F7;
+  --ow-border-on-dark: rgba(203, 213, 225, 0.2);
+
+  --ow-action-primary: #1D4ED8;
+  --ow-action-primary-hover: #1E40AF;
+  --ow-action-wash: #EFF6FF;
+  --ow-action-border: #BFDBFE;
+}
+
+body.ow-theme-map ::selection {
+  background-color: #DBEAFE;
+  color: #0F172A;
+}
+
+body.ow-theme-map .ow-header {
+  background-color: rgba(245, 247, 250, 0.94);
+}
+
+body.ow-theme-map .ow-btn-subtle {
+  color: #1E40AF;
+}
+
+.ow-map-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 60px 0 72px;
+  border-bottom: 1px solid var(--ow-border-default);
+  background-color: var(--ow-bg-canvas);
+}
+
+.ow-map-contour-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.72;
+}
+
+.ow-map-hero .ow-container {
+  position: relative;
+  z-index: 1;
+}
+
+.ow-kakao-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background-color: #FEE500;
+  border: 1px solid #EAB308;
+  color: #181600;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-hero-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.ow-map-preview-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-lg);
+  padding: 14px;
+  max-width: 470px;
+  width: 100%;
+  margin-left: auto;
+}
+
+.ow-map-canvas-frame {
+  position: relative;
+  border-radius: var(--ow-radius-md);
+  border: 1px solid var(--ow-border-default);
+  padding: 8px;
+  background-color: #EEF2F7;
+}
+
+.ow-map-canvas-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ow-map-canvas-img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: var(--ow-radius-sm);
+}
+
+.ow-map-pin-overlay {
+  position: absolute;
+  left: 58%;
+  top: 56%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.ow-map-pin-callout {
+  padding: 6px 12px;
+  border-radius: var(--ow-radius-sm);
+  background-color: #0F172A;
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ow-map-broken-inset {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 188px;
+  padding: 8px;
+  border-radius: var(--ow-radius-sm);
+  border: 1px solid #94A3B8;
+  background-color: #FFFFFF;
+}
+
+.ow-map-broken-blank {
+  height: 76px;
+  padding: 10px;
+  border-radius: var(--ow-radius-xs);
+  background-color: #EEF2F7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.ow-map-broken-caption {
+  padding: 6px 10px;
+  border-radius: var(--ow-radius-xs);
+  background-color: #1E293B;
+  color: #F8FAFC;
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ow-map-coord-pill {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 5px 10px;
+  border-radius: var(--ow-radius-xs);
+  background-color: rgba(15, 23, 42, 0.88);
+  color: #F8FAFC;
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.ow-map-card-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ow-map-route-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: var(--ow-radius-sm);
+  background-color: #0F172A;
+  border: 1px solid #0F172A;
+  color: #FFFFFF;
+  font-size: 0.84375rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ow-map-route-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 9px 14px;
+  border-radius: var(--ow-radius-sm);
+  background-color: #FFFFFF;
+  border: 1px solid var(--ow-border-strong);
+  color: #0F172A;
+  font-size: 0.84375rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ow-map-fallback-badge {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background-color: #065F46;
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Shared 5-Tab Folder Bar (Web Builders & Hosting Environments) */
+.ow-five-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+}
+
+.ow-workbench-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 18px;
+  margin-top: 18px;
+  align-items: start;
+}
+
+/* ==========================================================================
+   15. Domain Theme 3 — PHP exec() Patch: Zero-Trust Dark Payment Security IDE
+       Scoped via <body class="ow-theme-paypatch">
+   ========================================================================== */
+body.ow-theme-paypatch {
+  --ow-p-obsidian-950: #060911;
+  --ow-p-obsidian-900: #0D1320;
+  --ow-p-obsidian-800: #1E293B;
+  --ow-p-slate-900: #F8FAFC;
+  --ow-p-slate-700: #CBD5E1;
+  --ow-p-slate-600: #94A3B8;
+  --ow-p-slate-300: #334155;
+  --ow-p-slate-200: #1E293B;
+  --ow-p-slate-150: #172033;
+  --ow-p-slate-100: #0D1320;
+  --ow-p-slate-50: #090D16;
+
+  --ow-p-emerald-800: #6EE7B7;
+  --ow-p-emerald-50: #064E3B;
+  --ow-p-emerald-200: #047857;
+
+  --ow-bg-canvas: #090D16;
+  --ow-bg-sheet: #111827;
+  --ow-bg-recessed: #0D1320;
+  --ow-bg-tab-inactive: #0B101B;
+  --ow-bg-telemetry: #05080F;
+  --ow-bg-telemetry-raised: #0D1320;
+
+  --ow-text-primary: #F8FAFC;
+  --ow-text-secondary: #CBD5E1;
+  --ow-text-muted: #94A3B8;
+  --ow-text-on-dark: #F8FAFC;
+  --ow-text-on-dark-muted: #CBD5E1;
+
+  --ow-border-strong: #334155;
+  --ow-border-default: #1E293B;
+  --ow-border-subtle: #172033;
+  --ow-border-on-dark: #1E293B;
+
+  --ow-action-primary: #10B981;
+  --ow-action-primary-hover: #34D399;
+  --ow-action-wash: #064E3B;
+  --ow-action-border: #047857;
+}
+
+body.ow-theme-paypatch {
+  color-scheme: dark;
+  scrollbar-color: #334155 #090D16;
+}
+
+body.ow-theme-paypatch ::selection {
+  background-color: #065F46;
+  color: #ECFDF5;
+}
+
+body.ow-theme-paypatch a {
+  color: #34D399;
+}
+
+body.ow-theme-paypatch .ow-header {
+  background-color: rgba(9, 13, 22, 0.92);
+  border-bottom-color: #1E293B;
+}
+
+body.ow-theme-paypatch .ow-suite-link[aria-current="page"] {
+  background-color: #111827;
+  color: #34D399;
+  border-color: #334155;
+}
+
+body.ow-theme-paypatch .ow-btn-primary {
+  background-color: #10B981;
+  border-color: #10B981;
+  color: #022C22;
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.ow-theme-paypatch .ow-btn-primary:hover:not(:disabled) {
+    background-color: #34D399;
+    border-color: #34D399;
+    color: #022C22;
+  }
+  body.ow-theme-paypatch .ow-btn-subtle:hover:not(:disabled) {
+    background-color: #065F46;
+  }
+  body.ow-theme-paypatch .ow-preset-btn:hover {
+    background-color: #064E3B;
+    color: #A7F3D0;
+    border-color: #047857;
+  }
+}
+
+body.ow-theme-paypatch .ow-btn-subtle {
+  background-color: #064E3B;
+  border-color: #047857;
+  color: #6EE7B7;
+}
+
+body.ow-theme-paypatch .ow-chip-ok,
+body.ow-theme-paypatch .ow-trust-pill,
+body.ow-theme-paypatch .ow-target-xlsx-badge,
+body.ow-theme-paypatch .ow-inline-feedback.is-ok,
+body.ow-theme-paypatch .ow-step-pill.is-current,
+body.ow-theme-paypatch .ow-story-beat-highlight {
+  background-color: #064E3B;
+  border-color: #047857;
+  color: #A7F3D0;
+}
+
+@media (max-width: 980px) {
+  body.ow-theme-paypatch .ow-courier-tab[aria-selected="true"] {
+    background-color: #064E3B;
+    border-color: #10B981;
+    color: #A7F3D0;
+  }
+}
+
+body.ow-theme-paypatch .ow-chip-crit,
+body.ow-theme-paypatch .ow-inline-feedback.is-crit {
+  background-color: #450A0A;
+  border-color: #991B1B;
+  color: #FECACA;
+}
+
+body.ow-theme-paypatch .ow-chip-warn,
+body.ow-theme-paypatch .ow-inline-feedback.is-warn {
+  background-color: #451A03;
+  border-color: #92400E;
+  color: #FDE68A;
+}
+
+body.ow-theme-paypatch .ow-kpi-card-accent {
+  background-color: #064E3B;
+  border-color: #047857;
+}
+
+.ow-paypatch-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 60px 0 72px;
+  border-bottom: 1px solid var(--ow-border-default);
+  background-color: var(--ow-bg-canvas);
+}
+
+.ow-paypatch-grid-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.ow-paypatch-hero .ow-container {
+  position: relative;
+  z-index: 1;
+}
+
+.ow-diff-terminal {
+  background-color: #0D1320;
+  border: 1px solid #334155;
+  border-radius: var(--ow-radius-lg);
+  overflow: hidden;
+  width: 100%;
+}
+
+.ow-diff-chrome {
+  background-color: #111827;
+  border-bottom: 1px solid #1E293B;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ow-diff-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ow-diff-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ow-diff-body {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.ow-diff-del {
+  background-color: #2A1215;
+  border: 1px solid #7F1D1D;
+  border-radius: var(--ow-radius-sm);
+  padding: 12px 14px;
+  color: #FCA5A5;
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  overflow-x: auto;
+}
+
+.ow-diff-add {
+  background-color: #0D281E;
+  border: 1px solid #065F46;
+  border-radius: var(--ow-radius-sm);
+  padding: 12px 14px;
+  color: #86EFAC;
+  font-family: var(--ow-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.65;
+  overflow-x: auto;
+}
+
+.ow-diff-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  font-family: var(--ow-font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.ow-diff-label .ow-mono {
+  white-space: nowrap;
+}
+
+.ow-diff-telemetry {
+  background-color: #111827;
+  border-top: 1px solid #1E293B;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: #A7F3D0;
+}
+
+@media (max-width: 980px) {
+  .ow-five-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ow-five-tabs .ow-courier-tab {
+    border-radius: var(--ow-radius-xs);
+    border-bottom: 1px solid var(--ow-border-strong);
+  }
+  .ow-workbench-split {
+    grid-template-columns: 1fr;
+  }
+  .ow-map-preview-card {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-map-hero,
+  .ow-paypatch-hero {
+    padding: 40px 0 48px;
+  }
+  .ow-five-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ow-map-broken-inset {
+    width: 152px;
+  }
+  .ow-map-card-actions {
+    grid-template-columns: 1fr;
+  }
 }

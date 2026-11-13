@@ -1,6 +1,6 @@
 ---
-name: Ohker Works Warm Waybill & Precision Studio (OWDS v3.0)
-description: 국내 커머스 출고 및 웹 인프라 복구 실무자를 위한 에디토리얼 웜 페이퍼·운송장 스튜디오 디자인 시스템
+name: Ohker Works Tri-Domain Studio Design System (OWDS v3.1)
+description: 각 도구의 현장 문맥에 맞춘 3종 도메인 전용 디자인 시스템 — 발주서(Warm Waybill), 카카오 지도(Cartographic Storefront), PHP 결제 복구(Dark PayPatch Security)
 colors:
   brand-obsidian: "#1C1917"
   brand-obsidian-raised: "#292524"
@@ -10,7 +10,6 @@ colors:
   interactive-parcel-border: "#FED7AA"
   canvas-ground: "#FAF8F5"
   surface-sheet: "#FFFFFF"
-  surface-hover: "#FAF8F5"
   surface-recessed: "#F3EFEA"
   surface-tab-inactive: "#EAE5DC"
   ink-primary: "#18181B"
@@ -31,6 +30,48 @@ colors:
   status-crit-fg: "#991B1B"
   status-crit-bg: "#FEF2F2"
   status-crit-border: "#FECACA"
+  map-canvas: "#F5F7FA"
+  map-recessed: "#EEF2F7"
+  map-subtle: "#EDF2F7"
+  map-tab-inactive: "#E4EBF3"
+  map-ink-primary: "#0F172A"
+  map-ink-secondary: "#334155"
+  map-ink-muted: "#475569"
+  map-ink-on-dark: "#F8FAFC"
+  map-ink-on-dark-muted: "#CBD5E1"
+  map-border-default: "#E2E8F0"
+  map-border-mid: "#94A3B8"
+  map-telemetry-raised: "#1E293B"
+  map-route-blue: "#1D4ED8"
+  map-route-blue-hover: "#1E40AF"
+  map-route-blue-bright: "#2563EB"
+  map-route-wash: "#EFF6FF"
+  map-route-select: "#DBEAFE"
+  map-route-border: "#BFDBFE"
+  map-kakao-yellow: "#FEE500"
+  map-kakao-border: "#EAB308"
+  map-kakao-ink: "#181600"
+  pay-canvas: "#090D16"
+  pay-telemetry: "#05080F"
+  pay-obsidian: "#060911"
+  pay-tab-inactive: "#0B101B"
+  pay-recessed: "#0D1320"
+  pay-sheet: "#111827"
+  pay-border-subtle: "#172033"
+  pay-emerald-bright: "#34D399"
+  pay-emerald-soft: "#6EE7B7"
+  pay-emerald-wash: "#064E3B"
+  pay-emerald-border: "#047857"
+  pay-emerald-ink-dark: "#022C22"
+  pay-diff-del-bg: "#2A1215"
+  pay-diff-del-border: "#7F1D1D"
+  pay-diff-del-fg: "#FCA5A5"
+  pay-diff-add-bg: "#0D281E"
+  pay-diff-add-fg: "#86EFAC"
+  pay-crit-bg: "#450A0A"
+  pay-warn-bg: "#451A03"
+  pay-dot-red: "#EF4444"
+  pay-dot-amber: "#F59E0B"
 typography:
   display:
     fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif"
@@ -62,6 +103,11 @@ typography:
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: "-0.025em"
+  metric-large:
+    fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+    fontSize: "1.625rem"
+    fontWeight: 700
+    lineHeight: 1.2
   title:
     fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif"
     fontSize: "1.125rem"
@@ -106,6 +152,7 @@ rounded:
   sm: "8px"
   md: "12px"
   lg: "14px"
+  pill: "999px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -120,8 +167,6 @@ components:
     rounded: "{rounded.sm}"
     padding: "13px 22px"
     height: "46px"
-  button-primary-hover:
-    backgroundColor: "{colors.interactive-parcel-hover}"
   button-secondary:
     backgroundColor: "{colors.surface-sheet}"
     textColor: "{colors.ink-primary}"
@@ -133,31 +178,14 @@ components:
     textColor: "{colors.ink-primary}"
     rounded: "{rounded.md}"
     padding: "28px"
-  telemetry-rail:
-    backgroundColor: "{colors.brand-obsidian}"
-    textColor: "{colors.ink-on-dark}"
-    padding: "7px 24px"
-    height: "36px"
 ---
 
-# Ohker Works Warm Waybill & Precision Studio (OWDS v3.0)
+# Ohker Works Tri-Domain Studio Design System (OWDS v3.1)
 
 ## Overview
 
-**Creative North Star: "Warm Editorial Paper & Tactile Waybill Studio + Centered Live Workbench"**
+오커 웍스 3종 유틸리티는 공통된 **상단 실시간 증명 프리뷰 + 하단 스크롤 중앙 집중형 물리 탭 워크벤치** 레이아웃 문법을 공유하되, 각 도구의 도메인과 고객층에 맞춘 전용 테마 클래스로 구분된다:
 
-오커 웍스(Ohker Works)는 국내 이커머스 출고 실무자와 쇼핑몰 운영자가 매일 아침 열어 쓰는 **실물 운송장 감각의 출고·복구 스튜디오**다.
-
-- **전역 디자인 시스템 (System C — Warm Paper & Waybill Ticket)**: 눈이 편안한 웜 에디토리얼 페이퍼(`#FAF8F5`) 위 순백 원장 시트(`#FFFFFF`), 따뜻한 스톤 헤어라인(`#E7E5E4`, `#D6D3D1`), 짙은 먹색 타이포그래피(`#18181B`), 택배 라벨에서 추출한 **번트 오렌지 주 실행색(`#C8430C`, WCAG AA `4.93:1`)**, 절감·보안 검증을 나타내는 포레스트 에메랄드(`#065F46`), 그리고 상단 우측의 **톱니 절취선 실시간 운송장 티켓 카드**로 현장의 실체감을 전달한다.
-- **스크롤 하단 워크벤치 구조 (Layout A — Centered Feature Showcase)**: 첫 뷰포트 아래로 스크롤하면 시선이 분산되지 않는 중앙 집중형(`max-width: 980px`) 워크벤치가 이어지며, **택배사·플랫폼 물리 폴더 탭** + **원본→표준양식 수렴 파이프라인** + **드래그 앤 드롭·Ctrl+V 바** + **합포장 절감 배너가 내장된 실시간 프리뷰 테이블** + **하단 즉시 다운로드 액션바**가 단일 흐름으로 작동한다.
-
-## Colors & Contrast
-
-- 모든 텍스트와 버튼은 WCAG AA(`4.5:1` 이상) 명암비를 통과한다 (`#18181B` on `#FAF8F5` = `16.7:1`, `#57534E` on `#FAF8F5` = `7.0:1`, `#FFFFFF` on `#C8430C` = `4.93:1`).
-- 한 뷰포트 안에서 채움 강조색은 `#C8430C`(주 행동 CTA)와 `#065F46`(절감·보안 검증 상태) 두 역할만 엄격히 사용한다.
-
-## Do's and Don'ts
-
-- **Do**: 첫 화면 우측의 실시간 티켓과 스크롤 하단의 프리뷰 테이블이 실제 사용자 투입 데이터와 실시간으로 연동되게 한다.
-- **Don't**: 제목(`h1`, `h2`, `h3`) 바로 위에 아이브로/키커 라벨을 올리지 않는다(제목 아래에 비교·보안 배지를 둔다).
-- **Don't**: `1px` 테두리와 넓은 그림자를 중복 선언하는 Ghost Card나 `3px+` 좌측 색띠를 사용하지 않는다.
+1. **6대 마켓 발주서 통합 (`:root` 기본 — Warm Waybill Studio)**: 웜 에디토리얼 페이퍼(`#FAF8F5`) + 번트 오렌지(`#C8430C`) + 톱니 절취선 실시간 운송장 티켓.
+2. **카카오 지도 코드 복구 (`body.ow-theme-map` — Cartographic Storefront Studio)**: 도시 도로망 맵 캔버스(`#F5F7FA`) + 카카오 옐로우 핀(`#FEE500`) + 로얄 루트 블루(`#1D4ED8`) + 실시간 매장 지도 Before/After 카드.
+3. **PHP `exec()` 결제 복구 (`body.ow-theme-paypatch` — Zero-Trust Dark Payment Security IDE)**: 옵시디언 보안 다크(`#090D16`, `#111827`) + 차단 `exec()` 레드 Diff(`#2A1215`/`#FCA5A5`) + 순수 cURL 에메랄드 Diff(`#0D281E`/`#86EFAC`) 및 `#10B981` 검증 액션.

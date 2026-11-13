@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>오커 웍스 PHP exec() 차단 복구 생성기 | 영카트5·KCP pp_cli 결제 오류 cURL 전환</title>
+  <title>오커 웍스 페이패치 | PHP exec() 차단 진단 및 영카트·KCP cURL 어댑터 생성기</title>
   <meta name="description" content="카페24·가비아·닷홈 PHP 보안 패치(disable_functions=exec)로 멈춘 구형 영카트·그누보드 NHN KCP(pp_cli) 결제 모듈을 외부 전송 0바이트로 정적 진단하고 무바이너리 HTTPS cURL 어댑터 패치 코드를 즉시 생성합니다." />
   <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="오커 웍스 | 호스팅 PHP exec() 차단 진단 및 KCP cURL 어댑터 자동 생성기" />
+  <meta property="og:title" content="호스팅 PHP exec() 차단으로 멈춘 KCP 결제, 0.1초 만에 순수 cURL로 복구 | 오커 웍스" />
   <meta property="og:description" content="서버 비밀번호·시크릿키 외부 전송 0 Byte. pp_cli 바이너리 호출을 무바이너리 HTTPS cURL 어댑터로 즉시 교체합니다." />
   <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-monitor.jpg" />
   <link rel="icon" type="image/jpeg" href="../assets/brand-avatar.jpg" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
   <link rel="stylesheet" href="../assets/design-system.css" />
+  <script>document.documentElement.classList.add('js-ready');</script>
 
   <!-- Google Ads Global Site Tag (AW-17208942339) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
@@ -82,192 +83,200 @@
   }
   </script>
 </head>
-<body>
-  <!-- 1. Global Operational Telemetry Rail -->
+<body class="ow-theme-paypatch">
+  <!-- 1. Dark Security Telemetry Rail -->
   <div class="ow-telemetry-rail" role="region" aria-label="시스템 보안 및 가동 상태">
     <div class="ow-telemetry-inner">
       <div class="ow-telemetry-group">
         <span class="ow-telemetry-item">
           <span class="ow-pulse-dot" aria-hidden="true"></span>
-          <span>정적 분석 엔진 정상 가동 (<span class="ow-mono">OW-PayPatch 2.0</span>)</span>
+          <span>정적 분석 엔진 정상 가동 (<span class="ow-mono">OW-PayPatch 3.0</span>)</span>
         </span>
-        <span class="ow-telemetry-item ow-mono">시크릿키 보호 규약: Client-Side Local Memory · 외부 서버 전송 0 Byte</span>
+        <span class="ow-telemetry-item ow-mono">시크릿키 보호 규약: 브라우저 로컬 메모리 단독 처리 · 외부 전송 0 Byte</span>
       </div>
       <div class="ow-telemetry-group">
-        <a href="../design-system/">디자인 및 아키텍처 명세 (OWDS v2.0)</a>
-        <a href="mailto:oker04897@gmail.com">기술지원 SLA: oker04897@gmail.com</a>
+        <a href="mailto:oker04897@gmail.com">기술지원·환불: oker04897@gmail.com</a>
       </div>
     </div>
   </div>
 
-  <!-- 2. Institutional Workspace Header -->
+  <!-- 2. Sticky Security IDE Header -->
   <header class="ow-header">
     <div class="ow-header-inner">
       <a class="ow-brand" href="./">
-        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스 모노그램" width="32" height="32" />
+        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스 페이패치" width="32" height="32" />
         <span class="ow-brand-text">
-          <span class="ow-brand-name">오커 웍스 · Ohker Works</span>
-          <span class="ow-brand-sub">B2B COMMERCE &amp; INFRA SUITE</span>
+          <span class="ow-brand-name">오커 웍스 페이패치</span>
+          <span class="ow-brand-sub">OHKER PAYPATCH SECURITY</span>
         </span>
       </a>
 
       <nav class="ow-suite-nav" aria-label="제품군 전환">
-        <a class="ow-suite-link" href="../seller-converter/">6대 마켓 발주서 통합 엔진</a>
-        <a class="ow-suite-link" href="../">카카오 지도 교체 코드 생성기</a>
-        <a class="ow-suite-link" href="./" aria-current="page">PHP exec() 결제 복구 생성기</a>
+        <a class="ow-suite-link" href="../seller-converter/">6대 마켓 발주서 통합</a>
+        <a class="ow-suite-link" href="../">카카오 지도 코드 복구</a>
+        <a class="ow-suite-link" href="./" aria-current="page">PHP exec() 결제 복구</a>
       </nav>
 
       <div class="ow-header-actions">
-        <a class="ow-btn ow-btn-secondary" href="#patch-spec">호환 규격 및 단가</a>
-        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">통합 패스 구독 (월 4,900원)</a>
+        <a class="ow-btn ow-btn-secondary" href="#patch-spec">호환 규격·단가</a>
+        <a class="ow-btn ow-btn-primary" href="#workbench">무료 차단 진단</a>
       </div>
+    </div>
+    <div class="ow-scroll-progress" aria-hidden="true">
+      <div class="ow-scroll-progress-bar" id="scrollProgressBar"></div>
     </div>
   </header>
 
   <main>
-    <!-- 3. Asymmetric Workbench Hero Split -->
-    <section class="ow-hero-section">
+    <!-- =========================================================
+         CHAPTER 1 — ZERO-TRUST SECURITY HERO & LIVE CODE-DIFF TERMINAL
+         ========================================================= -->
+    <section class="ow-paypatch-hero">
+      <svg class="ow-paypatch-grid-bg" viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g stroke="#172033" stroke-width="1" fill="none">
+          <path d="M0 120 H1440 M0 240 H1440 M0 360 H1440 M0 480 H1440" />
+          <path d="M240 0 V620 M480 0 V620 M720 0 V620 M960 0 V620 M1200 0 V620" />
+        </g>
+      </svg>
+
       <div class="ow-container">
-        <div class="ow-workbench-grid">
-          <!-- Left Column: Institutional Spec -->
+        <div class="ow-studio-hero-grid">
+          <!-- Left: Developer & Merchant Security Hook -->
           <div>
-            <h1 class="ow-display-title">호스팅 PHP exec() 차단 무료 진단 및 영카트·KCP cURL 어댑터 생성기</h1>
+            <h1 class="ow-studio-headline">호스팅 PHP exec() 차단으로 멈춘 KCP 결제, 0.1초 만에 순수 cURL로 복구</h1>
+
+            <div class="ow-hero-badge-row">
+              <span class="ow-trust-pill">
+                <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                외부 서버 전송 0 Byte (100% 브라우저 로컬 변환)
+              </span>
+              <span class="ow-chip ow-chip-neutral">외주 긴급 수리 20만원 → 월 4,900원 무제한</span>
+            </div>
+
             <p class="ow-lead">
-              웹호스팅 보안 패치(<code class="ow-mono">disable_functions = exec</code>) 이후 구형 영카트5·그누보드 쇼핑몰의 카드 결제가 <code class="ow-mono">pp_cli</code> 오류로 멈췄을 때, FTP 비밀번호 공유 없이 브라우저 안에서 차단 지점을 정밀 진단하고 <strong>외부 바이너리 없는 HTTPS cURL 승인 어댑터 파일</strong>을 즉시 조립합니다.
+              카페24·가비아·닷홈 보안 패치(<code class="ow-mono">disable_functions = exec</code>) 이후 영카트5·그누보드 카드 결제가 <code class="ow-mono">pp_cli</code> 오류로 멈췄을 때, FTP 비밀번호나 <code class="ow-mono">site_key</code> 공유 없이 <strong>무바이너리 HTTPS cURL 승인 어댑터</strong>를 즉시 조립합니다.
             </p>
 
-            <dl class="ow-spec-dl">
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">진단 대상</dt>
-                <dd class="ow-spec-dd"><span class="ow-mono">exec / shell_exec / system / passthru / popen</span> 및 <span class="ow-mono">pp_cli</span> 바이너리 의존성</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">출력 어댑터</dt>
-                <dd class="ow-spec-dd">TLS 1.2 강제 <span class="ow-mono">OW_KCP_Curl_Adapter</span> + <span class="ow-mono">UTF-8 / EUC-KR</span> 자동 인코딩 브릿지</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">무인 상태 점검</dt>
-                <dd class="ow-spec-dd"><span class="ow-mono">?ow_health=1</span> JSON 헬스체크 내장 (cURL·TLS·함수 차단 실시간 확인)</dd>
-              </div>
-              <div class="ow-spec-row">
-                <dt class="ow-spec-dt">이용 조건</dt>
-                <dd class="ow-spec-dd">라인별 정적 진단 무료 · 완성 <span class="ow-mono">.php</span> 다운로드 월 4,900원 통합 패스</dd>
-              </div>
-            </dl>
-
-            <div class="ow-ledger-sheet" style="margin-top:20px;">
-              <div class="ow-console-header">
-                <span class="ow-console-title">검사항목 명세 원장 (Inspection Matrix)</span>
-                <span class="ow-console-meta">PHP 5.6 ~ 8.3 호환</span>
-              </div>
-              <div class="ow-table-wrap">
-                <table class="ow-table">
-                  <thead>
-                    <tr>
-                      <th>코드</th>
-                      <th>검출 대상</th>
-                      <th>교체 조치</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="ow-mono">CHK-PHP-01</td>
-                      <td><span class="ow-mono">exec($bin_path)</span> 직접 실행</td>
-                      <td><span class="ow-mono">curl_init()</span> HTTPS JSON 승인 호출로 치환</td>
-                    </tr>
-                    <tr>
-                      <td class="ow-mono">CHK-PHP-02</td>
-                      <td><span class="ow-mono">pp_cli / pp_cli_x64</span> 리눅스 바이너리</td>
-                      <td>외부 실행 파일 의존성 제거 (<span class="ow-mono">spl.kcp.co.kr</span> 직결)</td>
-                    </tr>
-                    <tr>
-                      <td class="ow-mono">CHK-PHP-03</td>
-                      <td><span class="ow-mono">EUC-KR / CP949</span> 레거시 쇼핑몰 인코딩</td>
-                      <td>요청·응답 <span class="ow-mono">iconv</span> 양방향 자동 변환 래퍼 결합</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="ow-hero-cta-row">
+              <button type="button" class="ow-btn ow-btn-primary ow-btn-lg" id="btnHeroSamplePhp">무료 차단 진단 실행</button>
+              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroDiagDownload">서버 호환성 진단기(.php) 무료 받기</button>
             </div>
+
+            <p class="ow-fine" style="margin:0;">
+              지원 환경: PHP 5.6 ~ 8.3 · <span class="ow-mono">CURL_SSLVERSION_TLSv1_2</span> 강제 · <span class="ow-mono">EUC-KR / UTF-8</span> 자동 브릿지
+            </p>
           </div>
 
-          <!-- Right Column: Interactive PHP Patch Workbench -->
-          <div class="ow-console" aria-labelledby="php-console-title">
-            <div class="ow-console-header">
-              <span class="ow-console-title" id="php-console-title">
-                <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                PHP 결제 모듈 정적 진단 및 cURL 어댑터 합성기
-              </span>
-              <span class="ow-console-meta" id="phpTelemetry">네트워크 전송: 0 Byte</span>
+          <!-- Right: Live Synced Code-Diff Security Terminal -->
+          <div class="ow-diff-terminal" aria-label="실시간 KCP 어댑터 치환 코드 비교 콘솔">
+            <div class="ow-diff-chrome">
+              <div style="display:inline-flex;align-items:center;gap:10px;">
+                <span class="ow-diff-dots" aria-hidden="true">
+                  <span class="ow-diff-dot" style="background:#EF4444;"></span>
+                  <span class="ow-diff-dot" style="background:#F59E0B;"></span>
+                  <span class="ow-diff-dot" style="background:#10B981;"></span>
+                </span>
+                <span class="ow-mono" style="font-size:0.75rem;color:#CBD5E1;">settle_kcp.inc.php → ow_kcp_curl_adapter.php</span>
+              </div>
+              <span class="ow-chip ow-chip-ok" id="heroDiffBadge">TLS 1.2 OK</span>
             </div>
 
-            <div class="ow-console-body">
-              <div class="ow-console-toolbar">
-                <div class="ow-preset-group">
-                  <button type="button" class="ow-preset-btn" id="btnSampleYoungcart">영카트5 KCP pp_cli 구형 소스 시연</button>
-                  <button type="button" class="ow-preset-btn" id="btnDownloadDiag">무료 서버 환경 진단 파일(.php) 받기</button>
-                  <button type="button" class="ow-preset-btn" id="btnClearPhp">초기화</button>
+            <div class="ow-diff-body">
+              <div class="ow-diff-del">
+                <div class="ow-diff-label">
+                  <span>차단된 구형 호출 (Blocked)</span>
+                  <span class="ow-mono" id="heroBlockedFnLabel">exec() [L12] 검출</span>
                 </div>
+                <div>- $bin_exe = $home_dir . '/bin/pp_cli_x64';</div>
+                <div>- exec($cmd, $output, $return_var); // Fatal: exec() disabled</div>
+              </div>
+
+              <div class="ow-diff-add">
+                <div class="ow-diff-label">
+                  <span>순수 PHP HTTPS cURL 어댑터 (Verified)</span>
+                  <span class="ow-mono" id="heroSiteMetaLabel">site_cd=A52Q7 · EUC-KR</span>
+                </div>
+                <div>+ require_once __DIR__ . '/ow_kcp_curl_adapter.php';</div>
+                <div id="heroAdapterCallLine">+ $res = OW_KCP_Curl_Adapter::approve($req, 'A52Q7', 'EUC-KR');</div>
+              </div>
+            </div>
+
+            <div class="ow-diff-telemetry">
+              <span>TLS 1.2 강제 연결 · <span class="ow-mono">?ow_health=1</span> 상태 엔드포인트 내장</span>
+              <span class="ow-mono">네트워크 전송: 0 Byte</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CHAPTER 2 — CENTERED 5-HOSTING ENVIRONMENT PATCH WORKBENCH
+         ========================================================= -->
+    <section class="ow-showcase-section" id="workbench">
+      <div class="ow-container">
+        <div class="ow-showcase-wrap">
+          <div class="ow-showcase-head">
+            <h2 class="ow-showcase-title">기존 PHP 파일만 넣으면, 무바이너리 cURL 어댑터 즉시 조립</h2>
+            <span class="ow-trust-pill">
+              <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              SSH/FTP 비밀번호 불필요 · site_key 마스킹 상태 그대로 진단 가능
+            </span>
+          </div>
+
+          <!-- 5 Hosting Environment Folder Tabs -->
+          <div class="ow-five-tabs" role="tablist" aria-label="웹호스팅 환경별 패치 안내">
+            <button type="button" class="ow-courier-tab" role="tab" aria-selected="true" data-hosting="cafe24">카페24 웹호스팅</button>
+            <button type="button" class="ow-courier-tab" role="tab" aria-selected="false" data-hosting="gabia">가비아</button>
+            <button type="button" class="ow-courier-tab" role="tab" aria-selected="false" data-hosting="dothome">닷홈</button>
+            <button type="button" class="ow-courier-tab" role="tab" aria-selected="false" data-hosting="hostingkr">호스팅케이알</button>
+            <button type="button" class="ow-courier-tab" role="tab" aria-selected="false" data-hosting="php8">PHP 8 자체서버</button>
+          </div>
+
+          <div class="ow-workbench-card">
+            <!-- Transformation Pipeline Row + Selected Hosting Guide -->
+            <div class="ow-market-convergence">
+              <div class="ow-market-badges">
+                <span class="ow-chip ow-chip-crit">pp_cli 바이너리 · exec() 차단</span>
+                <span class="ow-convergence-arrow" aria-hidden="true">
+                  <svg class="ow-icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+                <span class="ow-target-xlsx-badge">ow_kcp_curl_adapter.php (HTTPS TLS 1.2)</span>
+              </div>
+              <span class="ow-fine" id="hostingGuideDesc" style="font-weight:600;color:var(--ow-text-secondary);">
+                카페24 매니지드 광호스팅 disable_functions=exec 보안 차단 대응 표준 어댑터입니다.
+              </span>
+            </div>
+
+            <!-- Preset & Free Diagnostic Toolbar -->
+            <div class="ow-console-toolbar">
+              <div class="ow-preset-group">
+                <button type="button" class="ow-preset-btn" id="btnSampleYoungcart">영카트5 KCP pp_cli 구형 소스 시연</button>
+                <button type="button" class="ow-preset-btn" id="btnDownloadDiag">무료 서버 환경 진단 파일(.php) 받기</button>
+                <button type="button" class="ow-preset-btn" id="btnClearPhp">초기화</button>
                 <span class="ow-chip ow-chip-neutral" id="phpAuditBadge">소스 입력 대기</span>
               </div>
+              <span class="ow-console-meta" id="phpExtractSummary">진단 대기 중</span>
+            </div>
 
-              <label for="legacyPhpInput" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--ow-text-secondary);margin-bottom:6px;">
-                기존 <span class="ow-mono">settle_kcp.inc.php</span> 또는 <span class="ow-mono">pp_cli_hub_lib.php</span> 코드 일부 붙여넣기 (시크릿키는 마스킹해도 됩니다)
-              </label>
-              <textarea id="legacyPhpInput" class="ow-code-input" spellcheck="false" placeholder="<?php&#10;$g_conf_site_cd = 'A52Q7';&#10;$bin_exe = $g_conf_home_dir . '/bin/pp_cli_x64';&#10;exec($bin_exe . ' &quot;' . $parm . '&quot;', $exec_out, $ret_val);&#10;?>"></textarea>
+            <label for="legacyPhpInput" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--ow-text-secondary);margin-bottom:6px;">
+              기존 <span class="ow-mono">settle_kcp.inc.php</span> 또는 <span class="ow-mono">pp_cli_hub_lib.php</span> 코드 일부 붙여넣기 (<span class="ow-mono">Ctrl+V</span> 즉시 진단 · 시크릿키 마스킹 가능)
+            </label>
+            <textarea id="legacyPhpInput" class="ow-code-input" spellcheck="false" placeholder="<?php&#10;$g_conf_site_cd = 'A52Q7';&#10;$bin_exe = $g_conf_home_dir . '/bin/pp_cli_x64';&#10;exec($bin_exe . ' &quot;' . $parm . '&quot;', $exec_out, $ret_val);&#10;?>"></textarea>
 
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                <span style="font-size:0.8125rem;color:var(--ow-text-muted);">차단 함수 라인 번호·사이트 코드·인코딩을 로컬 메모리에서만 추출합니다.</span>
-                <button type="button" class="ow-btn ow-btn-primary" id="btnRunPhpAudit">
-                  무료 차단 진단 및 cURL 어댑터 합성
-                </button>
-              </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;">
+              <span class="ow-fine">차단 함수 라인 번호·사이트 코드·인코딩을 로컬 메모리에서만 추출합니다.</span>
+              <button type="button" class="ow-btn ow-btn-primary" id="btnRunPhpAudit">
+                무료 차단 진단 및 cURL 어댑터 합성
+              </button>
+            </div>
 
-              <!-- Step 1: Free Audit Ledger -->
-              <div style="margin-top:18px;border-top:1px solid var(--ow-border-default);padding-top:16px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
-                  <strong style="font-size:0.875rem;">1단계: 무료 차단 함수 검출 및 추출 원장</strong>
-                  <span class="ow-mono" style="color:var(--ow-text-muted);" id="phpExtractSummary">진단 대기 중</span>
-                </div>
-
-                <div class="ow-ledger-sheet" style="margin-bottom:16px;">
-                  <div class="ow-table-wrap">
-                    <table class="ow-table">
-                      <thead>
-                        <tr>
-                          <th>항목</th>
-                          <th>검출 상태</th>
-                          <th>추출 상세 명세</th>
-                        </tr>
-                      </thead>
-                      <tbody id="phpAuditTableBody">
-                        <tr>
-                          <td style="font-weight:600;">호스팅 차단 함수 (<span class="ow-mono">exec / system</span>)</td>
-                          <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td style="color:var(--ow-text-muted);">샘플 버튼 또는 기존 PHP 코드 입력 시 즉시 표시됩니다.</td>
-                        </tr>
-                        <tr>
-                          <td style="font-weight:600;">외부 바이너리 의존성 (<span class="ow-mono">pp_cli</span>)</td>
-                          <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td class="ow-mono" style="color:var(--ow-text-muted);">-</td>
-                        </tr>
-                        <tr>
-                          <td style="font-weight:600;">사이트 코드 · 문자 인코딩</td>
-                          <td><span class="ow-chip ow-chip-neutral">대기</span></td>
-                          <td class="ow-mono" style="color:var(--ow-text-muted);">-</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- Step 2: Generated cURL Adapter (Locked until PASS-2026-PRO) -->
+            <!-- 2-Column Split: Left = Generated PHP Adapter + Gate, Right = Static Audit Ledger -->
+            <div class="ow-workbench-split">
+              <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-                  <strong style="font-size:0.875rem;">2단계: 자동 합성된 무바이너리 KCP HTTPS cURL 어댑터 (<span class="ow-mono">ow_kcp_curl_adapter.php</span>)</strong>
-                  <div style="display:flex;gap:8px;">
-                    <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPhpPatch" style="padding:7px 12px;min-height:34px;" disabled>전체 코드 복사</button>
-                    <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPhpPatch" style="padding:7px 12px;min-height:34px;" disabled>.php 어댑터 다운로드</button>
-                  </div>
+                  <strong style="font-size:0.875rem;">자동 합성 어댑터 (<span class="ow-mono">ow_kcp_curl_adapter.php</span>)</strong>
+                  <span class="ow-chip ow-chip-ok" id="phpTelemetry">외부 전송 0 Byte</span>
                 </div>
 
                 <div class="ow-code-preview-box">
@@ -277,35 +286,66 @@
 ?&gt;</pre>
 
                   <div class="ow-code-gate-overlay" id="phpGateOverlay">
-                    <div style="font-size:0.8125rem;color:var(--ow-text-on-dark-muted);max-width:52ch;">
-                      <strong style="color:var(--ow-text-on-dark);">전체 어댑터 잠금 해제 (월 4,900원 오커 웍스 통합 패스):</strong>
-                      리틀리 결제 직후 안내되는 패스 코드를 입력하면 전체 <span class="ow-mono">ow_kcp_curl_adapter.php</span> 복사·다운로드와 발주서 변환기·지도 교체 생성기가 동시에 열립니다.
+                    <div class="ow-fine-dark" style="max-width:48ch;">
+                      <strong style="color:var(--ow-text-on-dark);">패스 코드 입력 시 전체 어댑터(.php) 복사·다운로드가 즉시 열립니다.</strong>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                       <input type="text" id="phpPassInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="패스 코드 입력" />
                       <button type="button" class="ow-btn ow-btn-secondary" id="btnUnlockPhpPass" style="min-height:38px;padding:8px 14px;">코드 인증</button>
-                      <a class="ow-btn ow-btn-primary" style="min-height:38px;padding:8px 14px;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">패스 발급받기</a>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div class="ow-ledger-sheet">
+                <div class="ow-console-header">
+                  <span class="ow-console-title">무료 정적 검출 및 인코딩 명세</span>
+                  <span class="ow-console-meta">PHP 5.6 ~ 8.3</span>
+                </div>
+                <div class="ow-table-wrap">
+                  <table class="ow-table">
+                    <thead>
+                      <tr>
+                        <th>검출 항목</th>
+                        <th>상태</th>
+                        <th>추출 상세</th>
+                      </tr>
+                    </thead>
+                    <tbody id="phpAuditTableBody">
+                      <tr>
+                        <td style="font-weight:600;">차단 함수 (<span class="ow-mono">exec</span>)</td>
+                        <td><span class="ow-chip ow-chip-neutral">대기</span></td>
+                        <td class="ow-fine">소스를 붙여 넣으세요.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
-            <div class="ow-console-footer">
-              <span>포함 기능: <span class="ow-mono">CURL_SSLVERSION_TLSv1_2</span> · <span class="ow-mono">EUC-KR/UTF-8</span> 자동 변환 · <span class="ow-mono">?ow_health=1</span> 무인 진단</span>
-              <span class="ow-mono">외부 전송: 0 B</span>
+            <div class="ow-inline-feedback" id="phpFeedback" role="status" aria-live="polite"></div>
+
+            <!-- Bottom Full-Width Action Bar -->
+            <div class="ow-workbench-actionbar">
+              <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPhpPatch" disabled>전체 코드 복사</button>
+              <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPhpPatch" disabled>.php 어댑터 다운로드</button>
+              <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">
+                월 4,900원 패스로 무바이너리 cURL 어댑터(.php) 내려받기
+              </a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. Output Specification & Cost Comparison -->
-    <section class="ow-section" id="patch-spec">
+    <!-- =========================================================
+         CHAPTER 3 — SPECIFICATION, COST COMPARISON & FAQ
+         ========================================================= -->
+    <section class="ow-section ow-reveal" id="patch-spec">
       <div class="ow-container">
         <div class="ow-section-head">
           <div>
-            <h2 class="ow-section-title">PG 모듈 수리 외주 의뢰 대비 자동 어댑터 생성기 원가 비교</h2>
+            <h2 class="ow-section-title">PG 모듈 긴급 외주 의뢰 대비 자동 어댑터 생성기 비교</h2>
             <p class="ow-section-desc">
               FTP 관리자 계정을 외부 작업자에게 넘기지 않고, 내 쇼핑몰의 사이트 코드와 인코딩에 맞춘 표준 cURL 승인 어댑터를 즉시 내려받아 적용할 수 있습니다.
             </p>
@@ -323,25 +363,25 @@
                 <span class="ow-price-amount">월 4,900원</span>
                 <span class="ow-price-unit">/ 도메인·생성 횟수 무제한 (VAT 포함)</span>
               </div>
-              <p style="margin:0;font-size:0.84375rem;color:var(--ow-text-muted);">
+              <p class="ow-fine" style="margin:0;">
                 단일 패스 코드 하나로 관리 중인 여러 영카트 쇼핑몰·거래처 사이트의 패치 파일을 제한 없이 생성하며 언제든 원클릭 해지할 수 있습니다.
               </p>
 
               <ul class="ow-check-list">
                 <li>
-                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <svg class="ow-icon" style="color:#34D399;margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
                   <span><span class="ow-mono">exec()</span> 없는 KCP HTTPS cURL 승인 어댑터(<span class="ow-mono">.php</span>) 무제한 생성</span>
                 </li>
                 <li>
-                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-                  <span>동일 패스로 <a href="../seller-converter/">6대 마켓 발주서 통합 엔진</a> + <a href="../">카카오 지도 교체 코드 생성기</a> 동시 이용</span>
+                  <svg class="ow-icon" style="color:#34D399;margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>동일 패스로 <a href="../seller-converter/">6대 마켓 발주서 통합기</a> + <a href="../">카카오 지도 교체 코드 생성기</a> 동시 이용</span>
                 </li>
                 <li>
-                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <svg class="ow-icon" style="color:#34D399;margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
                   <span>호스팅 <span class="ow-mono">cURL / TLS 1.2</span> 사전 호환성 점검 스크립트 무료 제공</span>
                 </li>
                 <li>
-                  <svg class="ow-icon" style="color:var(--ow-p-emerald-800);margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                  <svg class="ow-icon" style="color:#34D399;margin-top:2px;" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
                   <span>적용 후 호스팅 환경 문제로 미작동 시 7일 이내 조건 없는 100% 전액 환불 보장</span>
                 </li>
               </ul>
@@ -354,43 +394,56 @@
             </div>
           </div>
 
-          <div class="ow-ledger-sheet">
-            <div class="ow-console-header">
-              <span class="ow-console-title">PG 긴급 복구 외주 의뢰 vs 오커 웍스 자동 생성기 비교</span>
-              <span class="ow-console-meta">실무 비용 대조</span>
+          <div style="display:flex;flex-direction:column;justify-content:space-between;gap:16px;">
+            <div class="ow-ledger-sheet">
+              <div class="ow-console-header">
+                <span class="ow-console-title">단건 외주 의뢰 vs 오커 웍스 자동 생성기</span>
+                <span class="ow-console-meta">실무 비용 대조</span>
+              </div>
+              <div class="ow-table-wrap">
+                <table class="ow-table">
+                  <thead>
+                    <tr>
+                      <th>항목</th>
+                      <th>외주 게시판 의뢰</th>
+                      <th>오커 웍스 페이패치</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">결제 복구 속도</td>
+                      <td style="color:var(--ow-text-muted);">매칭·작업 반나절~2일</td>
+                      <td>붙여넣기 후 <strong>0.1초 즉시 합성</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">가맹점 보안</td>
+                      <td style="color:var(--ow-text-muted);">SSH/FTP 및 <span class="ow-mono">site_key</span> 공유</td>
+                      <td>계정·키 외부 전송 0건 (로컬 조립)</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">사후 상태 확인</td>
+                      <td style="color:var(--ow-text-muted);">수동 결제 외 확인 불가</td>
+                      <td><span class="ow-mono">?ow_health=1</span> 상시 점검</td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">지불 비용</td>
+                      <td class="ow-tnum" style="color:var(--ow-text-muted);">건당 150,000 ~ 250,000원</td>
+                      <td class="ow-tnum" style="font-weight:700;color:#34D399;">월 4,900원 (3종 통합 무제한)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="ow-table-wrap">
-              <table class="ow-table">
-                <thead>
-                  <tr>
-                    <th>항목</th>
-                    <th>제작의뢰 게시판 단건 외주</th>
-                    <th>오커 웍스 자동 어댑터 생성기</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="font-weight:600;">결제 복구 속도</td>
-                    <td style="color:var(--ow-text-muted);">작업자 매칭·견적 협의까지 반나절~2일</td>
-                    <td>코드 붙여넣기 후 <strong>0.1초 즉시 합성</strong></td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">가맹점 보안</td>
-                    <td style="color:var(--ow-text-muted);">SSH/FTP 비밀번호 및 <span class="ow-mono">site_key</span> 공유 필요</td>
-                    <td>계정·키 외부 전송 0건 (내 브라우저 로컬 조립)</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">사후 상태 확인</td>
-                    <td style="color:var(--ow-text-muted);">수동 테스트 결제 외 확인 수단 없음</td>
-                    <td><span class="ow-mono">?ow_health=1</span> JSON 엔드포인트로 상시 점검</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">지불 비용</td>
-                    <td class="ow-tnum" style="color:var(--ow-text-muted);">건당 150,000원 ~ 250,000원</td>
-                    <td class="ow-tnum" style="font-weight:700;color:var(--ow-action-primary);">월 4,900원 (3종 유틸리티 통합 무제한)</td>
-                  </tr>
-                </tbody>
-              </table>
+
+            <div class="ow-faq-list" style="margin-top:0;">
+              <details class="ow-faq-item">
+                <summary class="ow-faq-summary"><span>FTP 비밀번호나 KCP 시크릿키를 입력해야 하나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">아니요. 모든 코드 진단과 어댑터 합성은 브라우저 메모리에서만 수행되며 외부 서버 전송량은 0바이트입니다. 시크릿키는 마스킹한 채로 넣어도 됩니다.</div>
+              </details>
+              <details class="ow-faq-item">
+                <summary class="ow-faq-summary"><span>적용 후 호스팅 환경 차이로 미작동하면 환불되나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">네. 먼저 무료 서버 환경 진단 파일(.php)로 cURL·TLS 1.2 지원 여부를 확인할 수 있으며, 결제 후 7일 이내 조건 없이 100% 전액 환불을 보장합니다.</div>
+              </details>
             </div>
           </div>
         </div>
@@ -406,13 +459,13 @@
           <span>고객지원 및 환불 접수: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a> (평일 당일 처리 · 7일 이내 100% 환불 보장)</span>
         </div>
         <div class="ow-footer-links">
-          <a href="../seller-converter/">6대 마켓 발주서 통합 엔진</a>
+          <a href="../seller-converter/">6대 마켓 발주서 통합</a>
           <a href="../seller-converter/smartstore-lois-parcel/">스마트스토어 암호·로이스파셀 가이드</a>
           <a href="../seller-converter/courier-excel-format/">택배사별 엑셀 양식 모음</a>
           <a href="../seller-converter/sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
-          <a href="../">카카오 지도 교체 코드 생성기</a>
+          <a href="../">카카오 지도 코드 복구</a>
           <a href="../daumcdn-map-error/">다음·카카오 지도 백지 복구</a>
-          <a href="./">PHP exec() 결제 복구 생성기</a>
+          <a href="./">PHP exec() 결제 복구</a>
           <a href="cafe24-youngcart-kcp-error/">영카트 KCP 오류·외주비 비교</a>
           <a href="../privacy-terms/">개인정보·이용·환불약관</a>
           <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 및 결제 관리</a>
@@ -426,6 +479,7 @@
 
     const VALID_PASS = 'PASS-2026-PRO';
     let isPro = false;
+    let isDemoSample = true;
     try {
       const qPass = (new URLSearchParams(window.location.search).get('pass') || '').trim().toUpperCase();
       if (qPass === VALID_PASS) {
@@ -445,7 +499,7 @@
       "$g_conf_gw_url   = 'paygw.kcp.co.kr';",
       "// EUC-KR 레거시 환경 예시: charset=euc-kr",
       'class C_PP_CLI {',
-      '  function mf_do_tx($trace_no, $home_dir, $site_cd, $site_key, $tx_cd, $pub_key, $pa_url, $pa_port, $user_agent, $ordr_idxx, $ log_level) {',
+      '  function mf_do_tx($trace_no, $home_dir, $site_cd, $site_key, $tx_cd, $pub_key, $pa_url, $pa_port, $user_agent, $ordr_idxx, $log_level) {',
       "    $bin_exe = $home_dir . '/bin/pp_cli_x64';",
       '    $cmd = sprintf("%s -h \\"home=%s,site_cd=%s\\"", $bin_exe, $home_dir, $site_cd);',
       '    exec($cmd, $output, $return_var);',
@@ -454,6 +508,14 @@
       '}',
       '?>'
     ].join('\n');
+
+    const HOSTING_GUIDES = {
+      cafe24: '카페24 매니지드 광호스팅 disable_functions=exec 보안 차단 대응 표준 어댑터입니다.',
+      gabia: '가비아 리눅스 웹호스팅 외부 pp_cli 바이너리 실행 권한 제한을 순수 cURL로 우회합니다.',
+      dothome: '닷홈 공유 웹호스팅 exec/shell_exec 비활성 환경에서 바이너리 없이 KCP 승인을 직결합니다.',
+      hostingkr: '호스팅케이알 PHP 보안 패치 서버 및 EUC-KR/UTF-8 구형 영카트5 인코딩을 자동 변환합니다.',
+      php8: 'PHP 8.0~8.3 Fatal Error(Uncaught Error: Call to undefined function exec)를 원천 차단합니다.'
+    };
 
     const legacyPhpInput = document.getElementById('legacyPhpInput');
     const phpAuditBadge = document.getElementById('phpAuditBadge');
@@ -464,6 +526,48 @@
     const btnCopyPhpPatch = document.getElementById('btnCopyPhpPatch');
     const btnDownloadPhpPatch = document.getElementById('btnDownloadPhpPatch');
     const phpPassInput = document.getElementById('phpPassInput');
+    const phpFeedback = document.getElementById('phpFeedback');
+    const heroBlockedFnLabel = document.getElementById('heroBlockedFnLabel');
+    const heroSiteMetaLabel = document.getElementById('heroSiteMetaLabel');
+    const heroAdapterCallLine = document.getElementById('heroAdapterCallLine');
+    const hostingGuideDesc = document.getElementById('hostingGuideDesc');
+
+    function showPhpFeedback(msg, tone) {
+      phpFeedback.className = 'ow-inline-feedback is-visible ' + (tone || 'is-ok');
+      phpFeedback.textContent = msg;
+    }
+
+    /* Hosting 5-Tab Switcher */
+    const hostingTabs = Array.from(document.querySelectorAll('[data-hosting]'));
+    hostingTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        hostingTabs.forEach((t) => t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+        const key = tab.getAttribute('data-hosting');
+        if (hostingGuideDesc && HOSTING_GUIDES[key]) {
+          hostingGuideDesc.textContent = HOSTING_GUIDES[key];
+        }
+      });
+    });
+
+    /* Scroll Progress + Scroll Reveal */
+    const progressBar = document.getElementById('scrollProgressBar');
+    window.addEventListener('scroll', () => {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
+      if (progressBar) progressBar.style.transform = 'scaleX(' + ratio.toFixed(3) + ')';
+    }, { passive: true });
+
+    if ('IntersectionObserver' in window) {
+      const revealIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.ow-reveal').forEach((el) => revealIo.observe(el));
+    }
 
     function esc(s) {
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -477,15 +581,15 @@
         btnCopyPhpPatch.disabled = false;
         btnDownloadPhpPatch.disabled = false;
       } else {
-        const previewLines = fullAdapterCode.split('\n').slice(0, 18).join('\n');
-        generatedPhpPre.textContent = previewLines + '\n\n  /* ── 이하 68줄 (TLS 1.2 cURL JSON 승인 요청 + EUC-KR/UTF-8 브릿지 + 에러코드 매핑) 잠금 상태 ──\n     아래 패스 코드 입력 시 전체 ow_kcp_curl_adapter.php 코드 복사와 파일 다운로드가 즉시 열립니다. */';
+        const previewLines = fullAdapterCode.split('\n').slice(0, 16).join('\n');
+        generatedPhpPre.textContent = previewLines + '\n\n  /* ── 이하 70줄 (TLS 1.2 cURL JSON 승인 요청 + EUC-KR/UTF-8 브릿지 + 에러코드 매핑) 잠금 상태 ──\n     아래 패스 코드 입력 시 전체 ow_kcp_curl_adapter.php 코드 복사와 파일 다운로드가 즉시 열립니다. */';
         phpGateOverlay.style.display = 'flex';
         btnCopyPhpPatch.disabled = true;
         btnDownloadPhpPatch.disabled = true;
       }
     }
 
-    function runAudit() {
+    function runAudit(silent) {
       const t0 = performance.now();
       const raw = legacyPhpInput.value.trim();
       if (!raw) {
@@ -498,7 +602,7 @@
       phpAuditBadge.className = audit.dangerCount > 0 ? 'ow-chip ow-chip-crit' : 'ow-chip ow-chip-ok';
       phpAuditBadge.textContent = audit.dangerCount > 0
         ? ('차단 위험 ' + audit.dangerCount + '건 검출')
-        : '차단 함수 미검출 (표준 어댑터 생성)';
+        : '표준 어댑터 합성됨';
 
       phpExtractSummary.textContent = '처리 지연 ' + elapsed + 'ms · 전송 0B';
 
@@ -506,47 +610,41 @@
         ? audit.blockedCalls.map(c => c.fn + '() [L' + c.line + ']').join(', ')
         : '직접 셸 호출 미검출';
       const binDetail = audit.binaries.length > 0
-        ? audit.binaries.join(', ') + ' 외부 바이너리 참조'
-        : '외부 바이너리 참조 없음';
+        ? audit.binaries.join(', ') + ' 외부 바이너리'
+        : '외부 바이너리 없음';
+
+      if (heroBlockedFnLabel) heroBlockedFnLabel.textContent = callDetail;
+      if (heroSiteMetaLabel) heroSiteMetaLabel.textContent = 'site_cd=' + audit.siteCd + ' · ' + audit.charset;
+      if (heroAdapterCallLine) {
+        heroAdapterCallLine.textContent = "+ $res = OW_KCP_Curl_Adapter::approve($req, '" + audit.siteCd + "', '" + audit.charset + "');";
+      }
 
       phpAuditTableBody.innerHTML = [
-        '<tr>',
-        '  <td style="font-weight:600;">호스팅 차단 함수 (<span class="ow-mono">exec / system</span>)</td>',
+        '<tr class="ow-row-enter">',
+        '  <td style="font-weight:600;">호스팅 차단 함수</td>',
         '  <td><span class="ow-chip ' + (audit.blockedCalls.length > 0 ? 'ow-chip-crit' : 'ow-chip-ok') + '">' + (audit.blockedCalls.length > 0 ? (audit.blockedCalls.length + '건 검출') : '안전') + '</span></td>',
         '  <td class="ow-mono">' + esc(callDetail) + '</td>',
         '</tr>',
-        '<tr>',
-        '  <td style="font-weight:600;">외부 바이너리 의존성 (<span class="ow-mono">pp_cli</span>)</td>',
+        '<tr class="ow-row-enter">',
+        '  <td style="font-weight:600;">바이너리 의존성</td>',
         '  <td><span class="ow-chip ' + (audit.binaries.length > 0 ? 'ow-chip-warn' : 'ow-chip-ok') + '">' + (audit.binaries.length > 0 ? '교체 필요' : '없음') + '</span></td>',
         '  <td class="ow-mono">' + esc(binDetail) + '</td>',
         '</tr>',
-        '<tr>',
-        '  <td style="font-weight:600;">사이트 코드 · 문자 인코딩</td>',
-        '  <td><span class="ow-chip ow-chip-ok">추출 완료</span></td>',
-        '  <td class="ow-mono">site_cd=' + esc(audit.siteCd) + ' · ' + esc(audit.charset) + ' · ' + (audit.isTestMode ? 'TEST GW' : 'PROD GW') + '</td>',
-        '</tr>'
+        '<tr class="ow-row-enter">',
+        '  <td style="font-weight:600;">사이트 코드·인코딩</td>',
+        '  <td><span class="ow-chip ow-chip-ok">추출됨</span></td>',
+        '  <td class="ow-mono">site_cd=' + esc(audit.siteCd) + ' · ' + esc(audit.charset) + '</td>',
+        '</tr>',
+        '<tr class="ow-merged-savings-row"><td colspan="3">PG 긴급 외주 수리비 평균 200,000원 절감 · 0.1초 로컬 조립 완료</td></tr>'
       ].join('\n');
 
       renderCodeView();
+      if (!silent) {
+        showPhpFeedback('정적 진단 완료: ' + callDetail + ' 지점을 무바이너리 cURL 어댑터(site_cd=' + audit.siteCd + ')로 치환했습니다.', 'is-ok');
+      }
     }
 
-    document.getElementById('btnSampleYoungcart').addEventListener('click', () => {
-      legacyPhpInput.value = samplePhp;
-      runAudit();
-    });
-
-    document.getElementById('btnClearPhp').addEventListener('click', () => {
-      legacyPhpInput.value = '';
-      fullAdapterCode = '';
-      phpAuditBadge.className = 'ow-chip ow-chip-neutral';
-      phpAuditBadge.textContent = '소스 입력 대기';
-      phpExtractSummary.textContent = '진단 대기 중';
-      generatedPhpPre.textContent = '<?php\n/* 소스를 입력하고 진단을 실행해 주세요. */\n?>';
-    });
-
-    document.getElementById('btnRunPhpAudit').addEventListener('click', runAudit);
-
-    document.getElementById('btnDownloadDiag').addEventListener('click', () => {
+    function downloadDiagScript() {
       const diagPhp = [
         '<?php',
         "// [오커 웍스 무료 진단기] 호스팅 disable_functions 및 KCP cURL/TLS 1.2 호환성 점검 (확인 후 삭제 권장)",
@@ -568,18 +666,66 @@
       a.download = 'ow_hosting_exec_diag.php';
       a.click();
       URL.revokeObjectURL(a.href);
+      showPhpFeedback('무료 호환성 점검 파일(ow_hosting_exec_diag.php) 다운로드가 시작되었습니다.', 'is-ok');
+    }
+
+    legacyPhpInput.addEventListener('focus', () => {
+      if (isDemoSample) {
+        isDemoSample = false;
+        legacyPhpInput.select();
+      }
     });
+
+    legacyPhpInput.addEventListener('paste', () => {
+      isDemoSample = false;
+      setTimeout(() => runAudit(false), 40);
+    });
+
+    document.getElementById('btnSampleYoungcart').addEventListener('click', () => {
+      isDemoSample = false;
+      legacyPhpInput.value = samplePhp;
+      runAudit(false);
+    });
+
+    document.getElementById('btnHeroSamplePhp').addEventListener('click', () => {
+      isDemoSample = false;
+      legacyPhpInput.value = samplePhp;
+      runAudit(false);
+      const wb = document.getElementById('workbench');
+      if (wb) wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    document.getElementById('btnClearPhp').addEventListener('click', () => {
+      isDemoSample = false;
+      legacyPhpInput.value = '';
+      fullAdapterCode = '';
+      phpAuditBadge.className = 'ow-chip ow-chip-neutral';
+      phpAuditBadge.textContent = '소스 입력 대기';
+      phpExtractSummary.textContent = '진단 대기 중';
+      phpFeedback.className = 'ow-inline-feedback';
+      generatedPhpPre.textContent = '<?php\n/* 소스를 입력하고 진단을 실행해 주세요. */\n?>';
+      legacyPhpInput.focus();
+    });
+
+    document.getElementById('btnRunPhpAudit').addEventListener('click', () => {
+      isDemoSample = false;
+      runAudit(false);
+    });
+
+    document.getElementById('btnDownloadDiag').addEventListener('click', downloadDiagScript);
+    document.getElementById('btnHeroDiagDownload').addEventListener('click', downloadDiagScript);
 
     document.getElementById('btnUnlockPhpPass').addEventListener('click', () => {
       const code = (phpPassInput.value || '').trim().toUpperCase();
       if (code === VALID_PASS) {
         isPro = true;
         try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
-        if (!fullAdapterCode) runAudit();
+        if (!fullAdapterCode) runAudit(true);
         else renderCodeView();
+        showPhpFeedback('코드 인증 완료: 전체 ow_kcp_curl_adapter.php 복사 및 다운로드가 열렸습니다.', 'is-ok');
       } else {
         phpPassInput.value = '';
-        phpPassInput.placeholder = '유효하지 않은 패스 코드';
+        showPhpFeedback('유효하지 않은 패스 코드입니다. 리틀리 결제 직후 안내된 코드를 입력해 주세요.', 'is-warn');
         phpPassInput.focus();
       }
     });
@@ -589,6 +735,7 @@
       await navigator.clipboard.writeText(fullAdapterCode);
       const prev = btnCopyPhpPatch.textContent;
       btnCopyPhpPatch.textContent = '복사 완료';
+      showPhpFeedback('ow_kcp_curl_adapter.php 전체 소스가 클립보드에 복사되었습니다.', 'is-ok');
       setTimeout(() => { btnCopyPhpPatch.textContent = prev; }, 1600);
     });
 
@@ -600,11 +747,12 @@
       a.download = 'ow_kcp_curl_adapter.php';
       a.click();
       URL.revokeObjectURL(a.href);
+      showPhpFeedback('ow_kcp_curl_adapter.php 다운로드가 완료되었습니다.', 'is-ok');
     });
 
-    if (isPro) {
-      phpGateOverlay.style.display = 'none';
-    }
+    /* Pre-populate demo audit on load so developers immediately see line-level detection */
+    legacyPhpInput.value = samplePhp;
+    runAudit(true);
   </script>
 </body>
 </html>
