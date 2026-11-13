@@ -11,7 +11,8 @@ import { fileURLToPath } from "node:url";
  */
 export function scanHtmlForLegacyMap(html) {
   const issues = [];
-  const strippedInlineScripts = html.replace(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/gi, "");
+  const withoutTextareas = String(html || "").replace(/<textarea\b[^>]*>[\s\S]*?<\/textarea>/gi, "");
+  const strippedInlineScripts = withoutTextareas.replace(/<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/gi, "");
   const scriptSrcs = [...strippedInlineScripts.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)]
     .map((m) => m[1])
     .filter((src) => !/\/postcode\//i.test(src));
@@ -84,7 +85,11 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
   const arg1 = process.argv[2];
   if (!arg1) {
     const sample = `<script src="http://dapi.kakao.com/v2/maps/sdk.js"></script><script src="//apis.daum.net/maps/maps3.js"></script>`;
-    console.log(JSON.stringify({ selfTest: true, detected: scanHtmlForLegacyMap(sample) }));
+    const textareaSafe = `<textarea><script src="http://apis.daum.net/maps/maps3.js"></script></textarea>`;
+    console.log(JSON.stringify({
+      selfTest: scanHtmlForLegacyMap(textareaSafe).length === 0,
+      detected: scanHtmlForLegacyMap(sample)
+    }));
     process.exit(0);
   }
   if (arg1 === "--batch") {

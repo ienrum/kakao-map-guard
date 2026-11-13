@@ -4,7 +4,7 @@
 
 ## 주요 제품 및 무료 양식·복구 가이드
 
-- [6대 마켓 발주서 3초 통합기](https://ienrum.github.io/kakao-map-guard/seller-converter/): 스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24, 오늘의집, 아임웹, 톡스토어 주문 엑셀·CSV(EUC-KR 호환) 및 암호 엑셀 Ctrl+V 표를 합포장 병합하고 7종 택배·도매 시트로 저장 (회당 5건 무료).
+- [6대 마켓 발주서 3초 통합기](https://ienrum.github.io/kakao-map-guard/seller-converter/): 스마트스토어, 쿠팡, 11번가, G마켓, 옥션, 카페24, 오늘의집, 아임웹, 톡스토어 주문 엑셀·CSV(EUC-KR 호환) 및 암호 엑셀 Ctrl+V 표를 합포장 병합하고 7종 택배·도매 시트, 품목·옵션별 창고 피킹 총량 검수표(A4 인쇄·엑셀), 오후 운송장 마켓 역변환 시트로 저장 (회당 5건 무료).
 - [스마트스토어 암호 엑셀 → CJ 로이스파셀(LOIS Parcel)·택배 양식 3초 변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/smartstore-lois-parcel/): 재다운로드 없는 Ctrl+V 붙여넣기 변환 브릿지 및 050 안심번호 중복 주문 성명+주소 자동 합포장 해결 안내.
 - [쿠팡 윙(Wing) 발주서 분리주소 병합·050 합포장 및 스마트스토어 통합 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/coupang-wing-bundle/): 쿠팡 수취인 주소+상세주소 자동 결합, 구매수(수량) 정규화, 시간차 추가주문 050 안심번호 합포장 및 취소·반품 행 자동 제외 브릿지.
 - [도매매·오너클랜·도매꾹 위탁판매 대량발주 엑셀 3초 자동 변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/domeme-ownerclan-wholesale/): 스마트스토어 암호 엑셀 Ctrl+V 및 쿠팡 분리주소를 로컬 메모리에서 050 합포장하여 도매처 위탁발주 표준 엑셀(.xlsx)로 변환하는 브릿지.

@@ -365,6 +365,50 @@
               </div>
               <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>
 
+              <!-- 4.5 Warehouse Picking & SKU Quantity Summary (Matches "주문 통합관리 / 쇼핑몰 통합관리" Intent) -->
+              <details id="pickingSummaryPanel" class="ow-faq-item" style="margin-top:16px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-strong);border-radius:var(--ow-radius-sm);">
+                <summary class="ow-faq-summary" style="padding:12px 14px;cursor:pointer;">
+                  <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span class="ow-chip ow-chip-ok">창고 검수</span>
+                    <strong style="font-size:0.875rem;color:var(--ow-text-primary);">품목·옵션별 출고 피킹 총량 자동 집계표 (포장 누락 방지 체크리스트 인쇄 · 엑셀)</strong>
+                    <span class="ow-mono" style="font-size:0.75rem;color:var(--ow-text-muted);" id="pickingSummaryBadge">0개 품목</span>
+                  </span>
+                  <span class="ow-mono" style="font-weight:700;color:var(--ow-action-primary);">열기 +</span>
+                </summary>
+                <div class="ow-faq-body" style="padding:14px;border-top:1px dashed var(--ow-border-strong);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                    <span class="ow-fine">투입된 6대 마켓 주문에서 동일 상품·옵션 수량을 자동 합산해 오늘 선반에서 꺼낼 총수량과 주문건수를 즉시 보여줍니다.</span>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                      <button type="button" class="ow-btn ow-btn-secondary" id="btnPrintPicking" style="min-height:36px;padding:6px 12px;font-size:0.8125rem;">A4 검수표 인쇄</button>
+                      <button type="button" class="ow-btn ow-btn-primary" id="btnDownloadPickingXlsx" style="min-height:36px;padding:6px 14px;font-size:0.8125rem;">피킹 총량표(.xlsx) 저장</button>
+                    </div>
+                  </div>
+                  <div class="ow-ledger-sheet">
+                    <div class="ow-table-wrap">
+                      <table class="ow-table" aria-label="품목 및 옵션별 피킹 총량 집계표">
+                        <thead>
+                          <tr>
+                            <th>순번</th>
+                            <th>상품명 · 옵션 규격</th>
+                            <th>총 출고수량</th>
+                            <th>주문건수</th>
+                            <th>발생 마켓</th>
+                          </tr>
+                        </thead>
+                        <tbody id="pickingPreviewBody">
+                          <tr>
+                            <td colspan="5" style="text-align:center;color:var(--ow-text-muted);padding:14px 10px;font-size:0.78125rem;">
+                              주문서를 넣으면 품목·옵션별 총 출고수량이 자동 집계됩니다.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="ow-inline-feedback" id="pickingFeedback" role="status" aria-live="polite"></div>
+                </div>
+              </details>
+
               <!-- 5. Afternoon Waybill Tracking Reverse-Splitter (Closes the Morning-to-Afternoon Loop) -->
               <details id="trackingSplitPanel" class="ow-faq-item" style="margin-top:16px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-strong);border-radius:var(--ow-radius-sm);">
                 <summary class="ow-faq-summary" style="padding:12px 14px;cursor:pointer;">
@@ -1409,6 +1453,7 @@
           convStep2.className = 'ow-step-pill';
           convStep3.className = 'ow-step-pill';
           previewBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:24px 12px;font-size:0.8125rem;">파일을 놓거나 <strong>Ctrl+V</strong> 붙여넣기 또는 <strong>[샘플 9건 시연]</strong>을 눌러 보세요.</td></tr>';
+          if (typeof renderPickingSummary === 'function') renderPickingSummary();
           return;
         }
 
@@ -1476,6 +1521,7 @@
           }
           return rowHtml;
         }).join('');
+        if (typeof renderPickingSummary === 'function') renderPickingSummary();
       }
 
       var seenExactKeys = {};
@@ -1951,6 +1997,103 @@
         }
       });
 
+      var pickingSummaryPanel = document.getElementById('pickingSummaryPanel');
+      var pickingSummaryBadge = document.getElementById('pickingSummaryBadge');
+      var pickingPreviewBody = document.getElementById('pickingPreviewBody');
+      var btnPrintPicking = document.getElementById('btnPrintPicking');
+      var btnDownloadPickingXlsx = document.getElementById('btnDownloadPickingXlsx');
+      var pickingFeedback = document.getElementById('pickingFeedback');
+
+      function computePickingSummary() {
+        var map = {};
+        normalizedOrders.forEach(function(r) {
+          var item = String(r['상품및옵션'] || '').trim();
+          if (!item) return;
+          var q = parseInt(r['수량'], 10) || 1;
+          var m = String(r['마켓구분'] || '오픈마켓').trim();
+          if (!map[item]) map[item] = { item: item, totalQty: 0, orderCount: 0, markets: {} };
+          map[item].totalQty += q;
+          map[item].orderCount += 1;
+          if (m) map[item].markets[m] = true;
+        });
+        return Object.keys(map).map(function(k) {
+          var e = map[k];
+          return { item: e.item, totalQty: e.totalQty, orderCount: e.orderCount, markets: Object.keys(e.markets).join(', ') };
+        }).sort(function(a, b) {
+          return (b.totalQty - a.totalQty) || a.item.localeCompare(b.item, 'ko');
+        });
+      }
+
+      function renderPickingSummary() {
+        var list = computePickingSummary();
+        var sumUnits = list.reduce(function(acc, r) { return acc + r.totalQty; }, 0);
+        if (pickingSummaryBadge) {
+          pickingSummaryBadge.textContent = list.length > 0 ? (list.length + '개 품목 · 총 ' + sumUnits + '개 출고') : '0개 품목';
+        }
+        if (btnPrintPicking) btnPrintPicking.disabled = list.length === 0;
+        if (btnDownloadPickingXlsx) btnDownloadPickingXlsx.disabled = list.length === 0;
+        if (!pickingPreviewBody) return;
+        if (list.length === 0) {
+          pickingPreviewBody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ow-text-muted);padding:14px 10px;font-size:0.78125rem;">주문서를 넣으면 품목·옵션별 총 출고수량이 자동 집계됩니다.</td></tr>';
+          return;
+        }
+        pickingPreviewBody.innerHTML = list.slice(0, 6).map(function(r, idx) {
+          var locked = !isPro && idx >= 5;
+          return '<tr style="' + (locked ? 'opacity:0.55;' : '') + '">' +
+            '<td class="ow-mono">' + (idx + 1) + '</td>' +
+            '<td style="font-weight:700;">' + escapeHtml(r.item) + '</td>' +
+            '<td class="ow-tnum" style="font-weight:800;color:var(--ow-action-primary);">' + r.totalQty + '개</td>' +
+            '<td class="ow-tnum">' + r.orderCount + '건</td>' +
+            '<td><span class="ow-fine">' + escapeHtml(r.markets) + '</span></td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      if (btnDownloadPickingXlsx) {
+        btnDownloadPickingXlsx.addEventListener('click', function() {
+          var list = computePickingSummary();
+          if (!list.length) return;
+          var sliced = isPro ? list : list.slice(0, 5);
+          var outRows = sliced.map(function(r, idx) {
+            return {
+              '순번': idx + 1,
+              '검수체크': '□',
+              '상품명_옵션규격': r.item,
+              '총출고수량': r.totalQty,
+              '주문건수': r.orderCount,
+              '발생마켓': r.markets
+            };
+          });
+          var ws = XLSX.utils.json_to_sheet(outRows);
+          var wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, '창고피킹총량표');
+          XLSX.writeFile(wb, '오커웍스_창고피킹총량표_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5품목') + '.xlsx');
+          if (pickingFeedback) {
+            pickingFeedback.className = 'ow-inline-feedback is-visible ' + (!isPro && list.length > 5 ? 'is-warn' : 'is-ok');
+            pickingFeedback.innerHTML = (!isPro && list.length > 5)
+              ? ('무료 5개 품목 저장 완료 — 나머지 <strong>' + (list.length - 5) + '개 품목</strong> 포함 전체 피킹표는 <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick(\'https://litt.ly/ohker\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.')
+              : ('창고 피킹 총량표(' + outRows.length + '개 품목) 엑셀 다운로드 완료!');
+          }
+        });
+      }
+
+      if (btnPrintPicking) {
+        btnPrintPicking.addEventListener('click', function() {
+          var list = computePickingSummary();
+          if (!list.length) return;
+          var sliced = isPro ? list : list.slice(0, 5);
+          var stamp = new Date().toISOString().slice(0, 10);
+          var trs = sliced.map(function(r, idx) {
+            return '<tr><td style="text-align:center;">□</td><td style="text-align:center;">' + (idx + 1) + '</td><td><strong>' + escapeHtml(r.item) + '</strong></td><td style="text-align:right;font-weight:700;">' + r.totalQty + '개</td><td style="text-align:right;">' + r.orderCount + '건</td><td>' + escapeHtml(r.markets) + '</td></tr>';
+          }).join('');
+          var note = (!isPro && list.length > 5) ? ('<p style="color:#b45309;font-size:12px;">※ 무료 체험은 상위 5개 품목까지 인쇄됩니다. (전체 ' + list.length + '개 품목 해제는 오커 웍스 패스 적용)</p>') : '';
+          var w = window.open('', '_blank', 'width=820,height=720');
+          if (!w) return;
+          w.document.write('<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>창고 출고 피킹 검수표 ' + stamp + '</title><style>body{font-family:sans-serif;padding:24px;color:#111}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #ccc;padding:8px 10px;font-size:13px}th{background:#f5f5f4}</style></head><body><h2 style="margin:0 0 6px;">창고 출고 피킹·검수 총량 집계표 (' + stamp + ')</h2><div style="font-size:13px;color:#555;">오커 웍스 로컬 생성 (서버 전송 0 Byte)</div><table><thead><tr><th>검수</th><th>순번</th><th>상품명 · 옵션</th><th>총수량</th><th>주문건수</th><th>마켓</th></tr></thead><tbody>' + trs + '</tbody></table>' + note + '<script>setTimeout(function(){window.print();},150);<\/script></body></html>');
+          w.document.close();
+        });
+      }
+
       btnApplyPass.addEventListener('click', function() {
         var code = (passInput.value || '').trim().toUpperCase();
         if (code === VALID_PASS) {
@@ -1958,7 +2101,8 @@
           try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
           updateLicenseUI();
           renderTrackPreview();
-          showFeedback('무제한 패스가 인증되었습니다. 발주 합포장 및 송장 역변환 전체 행을 저장할 수 있습니다.', 'is-ok');
+          renderPickingSummary();
+          showFeedback('무제한 패스가 인증되었습니다. 발주 합포장, 창고 피킹표, 송장 역변환 전체 행을 저장할 수 있습니다.', 'is-ok');
         } else {
           showFeedback('패스 코드를 확인해 주세요. 결제 완료 화면의 코드를 입력하면 즉시 해제됩니다.', 'is-warn');
           passInput.focus();
@@ -2030,6 +2174,12 @@
             if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
             if (pasteInput) pasteInput.focus();
           }, 80);
+        }
+        if ((params.get('mode') === 'picking' || window.location.hash === '#pickingSummaryPanel') && pickingSummaryPanel) {
+          pickingSummaryPanel.open = true;
+          setTimeout(function() {
+            pickingSummaryPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 90);
         }
         if ((params.get('mode') === 'split' || window.location.hash === '#trackingSplitPanel') && trackingSplitPanel) {
           trackingSplitPanel.open = true;

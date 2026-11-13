@@ -253,6 +253,32 @@ export function consolidateBundles(rows) {
   return { rows: out.map((r, i) => ({ ...r, seq: i + 1 })), savedWaybills, savedFeeKrw: savedWaybills * 3000 };
 }
 
+export function summarizePickingList(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    const itemName = String(r.item || r["상품및옵션"] || "").trim();
+    if (!itemName) continue;
+    const qty = Number.parseInt(String(r.qty || r["수량"] || "1"), 10) || 1;
+    const market = String(r.market || r["마켓구분"] || "오픈마켓").trim();
+    if (!map.has(itemName)) {
+      map.set(itemName, { item: itemName, totalQty: 0, orderCount: 0, markets: new Set() });
+    }
+    const entry = map.get(itemName);
+    entry.totalQty += qty;
+    entry.orderCount += 1;
+    if (market) entry.markets.add(market);
+  }
+  return [...map.values()]
+    .sort((a, b) => b.totalQty - a.totalQty || a.item.localeCompare(b.item, "ko"))
+    .map((e, idx) => ({
+      seq: idx + 1,
+      item: e.item,
+      totalQty: e.totalQty,
+      orderCount: e.orderCount,
+      markets: [...e.markets].join(", "),
+    }));
+}
+
 export function formatRowsByPreset(rows, preset = "standard") {
   return rows.map((r) => {
     const itemWithQty = r.qty > 1 && !r.item.includes("(x") ? `${r.item} (${r.qty}개)` : r.item;
@@ -508,7 +534,9 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
 
   const parsedNaver = normalizeOrders(sampleSmartstoreTsv);
   const parsed11st = normalizeOrders(sample11stCsv);
-  const bundled = consolidateBundles([...parsedNaver, ...parsed11st]);
+  const allParsed = [...parsedNaver, ...parsed11st];
+  const bundled = consolidateBundles(allParsed);
+  const pickingList = summarizePickingList(allParsed);
 
   // 3) CJ 로이스파셀 출력 운송장 엑셀(합포장 콤마 병합 주문번호 포함) → 마켓별 발송처리 역변환 검증
   const sampleLoisTrackingTsv = [
@@ -532,6 +560,7 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) {
     [splitRows.length === 3 && splitRows[0].waybillNo === "651299103381", "합포장 운송장 주문번호 자동 분리 및 숫자 정규화"],
     [smartstoreUpload.length === 1 && smartstoreUpload[0]["상품주문번호"] === "20261113884120", "스마트스토어 발송처리 양식 자동 추출"],
     [coupangUpload.length === 1 && coupangUpload[0]["묶음배송번호"] === "3100948271055", "쿠팡 윙 운송장 등록 양식 자동 추출"],
+    [pickingList.length === 3 && pickingList[0].item === "무소음 키보드" && pickingList[0].totalQty === 2, "품목·옵션별 창고 피킹 총량 집계 검증"],
   ];
 
   const failed = assertions.filter(([ok]) => !ok).map(([, msg]) => msg);
