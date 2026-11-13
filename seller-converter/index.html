@@ -356,10 +356,11 @@
 
               <!-- Pass Unlock Bar -->
               <div class="ow-unlock-bar" style="margin-top:14px;">
-                <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">무제한 패스 코드 해제</label>
+                <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">무제한 패스 코드 해제 <span style="font-weight:400;opacity:0.85;">(결제 완료 화면에 1초 즉시 표시)</span></label>
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                   <input type="text" id="passInput" class="ow-pass-input" placeholder="패스 코드 입력 (예: PASS-...)" />
                   <button type="button" class="ow-btn ow-btn-secondary" id="btnApplyPass" style="padding:8px 14px;min-height:38px;">적용</button>
+                  <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="padding:8px 14px;min-height:38px;">패스 발급 (4,900원 →)</a>
                 </div>
               </div>
               <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>

@@ -184,7 +184,7 @@
               진단 중...
             </div>
 
-            <a class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../#workbench">추출된 좌표로 최신 v2 + 폴백 코드 생성하기 →</a>
+            <a id="btnJumpWorkbench" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?builder=gnuboard#workbench">추출된 좌표로 최신 v2 + 폴백 코드 생성하기 →</a>
           </div>
         </div>
       </div>
@@ -290,13 +290,13 @@
           return;
         }
         var findings = [];
-        if (/apis\.daum\.net/i.test(raw)) findings.push('구형 apis.daum.net 종료 대상 호출');
-        if (/root_daum_roughmap|roughmapLander/i.test(raw)) findings.push('구형 다음 약도 로더(roughmap) 의존');
-        if (/http:\/\/(apis\.daum|dapi\.kakao|t1\.daumcdn|map)/i.test(raw)) findings.push('SSL 사이트 혼합 콘텐츠(http://) 차단 위험');
+        if (/apis\.daum\.net|dmaps\.daum\.net/i.test(raw)) findings.push('구형 daum.net 종료 대상 호출');
+        if (/root_daum_roughmap|roughmapLander|roughmapLoader|daum\.roughmap/i.test(raw)) findings.push('구형 다음 약도 로더(roughmap) 의존');
+        if (/http:\/\/(apis\.daum|dmaps\.daum|dapi\.kakao|t1\.daumcdn|map)/i.test(raw)) findings.push('SSL 사이트 혼합 콘텐츠(http://) 차단 위험');
         if (/daum\.maps/i.test(raw) && !/autoload\s*=\s*false/i.test(raw)) findings.push('동기식 로더(탭·반응형 백지 유발 가능)');
 
         var coord = raw.match(/LatLng\(\s*([0-9]{2}\.[0-9]+)\s*,\s*([0-9]{2,3}\.[0-9]+)\s*\)/i);
-        var coordText = coord ? ('기존 좌표 감지됨: ' + coord[1] + ', ' + coord[2]) : '좌표 미포함 약도(주소·매장명 기준 변환 가능)';
+        var coordText = coord ? ('기존 좌표 감지됨: ' + coord[1] + ', ' + coord[2]) : '좌표 미포함 약도(도로명 주소 자동 지오코딩 변환 지원)';
 
         if (findings.length > 0) {
           badge.className = 'ow-chip ow-chip-crit';
@@ -310,6 +310,15 @@
       }
 
       input.addEventListener('input', analyze);
+      var jumpBtn = document.getElementById('btnJumpWorkbench');
+      if (jumpBtn) {
+        jumpBtn.addEventListener('click', function() {
+          try {
+            var v = (input.value || '').trim();
+            if (v) sessionStorage.setItem('ow_pending_map_html', v);
+          } catch (e) {}
+        });
+      }
       analyze();
     })();
   </script>
