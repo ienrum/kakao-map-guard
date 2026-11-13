@@ -105,27 +105,30 @@
     </div>
   </div>
 
-  <!-- Sticky Header + GPU Scroll Progress -->
+  <!-- Sticky Studio Header with Perforated Ticket Divider -->
   <header class="ow-header">
     <div class="ow-header-inner">
-      <a class="ow-brand" href="./">
-        <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
-        <span class="ow-brand-text">
-          <span class="ow-brand-name">오커 웍스</span>
-          <span class="ow-brand-sub">OHKER WORKS</span>
-        </span>
-      </a>
+      <div class="ow-brand-group">
+        <a class="ow-brand" href="./">
+          <img class="ow-brand-mark" src="../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+          <span class="ow-brand-text">
+            <span class="ow-brand-name">오커 웍스 출고 스튜디오</span>
+            <span class="ow-brand-sub">OHKER PARCEL STUDIO</span>
+          </span>
+        </a>
+        <span class="ow-ticket-notch-sep" aria-hidden="true"></span>
+      </div>
 
       <nav class="ow-suite-nav" aria-label="도구 전환">
-        <a class="ow-suite-link" href="./" aria-current="page">6대 마켓 발주서 통합</a>
+        <a class="ow-suite-link" href="./" aria-current="page">발주서 3초 통합</a>
         <a class="ow-suite-link" href="sabangnet-alternative/">ERP 비용 비교</a>
-        <a class="ow-suite-link" href="../">카카오 지도 코드 복구</a>
-        <a class="ow-suite-link" href="../kcp-exec-patch/">PHP exec() 결제 복구</a>
+        <a class="ow-suite-link" href="../">카카오맵 복구</a>
+        <a class="ow-suite-link" href="../kcp-exec-patch/">PHP exec 복구</a>
       </nav>
 
       <div class="ow-header-actions">
-        <a class="ow-btn ow-btn-subtle" href="#story">시각화 보기</a>
-        <a class="ow-btn ow-btn-primary" href="#offer">월 4,900원 시작</a>
+        <a class="ow-btn ow-btn-secondary" href="#offer">월 4,900원 패스</a>
+        <button type="button" class="ow-btn ow-btn-primary" id="btnHeaderPaste">주문서 붙여넣기 (Ctrl+V)</button>
       </div>
     </div>
     <div class="ow-scroll-progress" aria-hidden="true">
@@ -135,170 +138,231 @@
 
   <main>
     <!-- =========================================================
-         CHAPTER 1 — HOOK & LIVE BAIT WORKBENCH
+         CHAPTER 1A — CONCEPT C STUDIO HERO & LIVE WAYBILL TICKET
          ========================================================= -->
-    <section class="ow-hero-section" id="hook">
+    <section class="ow-studio-hero" id="hook">
       <div class="ow-container">
-        <div class="ow-workbench-grid">
-          <!-- Left: Crisp Minimal Hook + Key Visual Metrics -->
+        <div class="ow-studio-hero-grid">
+          <!-- Left: Editorial Headline + Cost Comparison + Primary Paste CTA -->
           <div>
-            <h1 class="ow-display-title">흩어진 6대 마켓 주문 엑셀, 3초 만에 1개로</h1>
-            <p class="ow-lead">
-              복붙 없이 파일만 놓으세요. 택배·도매 표준 양식으로 즉시 합쳐집니다.
-            </p>
+            <h1 class="ow-studio-headline">매일 아침 25분 엑셀 복붙,<br />이제 3초 만에 송장 뽑으세요</h1>
 
-            <div class="ow-hero-metrics">
-              <div class="ow-metric-tile">
-                <span class="ow-metric-val">3초</span>
-                <span class="ow-metric-lbl">6개 마켓 병합 속도</span>
-              </div>
-              <div class="ow-metric-tile">
-                <span class="ow-metric-val">0 Byte</span>
-                <span class="ow-metric-lbl">고객 정보 외부 전송</span>
-              </div>
-              <div class="ow-metric-tile">
-                <span class="ow-metric-val">5건 무료</span>
-                <span class="ow-metric-lbl">회원가입·설치 없음</span>
-              </div>
+            <div class="ow-compare-pill">
+              <span>사방넷 월 5만원 vs 오커 웍스 월 4,900원</span>
+              <span style="color:var(--ow-border-strong);">|</span>
+              <span style="color:var(--ow-p-emerald-800);">첫 5건 무료</span>
             </div>
 
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-              <button type="button" class="ow-btn ow-btn-primary" id="btnHeroSample">1초 샘플로 바로 시연하기</button>
-              <a class="ow-btn ow-btn-secondary" href="#story">작동 원리 스크롤 보기</a>
+            <p class="ow-lead">
+              암호 걸린 스마트스토어·쿠팡 엑셀도 재다운로드 없이 화면 그대로 <strong>Ctrl+V</strong> 하세요. 050 안심번호가 다른 동일 수취인 주문까지 자동 합포장해 택배사 양식 1개로 만들어 드립니다.
+            </p>
+
+            <div class="ow-hero-cta-row">
+              <button type="button" class="ow-btn ow-btn-primary ow-btn-lg" id="btnHeroPasteJump">주문서 붙여넣기 (Ctrl+V)</button>
+              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroSample">합포장 시연 바로 보기</button>
             </div>
 
             <p class="ow-fine" style="margin:0;">
-              지원 마켓: 스마트스토어 · 쿠팡 · 11번가 · G마켓 · 옥션 · 카페24 (.xlsx, .xls, .csv)
+              지원 마켓: 스마트스토어 · 쿠팡 · 11번가 · G마켓 · 옥션 · 카페24 · 오늘의집 · 아임웹 (.xlsx, .xls, .csv, Ctrl+V)
             </p>
           </div>
 
-          <!-- Right: Interactive Bait Workbench -->
-          <div class="ow-console" aria-labelledby="converter-console-title">
-            <div class="ow-console-header">
-              <span class="ow-console-title" id="converter-console-title">
-                <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                실시간 통합 워크벤치
+          <!-- Right: Tactile Perforated Waybill Ticket Card (Live Synced) -->
+          <div class="ow-waybill-ticket" aria-label="실시간 운송장 합포장 티켓 미리보기">
+            <svg class="ow-waybill-edge ow-waybill-edge-top" viewBox="0 0 440 10" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,0 L440,0 L440,10 L429,2 L418,10 L407,2 L396,10 L385,2 L374,10 L363,2 L352,10 L341,2 L330,10 L319,2 L308,10 L297,2 L286,10 L275,2 L264,10 L253,2 L242,10 L231,2 L220,10 L209,2 L198,10 L187,2 L176,10 L165,2 L154,10 L143,2 L132,10 L121,2 L110,10 L99,2 L88,10 L77,2 L66,10 L55,2 L44,10 L33,2 L22,10 L11,2 L0,10 Z" fill="#FAF8F5" stroke="#D6D3D1" stroke-width="1"/>
+            </svg>
+
+            <svg class="ow-waybill-barcode" viewBox="0 0 320 54" role="img" aria-label="운송장 바코드 그래픽">
+              <rect x="8" y="4" width="4" height="46" fill="currentColor"/><rect x="16" y="4" width="2" height="46" fill="currentColor"/><rect x="22" y="4" width="6" height="46" fill="currentColor"/><rect x="32" y="4" width="2" height="46" fill="currentColor"/><rect x="38" y="4" width="4" height="46" fill="currentColor"/><rect x="46" y="4" width="8" height="46" fill="currentColor"/><rect x="58" y="4" width="2" height="46" fill="currentColor"/><rect x="64" y="4" width="4" height="46" fill="currentColor"/><rect x="72" y="4" width="6" height="46" fill="currentColor"/><rect x="82" y="4" width="2" height="46" fill="currentColor"/><rect x="88" y="4" width="4" height="46" fill="currentColor"/><rect x="96" y="4" width="2" height="46" fill="currentColor"/><rect x="102" y="4" width="8" height="46" fill="currentColor"/><rect x="114" y="4" width="4" height="46" fill="currentColor"/><rect x="122" y="4" width="2" height="46" fill="currentColor"/><rect x="128" y="4" width="6" height="46" fill="currentColor"/><rect x="138" y="4" width="4" height="46" fill="currentColor"/><rect x="146" y="4" width="2" height="46" fill="currentColor"/><rect x="152" y="4" width="8" height="46" fill="currentColor"/><rect x="164" y="4" width="2" height="46" fill="currentColor"/><rect x="170" y="4" width="4" height="46" fill="currentColor"/><rect x="178" y="4" width="6" height="46" fill="currentColor"/><rect x="188" y="4" width="2" height="46" fill="currentColor"/><rect x="194" y="4" width="4" height="46" fill="currentColor"/><rect x="202" y="4" width="6" height="46" fill="currentColor"/><rect x="212" y="4" width="2" height="46" fill="currentColor"/><rect x="218" y="4" width="8" height="46" fill="currentColor"/><rect x="230" y="4" width="4" height="46" fill="currentColor"/><rect x="238" y="4" width="2" height="46" fill="currentColor"/><rect x="244" y="4" width="6" height="46" fill="currentColor"/><rect x="254" y="4" width="2" height="46" fill="currentColor"/><rect x="260" y="4" width="4" height="46" fill="currentColor"/><rect x="268" y="4" width="8" height="46" fill="currentColor"/><rect x="280" y="4" width="2" height="46" fill="currentColor"/><rect x="286" y="4" width="6" height="46" fill="currentColor"/><rect x="296" y="4" width="2" height="46" fill="currentColor"/><rect x="302" y="4" width="4" height="46" fill="currentColor"/><rect x="310" y="4" width="3" height="46" fill="currentColor"/>
+            </svg>
+
+            <div class="ow-waybill-title">실시간 운송장 합포장 티켓</div>
+            <div class="ow-waybill-recipient" id="ticketRecipient">받는분 : 김지훈 (06236)</div>
+            <div class="ow-waybill-saving-pill" id="ticketSavingPill">050 안심번호 2건 자동 합포장 완료 · 택배비 3,000원 절약</div>
+
+            <div class="ow-waybill-meta-row">
+              <span id="ticketSpecName">CJ대한통운 로이스파셀 규격</span>
+              <span class="ow-mono" style="font-size:0.75rem;color:var(--ow-p-emerald-800);" id="ticketStatusTag">외부 전송 0 Byte</span>
+            </div>
+
+            <svg class="ow-waybill-edge ow-waybill-edge-bottom" viewBox="0 0 440 10" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,10 L440,10 L440,0 L429,8 L418,0 L407,8 L396,0 L385,8 L374,0 L363,8 L352,0 L341,8 L330,0 L319,8 L308,0 L297,8 L286,0 L275,8 L264,0 L253,8 L242,0 L231,8 L220,0 L209,8 L198,0 L187,8 L176,0 L165,8 L154,0 L143,8 L132,0 L121,8 L110,0 L99,8 L88,0 L77,8 L66,0 L55,8 L44,0 L33,8 L22,0 L11,8 L0,0 Z" fill="#FAF8F5" stroke="#D6D3D1" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         CHAPTER 1B — SCROLL DOWN: CONCEPT A CENTERED SHOWCASE & WORKBENCH
+         ========================================================= -->
+    <section class="ow-showcase-section" id="workbench">
+      <div class="ow-container">
+        <div class="ow-showcase-wrap">
+          <div class="ow-showcase-head">
+            <h2 class="ow-showcase-title">흩어진 6대 마켓 발주서,<br />놓는 순간 택배 양식 끝</h2>
+            <div style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;">
+              <span class="ow-trust-pill">
+                <span class="ow-pulse-dot" aria-hidden="true"></span>
+                <span>내 PC 로컬 처리 · 서버 전송 0 Byte</span>
               </span>
               <span class="ow-chip ow-chip-ok" id="licenseBadge">무료 5건 활성</span>
             </div>
+          </div>
 
-            <div class="ow-console-body">
-              <div class="ow-step-strip" aria-label="진행 단계">
-                <div class="ow-step-pill is-current" id="convStep1"><span class="ow-mono">1</span><span>파일 투입</span></div>
-                <div class="ow-step-pill" id="convStep2"><span class="ow-mono">2</span><span>자동 매핑</span></div>
-                <div class="ow-step-pill" id="convStep3"><span class="ow-mono">3</span><span>엑셀 저장</span></div>
+          <!-- Physical Courier Folder Tabs (Synced with #exportPresetSelect) -->
+          <div class="ow-courier-tabs" role="tablist" aria-label="택배사 출고 양식 선택">
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="cj" aria-selected="true">CJ대한통운</button>
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="epost" aria-selected="false">우체국택배</button>
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="hanjin" aria-selected="false">한진택배</button>
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="lotte" aria-selected="false">롯데택배</button>
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="logen" aria-selected="false">로젠택배</button>
+            <button type="button" class="ow-courier-tab" role="tab" data-preset="wholesale" aria-selected="false">도매·통합</button>
+          </div>
+
+          <!-- Centered Concept A Workbench Sheet -->
+          <div class="ow-workbench-card" aria-labelledby="workbench-card-heading">
+            <span id="workbench-card-heading" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">실시간 6대 마켓 통합 및 택배 양식 변환기</span>
+
+            <!-- 1. Marketplace-to-Courier Visual Convergence Pipeline -->
+            <div class="ow-market-convergence" aria-label="지원 마켓 및 변환 대상 양식">
+              <div class="ow-market-badges">
+                <span class="ow-market-badge"><span class="ow-market-dot" style="background-color:var(--ow-p-emerald-800);">N</span>스마트스토어</span>
+                <span class="ow-market-badge"><span class="ow-market-dot" style="background-color:var(--ow-p-crimson-800);">C</span>쿠팡</span>
+                <span class="ow-market-badge"><span class="ow-market-dot" style="background-color:var(--ow-action-primary);">11</span>11번가</span>
+                <span class="ow-market-badge"><span class="ow-market-dot" style="background-color:var(--ow-p-amber-800);">G</span>G마켓·옥션</span>
+                <span class="ow-market-badge"><span class="ow-market-dot" style="background-color:var(--ow-p-obsidian-950);">24</span>카페24</span>
               </div>
+              <span class="ow-convergence-arrow" aria-hidden="true">
+                <svg class="ow-icon" style="width:22px;height:22px;" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+              </span>
+              <span class="ow-target-xlsx-badge">
+                <span class="ow-market-dot" style="background-color:var(--ow-p-emerald-800);">X</span>
+                <span id="targetXlsxName">CJ 로이스파셀 표준양식.xlsx</span>
+              </span>
+            </div>
 
-              <div class="ow-console-toolbar">
-                <div class="ow-preset-group">
-                  <button type="button" class="ow-preset-btn" id="btnSampleOrders">샘플 9건 불러오기</button>
-                  <button type="button" class="ow-preset-btn" id="btnTogglePaste" aria-expanded="false">암호 엑셀 Ctrl+V 붙여넣기</button>
-                  <button type="button" class="ow-preset-btn" id="btnResetOrders">초기화</button>
-                </div>
+            <!-- Step Progress Strip (Kept in DOM for state sync, visually compact) -->
+            <div class="ow-step-strip" aria-label="진행 단계" style="display:none;">
+              <div class="ow-step-pill is-current" id="convStep1"><span class="ow-mono">1</span><span>파일 투입 · Ctrl+V</span></div>
+              <div class="ow-step-pill" id="convStep2"><span class="ow-mono">2</span><span>050 자동 합포장</span></div>
+              <div class="ow-step-pill" id="convStep3"><span class="ow-mono">3</span><span>택배 양식 다운로드</span></div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="ow-console-toolbar" style="margin-bottom:10px;">
+              <div class="ow-preset-group">
+                <button type="button" class="ow-preset-btn" id="btnSampleOrders">샘플 9건 시연</button>
+                <button type="button" class="ow-preset-btn" id="btnTogglePaste" aria-expanded="false">암호 엑셀 Ctrl+V 입력창</button>
+                <button type="button" class="ow-preset-btn" id="btnResetOrders">초기화</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:0.75rem;font-weight:700;color:var(--ow-text-secondary);">
+                  <input type="checkbox" id="chkBundleMerge" checked style="accent-color:var(--ow-action-primary);width:15px;height:15px;cursor:pointer;" />
+                  <span>050·동일수취인 합포장 병합</span>
+                </label>
                 <span class="ow-console-meta" id="convTelemetry">외부 전송 0 B</span>
               </div>
+            </div>
 
-              <div id="pastePanel" style="display:none;margin-bottom:12px;padding:12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-bg-recessed);border:1px solid var(--ow-action-primary);">
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-                  <strong style="font-size:0.8125rem;color:var(--ow-text-primary);">암호 걸린 스마트스토어·쿠팡 엑셀 1초 붙여넣기</strong>
-                  <span class="ow-fine">엑셀에서 <span class="ow-mono">Ctrl+A → Ctrl+C</span> 후 아래 칸에 <span class="ow-mono">Ctrl+V</span></span>
-                </div>
-                <textarea id="pasteInput" rows="3" placeholder="열려 있는 엑셀 표 전체(제목줄 포함)를 복사해 여기에 붙여넣으세요. 암호 해제 재다운로드 없이 즉시 병합됩니다." style="width:100%;font-family:var(--ow-font-mono);font-size:0.75rem;padding:8px 10px;border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);background:#fff;color:var(--ow-text-primary);resize:vertical;"></textarea>
-                <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
-                  <button type="button" class="ow-btn ow-btn-primary" id="btnRunPaste" style="min-height:32px;padding:6px 14px;font-size:0.75rem;">붙여넣은 표 즉시 병합</button>
+            <!-- Clipboard Paste Panel -->
+            <div id="pastePanel" style="display:none;margin-bottom:12px;padding:12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-bg-recessed);border:1px solid var(--ow-action-primary);">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                <strong style="font-size:0.84375rem;color:var(--ow-text-primary);">암호 걸린 스마트스토어·쿠팡 엑셀 1초 붙여넣기</strong>
+                <span class="ow-fine">엑셀에서 <span class="ow-mono">Ctrl+A → Ctrl+C</span> 후 아래 칸에 <span class="ow-mono">Ctrl+V</span></span>
+              </div>
+              <textarea id="pasteInput" rows="3" placeholder="열려 있는 엑셀 표 전체(제목줄 포함)를 복사해 여기에 붙여넣으세요. 암호 해제 재다운로드 없이 즉시 병합됩니다." style="width:100%;font-family:var(--ow-font-mono);font-size:0.75rem;padding:9px 11px;border:1px solid var(--ow-border-strong);border-radius:var(--ow-radius-xs);background:#fff;color:var(--ow-text-primary);resize:vertical;"></textarea>
+              <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+                <button type="button" class="ow-btn ow-btn-primary" id="btnRunPaste" style="min-height:36px;padding:7px 16px;font-size:0.8125rem;">붙여넣은 표 즉시 병합</button>
+              </div>
+            </div>
+
+            <!-- 2. Wide Drag-and-Drop & Ctrl+V Bar -->
+            <div class="ow-dropzone" id="dropzone" tabindex="0" role="button" aria-label="마켓 주문 엑셀 또는 CSV 파일 선택" style="padding:16px 18px;">
+              <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv" style="display:none;" />
+              <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+                <svg class="ow-icon" style="width:20px;height:20px;color:var(--ow-action-primary);" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <strong style="font-size:0.9375rem;color:var(--ow-text-primary);">주문서 파일 드래그 앤 드롭 또는 화면에 바로 Ctrl+V 붙여넣기</strong>
+                <span class="ow-btn ow-btn-secondary" style="min-height:32px;padding:5px 12px;font-size:0.75rem;">파일 선택</span>
+              </div>
+            </div>
+
+            <!-- 3. Live Preview Summary + Table -->
+            <div id="resultPanel" style="margin-top:14px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <strong style="font-size:0.875rem;">출고 데이터 미리보기</strong>
+                  <span class="ow-mono" style="color:var(--ow-text-muted);" id="summaryCount">0건</span>
+                  <span class="ow-chip ow-chip-ok" id="bundleSavingBadge" style="display:none;">합포장 0건 절감</span>
+                  <span class="ow-chip ow-chip-neutral" id="demoModeBadge" style="display:none;">시연 예시 (내 파일 투입 시 자동 교체)</span>
                 </div>
               </div>
 
-              <div class="ow-dropzone" id="dropzone" tabindex="0" role="button" aria-label="마켓 주문 엑셀 또는 CSV 파일 선택">
-                <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv" style="display:none;" />
-                <svg class="ow-icon" style="width:24px;height:24px;color:var(--ow-action-primary);margin-bottom:6px;" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <div style="font-weight:700;font-size:0.9375rem;color:var(--ow-text-primary);margin-bottom:8px;">
-                  주문 파일 여러 개를 놓거나 화면에 바로 Ctrl+V 하세요
+              <div class="ow-ledger-sheet">
+                <div class="ow-table-wrap">
+                  <table class="ow-table" aria-label="통합 발주서 미리보기">
+                    <thead>
+                      <tr>
+                        <th>마켓</th>
+                        <th>수취인</th>
+                        <th>050 안심·연락처</th>
+                        <th>합포장 품목 / 옵션</th>
+                        <th>수량</th>
+                        <th>우편번호 · 배송지</th>
+                      </tr>
+                    </thead>
+                    <tbody id="previewBody">
+                      <tr>
+                        <td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:20px 12px;font-size:0.8125rem;">
+                          파일을 놓거나 <strong>[샘플 9건 시연]</strong>을 눌러 보세요.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <span class="ow-btn ow-btn-secondary" style="min-height:36px;padding:7px 14px;font-size:0.8125rem;">파일 직접 선택</span>
-                <div class="ow-fine" style="margin-top:8px;">* 암호 설정된 엑셀은 재다운로드 없이 엑셀 화면 복사 후 <strong>[암호 엑셀 Ctrl+V 붙여넣기]</strong>로 1초 투입</div>
               </div>
 
-              <div id="resultPanel" style="margin-top:16px;border-top:1px solid var(--ow-border-default);padding-top:14px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
-                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    <strong style="font-size:0.875rem;">통합 결과</strong>
-                    <span class="ow-mono" style="color:var(--ow-text-muted);" id="summaryCount">0건</span>
-                    <span class="ow-chip ow-chip-ok" id="bundleSavingBadge" style="display:none;">합포장 0건 절감</span>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    <button type="button" class="ow-btn ow-btn-secondary" id="btnDownloadCsv" disabled>CSV 저장</button>
-                    <button type="button" class="ow-btn ow-btn-primary" id="btnDownloadXlsx" disabled>엑셀(.xlsx) 저장</button>
-                  </div>
+              <!-- 4. Concept A Bottom Action Bar (Courier Selector + CSV + Prominent Burnt-Orange XLSX Download) -->
+              <div class="ow-workbench-actionbar">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <label for="exportPresetSelect" class="ow-fine" style="font-weight:700;color:var(--ow-text-secondary);white-space:nowrap;">택배 양식</label>
+                  <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);font-weight:600;min-width:214px;min-height:44px;padding:8px 12px;">
+                    <option value="cj" selected>CJ대한통운 로이스파셀·CNPlus</option>
+                    <option value="epost">우체국택배 계약소포 엑셀접수</option>
+                    <option value="hanjin">한진택배 H-Focus 일괄출고</option>
+                    <option value="lotte">롯데택배 알짜배기 운송장</option>
+                    <option value="logen">로젠택배 i-LOGEN 표준양식</option>
+                    <option value="wholesale">도매꾹·오너클랜 위탁발주서</option>
+                    <option value="standard">표준 통합발주서 (10열)</option>
+                  </select>
                 </div>
-
-                <!-- Export Preset & Bundle Consolidation Controls -->
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;background-color:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-xs);">
-                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    <label for="exportPresetSelect" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">출고 양식</label>
-                    <select id="exportPresetSelect" class="ow-pass-input" style="font-family:var(--ow-font-sans);min-width:206px;padding:6px 10px;">
-                      <option value="standard">표준 통합발주서 (10열)</option>
-                      <option value="cj">CJ대한통운 로이스파셀·CNPlus</option>
-                      <option value="epost">우체국택배 계약소포 엑셀접수</option>
-                      <option value="hanjin">한진택배 H-Focus 일괄출고</option>
-                      <option value="lotte">롯데택배 알짜배기 운송장</option>
-                      <option value="logen">로젠택배 i-LOGEN 표준양식</option>
-                      <option value="wholesale">도매꾹·오너클랜 위탁발주서</option>
-                    </select>
-                  </div>
-                  <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:0.75rem;font-weight:600;color:var(--ow-text-secondary);">
-                    <input type="checkbox" id="chkBundleMerge" checked style="accent-color:var(--ow-action-primary);width:15px;height:15px;cursor:pointer;" />
-                    <span>동일 수취인 합포장 자동 병합 (중복 택배비 방지)</span>
-                  </label>
-                </div>
-
-                <!-- Live Market Distribution Bar -->
-                <div class="ow-dist-box" id="marketDistBox" style="display:none;" aria-live="polite">
-                  <div class="ow-dist-bar" id="marketDistBar"></div>
-                  <div class="ow-dist-legend" id="marketDistLegend"></div>
-                </div>
-
-                <div id="limitNotice" style="display:none;margin-bottom:10px;padding:10px 12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.75rem;color:var(--ow-p-amber-800);">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-                    <span>무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
-                    <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
-                  </div>
-                </div>
-
-                <div class="ow-ledger-sheet">
-                  <div class="ow-table-wrap">
-                    <table class="ow-table" aria-label="통합 발주서 미리보기">
-                      <thead>
-                        <tr>
-                          <th>마켓</th>
-                          <th>수취인</th>
-                          <th>연락처</th>
-                          <th>상품 / 옵션</th>
-                          <th>수량</th>
-                          <th>배송지</th>
-                        </tr>
-                      </thead>
-                      <tbody id="previewBody">
-                        <tr>
-                          <td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:20px 12px;font-size:0.8125rem;">
-                            파일을 놓거나 <strong>[샘플 8건 불러오기]</strong>를 눌러 보세요.
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <!-- Pass Unlock Bar -->
-                <div class="ow-unlock-bar" style="margin-top:12px;">
-                  <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">패스 코드 해제</label>
-                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                    <input type="text" id="passInput" class="ow-pass-input" placeholder="패스 코드 입력" />
-                    <button type="button" class="ow-btn ow-btn-secondary" id="btnApplyPass" style="padding:8px 14px;min-height:38px;">적용</button>
-                  </div>
-                </div>
-                <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>
+                <button type="button" class="ow-btn ow-btn-secondary" id="btnDownloadCsv" disabled>CSV 저장</button>
+                <button type="button" class="ow-btn ow-btn-primary ow-btn-lg" id="btnDownloadXlsx" disabled>엑셀(.xlsx) 즉시 다운로드</button>
               </div>
+
+              <div id="limitNotice" style="display:none;margin-top:12px;padding:10px 12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.75rem;color:var(--ow-p-amber-800);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                  <span>무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
+                  <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
+                </div>
+              </div>
+
+              <!-- Live Market Distribution Bar -->
+              <div class="ow-dist-box" id="marketDistBox" style="display:none;margin-top:10px;margin-bottom:0;" aria-live="polite">
+                <div class="ow-dist-bar" id="marketDistBar"></div>
+                <div class="ow-dist-legend" id="marketDistLegend"></div>
+              </div>
+
+              <!-- Pass Unlock Bar -->
+              <div class="ow-unlock-bar" style="margin-top:14px;">
+                <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">무제한 패스 코드 해제</label>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <input type="text" id="passInput" class="ow-pass-input" placeholder="패스 코드 입력 (예: PASS-...)" />
+                  <button type="button" class="ow-btn ow-btn-secondary" id="btnApplyPass" style="padding:8px 14px;min-height:38px;">적용</button>
+                </div>
+              </div>
+              <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>
             </div>
           </div>
         </div>
@@ -377,12 +441,12 @@
               <!-- Animated Connector SVG -->
               <div style="text-align:center;">
                 <svg viewBox="0 0 88 80" style="width:88px;height:64px;display:block;margin:0 auto;" aria-hidden="true">
-                  <path d="M 6 20 L 82 40" stroke="#334155" stroke-width="2" fill="none" />
-                  <path d="M 6 40 L 82 40" stroke="#334155" stroke-width="2" fill="none" />
-                  <path d="M 6 60 L 82 40" stroke="#334155" stroke-width="2" fill="none" />
-                  <path class="ow-flow-path" d="M 6 20 L 82 40" stroke="#2563EB" stroke-width="2" fill="none" />
+                  <path d="M 6 20 L 82 40" stroke="#57534E" stroke-width="2" fill="none" />
+                  <path d="M 6 40 L 82 40" stroke="#57534E" stroke-width="2" fill="none" />
+                  <path d="M 6 60 L 82 40" stroke="#57534E" stroke-width="2" fill="none" />
+                  <path class="ow-flow-path" d="M 6 20 L 82 40" stroke="#EA580C" stroke-width="2" fill="none" />
                   <path class="ow-flow-path" d="M 6 40 L 82 40" stroke="#10B981" stroke-width="2" fill="none" />
-                  <path class="ow-flow-path" d="M 6 60 L 82 40" stroke="#2563EB" stroke-width="2" fill="none" />
+                  <path class="ow-flow-path" d="M 6 60 L 82 40" stroke="#EA580C" stroke-width="2" fill="none" />
                 </svg>
                 <span class="ow-fine-dark">자동 매핑</span>
               </div>
@@ -427,36 +491,36 @@
           <div class="ow-viz-stage" style="padding:24px;">
             <svg class="ow-pipeline-svg" viewBox="0 0 920 230" role="img" aria-label="외부 서버 업로드 방식과 내 PC 메모리 단독 처리 구조 비교 도식">
               <!-- Top Lane: Traditional Cloud Upload (Risk) -->
-              <rect x="16" y="18" width="200" height="72" rx="8" fill="#131F35" stroke="#334155" />
-              <text x="116" y="48" text-anchor="middle" fill="#CBD5E1" font-size="13" font-weight="600" font-family="Pretendard, sans-serif">일반 무료 웹 변환기</text>
-              <text x="116" y="68" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Pretendard, sans-serif">주문서 원격 업로드</text>
+              <rect x="16" y="18" width="200" height="72" rx="8" fill="#292524" stroke="#57534E" />
+              <text x="116" y="48" text-anchor="middle" fill="#D6D3D1" font-size="13" font-weight="600" font-family="Pretendard, sans-serif">일반 무료 웹 변환기</text>
+              <text x="116" y="68" text-anchor="middle" fill="#A8A29E" font-size="12" font-family="Pretendard, sans-serif">주문서 원격 업로드</text>
 
               <path d="M 216 54 L 356 54" stroke="#991B1B" stroke-width="2" stroke-dasharray="5 5" fill="none" />
-              <rect x="356" y="18" width="240" height="72" rx="8" fill="#131F35" stroke="#991B1B" />
+              <rect x="356" y="18" width="240" height="72" rx="8" fill="#292524" stroke="#991B1B" />
               <text x="476" y="48" text-anchor="middle" fill="#FECACA" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">외부 중계 서버 · DB 저장</text>
               <text x="476" y="68" text-anchor="middle" fill="#FECACA" font-size="12" font-family="Pretendard, sans-serif">고객 성명·전화·주소 유출 위험</text>
 
               <path d="M 596 54 L 700 54" stroke="#991B1B" stroke-width="2" stroke-dasharray="5 5" fill="none" />
-              <rect x="700" y="26" width="204" height="56" rx="8" fill="#0B1220" stroke="#991B1B" />
+              <rect x="700" y="26" width="204" height="56" rx="8" fill="#1C1917" stroke="#991B1B" />
               <text x="802" y="59" text-anchor="middle" fill="#FECACA" font-size="12" font-weight="600" font-family="Pretendard, sans-serif">오커 웍스는 이 경로를 원천 차단</text>
 
               <!-- Bottom Lane: Ohker Works Zero-Upload (Safe) -->
-              <rect x="16" y="132" width="200" height="80" rx="8" fill="#131F35" stroke="#1D4ED8" stroke-width="1.5" />
-              <text x="116" y="164" text-anchor="middle" fill="#F8FAFC" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">오커 웍스 로컬 엔진</text>
-              <text x="116" y="186" text-anchor="middle" fill="#DBEAFE" font-size="12" font-family="JetBrains Mono, monospace">6대 마켓 엑셀 드래그</text>
+              <rect x="16" y="132" width="200" height="80" rx="8" fill="#292524" stroke="#EA580C" stroke-width="1.5" />
+              <text x="116" y="164" text-anchor="middle" fill="#FAF8F5" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">오커 웍스 출고 스튜디오</text>
+              <text x="116" y="186" text-anchor="middle" fill="#FED7AA" font-size="12" font-family="JetBrains Mono, monospace">드래그 &amp; Ctrl+V 투입</text>
 
-              <path d="M 216 172 L 356 172" stroke="#334155" stroke-width="2.5" fill="none" />
-              <path class="ow-flow-path" d="M 216 172 L 356 172" stroke="#2563EB" stroke-width="2.5" fill="none" />
+              <path d="M 216 172 L 356 172" stroke="#57534E" stroke-width="2.5" fill="none" />
+              <path class="ow-flow-path" d="M 216 172 L 356 172" stroke="#EA580C" stroke-width="2.5" fill="none" />
 
-              <rect x="356" y="132" width="240" height="80" rx="8" fill="#131F35" stroke="#10B981" stroke-width="1.5" />
+              <rect x="356" y="132" width="240" height="80" rx="8" fill="#292524" stroke="#10B981" stroke-width="1.5" />
               <text x="476" y="164" text-anchor="middle" fill="#ECFDF5" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">내 PC 메모리(RAM) 단독 병합</text>
               <text x="476" y="186" text-anchor="middle" fill="#10B981" font-size="12" font-weight="600" font-family="JetBrains Mono, monospace">외부 네트워크 패킷 0 Byte</text>
 
-              <path d="M 596 172 L 700 172" stroke="#334155" stroke-width="2.5" fill="none" />
+              <path d="M 596 172 L 700 172" stroke="#57534E" stroke-width="2.5" fill="none" />
               <path class="ow-flow-path" d="M 596 172 L 700 172" stroke="#10B981" stroke-width="2.5" fill="none" />
 
               <rect x="700" y="132" width="204" height="80" rx="8" fill="#065F46" fill-opacity="0.3" stroke="#10B981" stroke-width="1.5" />
-              <text x="802" y="164" text-anchor="middle" fill="#ECFDF5" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">표준 발주서 즉시 저장</text>
+              <text x="802" y="164" text-anchor="middle" fill="#ECFDF5" font-size="13" font-weight="700" font-family="Pretendard, sans-serif">택배 표준 발주서 저장</text>
               <text x="802" y="186" text-anchor="middle" fill="#A7F3D0" font-size="12" font-family="JetBrains Mono, monospace" id="svgOutStatus">3초 완료 (.xlsx)</text>
             </svg>
           </div>
@@ -467,37 +531,37 @@
           <div class="ow-walk-step">
             <div class="ow-walk-illustration">
               <svg viewBox="0 0 240 64" style="width:100%;height:56px;display:block;" aria-hidden="true">
-                <rect x="12" y="12" width="58" height="40" rx="6" fill="#FFFFFF" stroke="#CBD5E1" />
-                <text x="41" y="36" text-anchor="middle" fill="#334155" font-size="11" font-weight="700">.xlsx</text>
-                <rect x="82" y="12" width="58" height="40" rx="6" fill="#FFFFFF" stroke="#CBD5E1" />
-                <text x="111" y="36" text-anchor="middle" fill="#334155" font-size="11" font-weight="700">.csv</text>
-                <path d="M 152 32 L 218 32" stroke="#1D4ED8" stroke-width="2" stroke-dasharray="4 4" />
+                <rect x="12" y="12" width="58" height="40" rx="6" fill="#FFFFFF" stroke="#D6D3D1" />
+                <text x="41" y="36" text-anchor="middle" fill="#44403C" font-size="11" font-weight="700">.xlsx</text>
+                <rect x="82" y="12" width="58" height="40" rx="6" fill="#FFFFFF" stroke="#D6D3D1" />
+                <text x="111" y="36" text-anchor="middle" fill="#44403C" font-size="11" font-weight="700">Ctrl+V</text>
+                <path d="M 152 32 L 218 32" stroke="#C8430C" stroke-width="2" stroke-dasharray="4 4" />
               </svg>
             </div>
-            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">1. 주문 엑셀 한꺼번에 놓기</strong>
-            <span class="ow-fine">마켓 구분 없이 다운로드한 파일들을 동시에 끌어다 놓습니다.</span>
+            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">1. 주문 파일 놓기 또는 Ctrl+V</strong>
+            <span class="ow-fine">마켓 파일을 동시에 놓거나 암호 걸린 엑셀 표를 그대로 붙여넣습니다.</span>
           </div>
 
           <div class="ow-walk-step">
             <div class="ow-walk-illustration">
               <svg viewBox="0 0 240 64" style="width:100%;height:56px;display:block;" aria-hidden="true">
-                <rect x="20" y="14" width="200" height="14" rx="4" fill="#DBEAFE" />
+                <rect x="20" y="14" width="200" height="14" rx="4" fill="#FED7AA" />
                 <rect x="20" y="36" width="148" height="14" rx="4" fill="#A7F3D0" />
               </svg>
             </div>
-            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">2. 마켓·안심번호 자동 정렬</strong>
-            <span class="ow-fine">050 안심번호 하이픈과 상세주소 병합이 자동으로 끝납니다.</span>
+            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">2. 050 안심번호 자동 합포장</strong>
+            <span class="ow-fine">서로 다른 마켓의 동일 수취인을 찾아 묶고 우편번호 0 누락을 복원합니다.</span>
           </div>
 
           <div class="ow-walk-step">
             <div class="ow-walk-illustration">
               <svg viewBox="0 0 240 64" style="width:100%;height:56px;display:block;" aria-hidden="true">
-                <rect x="56" y="10" width="128" height="44" rx="8" fill="#ECFDF5" stroke="#10B981" />
-                <text x="120" y="36" text-anchor="middle" fill="#065F46" font-size="12" font-weight="700">통합발주서.xlsx</text>
+                <rect x="52" y="10" width="136" height="44" rx="8" fill="#ECFDF5" stroke="#10B981" />
+                <text x="120" y="36" text-anchor="middle" fill="#065F46" font-size="12" font-weight="700">로이스파셀.xlsx</text>
               </svg>
             </div>
-            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">3. 택배사·도매처 바로 전달</strong>
-            <span class="ow-fine">깨끗하게 통일된 엑셀 1개로 송장 출력과 발주를 바로 끝냅니다.</span>
+            <strong style="display:block;font-size:0.9375rem;margin-bottom:4px;">3. 5대 택배사·도매 즉시 등록</strong>
+            <span class="ow-fine">CJ·우체국·한진·롯데·로젠 양식 그대로 다운로드해 바로 송장을 뽑습니다.</span>
           </div>
         </div>
       </div>
@@ -676,8 +740,8 @@
                 <div class="ow-faq-body ow-fine">리틀리 결제 완료 즉시 화면과 안내 메시지에 패스 코드가 표시되며, 입력 즉시 행 제한이 해제됩니다.</div>
               </details>
               <details class="ow-faq-item">
-                <summary class="ow-faq-summary"><span>엑셀 파일이 안 읽힐 때는 어떻게 하나요?</span><span class="ow-mono">+</span></summary>
-                <div class="ow-faq-body ow-fine">마켓에서 다운로드할 때 설정된 '문서 암호'만 해제해 저장한 뒤 올려 주시면 즉시 병합됩니다.</div>
+                <summary class="ow-faq-summary"><span>암호 걸린 스마트스토어 엑셀도 바로 되나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">네! 암호를 풀어 다시 저장할 필요 없이, 열려 있는 엑셀 화면에서 전체 선택(Ctrl+A) → 복사(Ctrl+C) 후 워크벤치에서 바로 Ctrl+V를 누르면 1초 만에 병합됩니다.</div>
               </details>
             </div>
           </div>
@@ -1139,12 +1203,48 @@
       }
 
       var MARKET_COLORS = {
-        '스마트스토어': '#1D4ED8',
-        '쿠팡': '#10B981',
-        '11번가': '#2563EB',
-        'G마켓·옥션': '#92400E',
-        '카페24': '#334155'
+        '스마트스토어': '#03C75A',
+        '쿠팡': '#E11D48',
+        '11번가': '#C8430C',
+        'G마켓·옥션': '#15803D',
+        '카페24': '#1D4ED8'
       };
+
+      var PRESET_UI_META = {
+        cj: { xlsx: 'CJ 로이스파셀 표준양식.xlsx', spec: 'CJ대한통운 로이스파셀 규격' },
+        epost: { xlsx: '우체국 계약소포 접수양식.xlsx', spec: '우체국택배 계약소포 규격' },
+        hanjin: { xlsx: '한진 H-Focus 일괄출고.xlsx', spec: '한진택배 H-Focus 규격' },
+        lotte: { xlsx: '롯데 알짜배기 운송장.xlsx', spec: '롯데택배 알짜배기 규격' },
+        logen: { xlsx: '로젠 i-LOGEN 표준양식.xlsx', spec: '로젠택배 i-LOGEN 규격' },
+        wholesale: { xlsx: '도매·위탁 통합발주서.xlsx', spec: '도매꾹·오너클랜 위탁발주 규격' },
+        standard: { xlsx: '표준 통합발주서(10열).xlsx', spec: '표준 통합발주서 10열 규격' }
+      };
+
+      var isDemoSample = false;
+      var demoModeBadge = document.getElementById('demoModeBadge');
+      var targetXlsxName = document.getElementById('targetXlsxName');
+      var ticketRecipient = document.getElementById('ticketRecipient');
+      var ticketSavingPill = document.getElementById('ticketSavingPill');
+      var ticketSpecName = document.getElementById('ticketSpecName');
+      var courierTabBtns = document.querySelectorAll('.ow-courier-tab');
+
+      function syncPresetTabsUI(presetVal) {
+        var meta = PRESET_UI_META[presetVal] || PRESET_UI_META.cj;
+        if (targetXlsxName) targetXlsxName.textContent = meta.xlsx;
+        if (ticketSpecName) ticketSpecName.textContent = meta.spec;
+        var tabTarget = presetVal === 'standard' ? 'wholesale' : presetVal;
+        courierTabBtns.forEach(function(tab) {
+          tab.setAttribute('aria-selected', tab.getAttribute('data-preset') === tabTarget ? 'true' : 'false');
+        });
+      }
+
+      function clearDemoIfActive() {
+        if (isDemoSample) {
+          normalizedOrders = [];
+          seenExactKeys = {};
+          isDemoSample = false;
+        }
+      }
 
       function renderPreview() {
         var bundle = getProcessedBundle();
@@ -1154,12 +1254,34 @@
         btnDownloadXlsx.disabled = total === 0;
         btnDownloadCsv.disabled = total === 0;
 
+        if (demoModeBadge) {
+          demoModeBadge.style.display = (isDemoSample && total > 0) ? 'inline-flex' : 'none';
+        }
+
         if (bundleSavingBadge) {
           if (bundle.savedWaybills > 0) {
             bundleSavingBadge.style.display = 'inline-flex';
             bundleSavingBadge.textContent = '합포장 ' + bundle.savedWaybills + '건 · 택배비 약 ' + (bundle.savedWaybills * 3000).toLocaleString() + '원 절감';
           } else {
             bundleSavingBadge.style.display = 'none';
+          }
+        }
+
+        if (ticketRecipient && ticketSavingPill) {
+          if (total > 0) {
+            var leadRow = displayOrders[0];
+            for (var mIdx = 0; mIdx < displayOrders.length; mIdx++) {
+              if (displayOrders[mIdx]._merged) { leadRow = displayOrders[mIdx]; break; }
+            }
+            ticketRecipient.textContent = '받는분 : ' + (leadRow['수취인명'] || '-') + (leadRow['우편번호'] ? ' (' + leadRow['우편번호'] + ')' : '');
+            if (bundle.savedWaybills > 0) {
+              ticketSavingPill.textContent = '050 안심번호 합포장 ' + bundle.savedWaybills + '건 완료 · 택배비 ' + (bundle.savedWaybills * 3000).toLocaleString() + '원 절약';
+            } else {
+              ticketSavingPill.textContent = '출고 시트 ' + total + '건 자동 정규화 완료 · 외부 전송 0 Byte';
+            }
+          } else {
+            ticketRecipient.textContent = '받는분 : 김지훈 (06236)';
+            ticketSavingPill.textContent = '050 안심번호 2건 자동 합포장 완료 · 택배비 3,000원 절약';
           }
         }
 
@@ -1172,7 +1294,7 @@
           convStep1.className = 'ow-step-pill is-current';
           convStep2.className = 'ow-step-pill';
           convStep3.className = 'ow-step-pill';
-          previewBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:20px 12px;font-size:0.8125rem;">파일을 놓거나 <strong>[샘플 8건 불러오기]</strong>를 눌러 보세요.</td></tr>';
+          previewBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ow-text-muted);padding:24px 12px;font-size:0.8125rem;">파일을 놓거나 <strong>Ctrl+V</strong> 붙여넣기 또는 <strong>[샘플 9건 시연]</strong>을 눌러 보세요.</td></tr>';
           return;
         }
 
@@ -1191,11 +1313,11 @@
         var mKeys = Object.keys(counts);
         marketDistBar.innerHTML = mKeys.map(function(m) {
           var pct = Math.max(6, Math.round((counts[m] / normalizedOrders.length) * 100));
-          var col = MARKET_COLORS[m] || '#475569';
+          var col = MARKET_COLORS[m] || '#57534E';
           return '<div class="ow-dist-seg" style="width:' + pct + '%;background-color:' + col + ';"></div>';
         }).join('');
         marketDistLegend.innerHTML = mKeys.map(function(m) {
-          var col = MARKET_COLORS[m] || '#475569';
+          var col = MARKET_COLORS[m] || '#57534E';
           return '<span style="display:inline-flex;align-items:center;gap:5px;">' +
             '<span style="width:8px;height:8px;border-radius:50%;background-color:' + col + ';display:inline-block;"></span>' +
             '<strong>' + escapeHtml(m) + '</strong> ' + counts[m] + '건' +
@@ -1210,17 +1332,24 @@
           limitNotice.style.display = 'none';
         }
 
-        previewBody.innerHTML = displayOrders.slice(0, 10).map(function(r, idx) {
+        var shownBanner = false;
+        previewBody.innerHTML = displayOrders.slice(0, 6).map(function(r, idx) {
           var lockedRow = !isPro && idx >= 5;
           var delayMs = Math.min(idx, 6) * 35;
-          return '<tr class="ow-row-enter" style="animation-delay:' + delayMs + 'ms;' + (lockedRow ? 'opacity:0.55;' : '') + '">' +
+          var addrWithZip = (r['우편번호'] ? '[' + escapeHtml(r['우편번호']) + '] ' : '') + escapeHtml(r['통합배송지']);
+          var rowHtml = '<tr class="ow-row-enter" style="animation-delay:' + delayMs + 'ms;' + (lockedRow ? 'opacity:0.55;' : '') + '">' +
             '<td><span class="ow-chip ow-chip-neutral">' + escapeHtml(r['마켓구분']) + '</span></td>' +
-            '<td style="font-weight:600;">' + escapeHtml(r['수취인명']) + '</td>' +
+            '<td style="font-weight:700;">' + escapeHtml(r['수취인명']) + '</td>' +
             '<td class="ow-mono">' + escapeHtml(r['수취인연락처']) + '</td>' +
             '<td>' + escapeHtml(r['상품및옵션']) + '</td>' +
-            '<td class="ow-tnum" style="font-weight:600;">' + r['수량'] + '</td>' +
-            '<td>' + escapeHtml(r['통합배송지']) + '</td>' +
+            '<td class="ow-tnum" style="font-weight:700;">' + r['수량'] + '</td>' +
+            '<td>' + addrWithZip + '</td>' +
           '</tr>';
+          if (r._merged && !shownBanner) {
+            shownBanner = true;
+            rowHtml += '<tr class="ow-merged-savings-row"><td colspan="6">050 안심번호 합포장 병합 완료 · 택배비 ' + (bundle.savedWaybills * 3000).toLocaleString() + '원 절감</td></tr>';
+          }
+          return rowHtml;
         }).join('');
       }
 
@@ -1245,9 +1374,15 @@
         var firstLine = cleaned.split(/\r?\n/)[0] || '';
         var delim = firstLine.indexOf('\t') !== -1 ? '\t' : ',';
         var rows = matrixToObjects(parseDelimitedMatrix(cleaned, delim));
-        var added = 0, dupCount = 0;
+        var validNorms = [];
         rows.forEach(function(r) {
-          var res = pushNormalizedOrder(normalizeRow(r, 'clipboard'));
+          var n = normalizeRow(r, 'clipboard');
+          if (n) validNorms.push(n);
+        });
+        if (validNorms.length > 0) clearDemoIfActive();
+        var added = 0, dupCount = 0;
+        validNorms.forEach(function(n) {
+          var res = pushNormalizedOrder(n);
           if (res === true) added += 1;
           else if (res === 'dup') dupCount += 1;
         });
@@ -1290,8 +1425,14 @@
                 var ws = wb.Sheets[wb.SheetNames[0]];
                 rows = extractSheetRows(ws);
               }
+              var validNorms = [];
               rows.forEach(function(r) {
-                var res = pushNormalizedOrder(normalizeRow(r, file.name));
+                var n = normalizeRow(r, file.name);
+                if (n) validNorms.push(n);
+              });
+              if (validNorms.length > 0) clearDemoIfActive();
+              validNorms.forEach(function(n) {
+                var res = pushNormalizedOrder(n);
                 if (res === 'dup') dupCount += 1;
               });
             } catch (err) {
@@ -1317,8 +1458,9 @@
         });
       }
 
-      function loadSampleData() {
+      function loadSampleData(silentInit) {
         seenExactKeys = {};
+        isDemoSample = true;
         normalizedOrders = [
           { '마켓구분':'스마트스토어', '주문번호':'20261113884120', '수취인명':'김지훈', '수취인연락처':'0507-1411-8801', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'보온 텀블러 500ml [블랙]', '수량':2, '배송메시지':'문 앞' },
           { '마켓구분':'쿠팡', '주문번호':'3100948271055', '수취인명':'김지훈', '수취인연락처':'0507-1492-3309', '우편번호':'06236', '통합배송지':'서울 강남구 테헤란로 152 8층', '상품및옵션':'전용 세척솔 세트 [화이트]', '수량':1, '배송메시지':'문 앞' },
@@ -1331,22 +1473,37 @@
           { '마켓구분':'G마켓·옥션', '주문번호':'4491827920', '수취인명':'윤채원', '수취인연락처':'010-8450-1928', '우편번호':'41911', '통합배송지':'대구 중구 동성로 26 2층', '상품및옵션':'알루미늄 노트북 거치대 [그레이]', '수량':1, '배송메시지':'오전 배송' }
         ];
         renderPreview();
-        showFeedback('원본 9건(050 안심번호가 다른 동일 수취인 주문 포함) → 합포장 8건 자동 통합 완료 (택배비 약 3,000원 절감).', 'is-ok');
+        if (silentInit !== true) {
+          showFeedback('원본 9건(050 안심번호가 다른 동일 수취인 주문 포함) → 합포장 8건 자동 통합 완료 (택배비 약 3,000원 절감).', 'is-ok');
+        }
       }
 
       function getExportRows() {
         var displayOrders = getProcessedBundle().rows;
         var sliced = isPro ? displayOrders : displayOrders.slice(0, 5);
-        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'cj';
         return formatRowsByPreset(sliced, preset);
       }
 
       if (chkBundleMerge) chkBundleMerge.addEventListener('change', renderPreview);
       if (exportPresetSelect) exportPresetSelect.addEventListener('change', function() {
+        syncPresetTabsUI(exportPresetSelect.value);
         if (normalizedOrders.length > 0) {
           var pName = PRESET_LABELS[exportPresetSelect.value] || '통합발주서';
           showFeedback('출고 양식이 [' + pName.replace(/_/g, ' ') + '] 규격으로 전환되었습니다.', 'is-ok');
         }
+      });
+
+      courierTabBtns.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          var p = tab.getAttribute('data-preset') || 'cj';
+          if (exportPresetSelect) exportPresetSelect.value = p;
+          syncPresetTabsUI(p);
+          if (normalizedOrders.length > 0) {
+            var pName = PRESET_LABELS[p] || '통합발주서';
+            showFeedback('출고 양식이 [' + pName.replace(/_/g, ' ') + '] 규격으로 전환되었습니다.', 'is-ok');
+          }
+        });
       });
 
       dropzone.addEventListener('click', function() { fileInput.click(); });
@@ -1360,12 +1517,29 @@
       });
       fileInput.addEventListener('change', function(e) { handleFiles(e.target.files); });
 
-      document.getElementById('btnSampleOrders').addEventListener('click', loadSampleData);
-      document.getElementById('btnHeroSample').addEventListener('click', loadSampleData);
+      document.getElementById('btnSampleOrders').addEventListener('click', function() { loadSampleData(false); });
+      document.getElementById('btnHeroSample').addEventListener('click', function() {
+        loadSampleData(false);
+        var wbEl = document.getElementById('workbench');
+        if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      function jumpAndOpenPaste() {
+        var wbEl = document.getElementById('workbench');
+        if (wbEl) wbEl.scrollIntoView({ behavior: 'smooth' });
+        if (pastePanel) pastePanel.style.display = 'block';
+        if (btnTogglePaste) btnTogglePaste.setAttribute('aria-expanded', 'true');
+        if (pasteInput) setTimeout(function() { pasteInput.focus(); }, 220);
+      }
+      var btnHeaderPaste = document.getElementById('btnHeaderPaste');
+      var btnHeroPasteJump = document.getElementById('btnHeroPasteJump');
+      if (btnHeaderPaste) btnHeaderPaste.addEventListener('click', jumpAndOpenPaste);
+      if (btnHeroPasteJump) btnHeroPasteJump.addEventListener('click', jumpAndOpenPaste);
 
       document.getElementById('btnResetOrders').addEventListener('click', function() {
         normalizedOrders = [];
         seenExactKeys = {};
+        isDemoSample = false;
         fileInput.value = '';
         var pi = document.getElementById('pasteInput');
         if (pi) pi.value = '';
@@ -1420,7 +1594,7 @@
         var totalAll = getProcessedBundle().rows.length;
         var rows = getExportRows();
         if (!rows.length) return;
-        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'cj';
         var label = PRESET_LABELS[preset] || '통합발주서';
         var ws = XLSX.utils.json_to_sheet(rows);
         var wb = XLSX.utils.book_new();
@@ -1439,7 +1613,7 @@
         var totalAll = getProcessedBundle().rows.length;
         var rows = getExportRows();
         if (!rows.length) return;
-        var preset = exportPresetSelect ? exportPresetSelect.value : 'standard';
+        var preset = exportPresetSelect ? exportPresetSelect.value : 'cj';
         var label = PRESET_LABELS[preset] || '통합발주서';
         var ws = XLSX.utils.json_to_sheet(rows);
         var csv = '\uFEFF' + XLSX.utils.sheet_to_csv(ws);
@@ -1456,6 +1630,7 @@
         }
       });
 
+      var skipInitialSample = false;
       try {
         var params = new URLSearchParams(window.location.search);
         var qp = params.get('preset');
@@ -1472,12 +1647,14 @@
           setTimeout(function() { showFeedback('결제 패스가 원클릭 자동 인증되었습니다! 건수 제한 없이 즉시 저장하세요.', 'is-ok'); }, 60);
         }
         if (params.get('mode') === 'paste' && pastePanel) {
+          skipInitialSample = true;
           pastePanel.style.display = 'block';
           if (btnTogglePaste) btnTogglePaste.setAttribute('aria-expanded', 'true');
           if (pasteInput) setTimeout(function() { pasteInput.focus(); }, 80);
         }
         var pendingTsv = sessionStorage.getItem('ow_pending_tsv');
         if (pendingTsv) {
+          skipInitialSample = true;
           sessionStorage.removeItem('ow_pending_tsv');
           if (pastePanel) pastePanel.style.display = 'block';
           if (pasteInput) pasteInput.value = pendingTsv;
@@ -1485,6 +1662,10 @@
         }
       } catch (e) {}
 
+      syncPresetTabsUI(exportPresetSelect ? exportPresetSelect.value : 'cj');
+      if (!skipInitialSample) {
+        loadSampleData(true);
+      }
       updateLicenseUI();
     })();
   </script>

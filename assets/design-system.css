@@ -1,29 +1,29 @@
 /* ==========================================================================
-   Ohker Works Precision Ledger Design System (OWDS v2.0)
-   References: Toss TDS (Single-Primary Blue) · Stripe (Hairline Ledger)
-               Channel.io Bezier (3-Tier Tokens) · Datadog DRUIDS (Telemetry)
+   Ohker Works Warm Waybill & Precision Studio Design System (OWDS v3.0)
+   System C (Warm Paper #FAF8F5 · Burnt Orange #C8430C · Waybill Ticket)
+   + Layout A (Centered Visual Convergence & Live Workbench Showcase)
    ========================================================================== */
 
 :root {
-  /* Layer 1: Primitive Tokens */
-  --ow-p-obsidian-950: #0B1220;
-  --ow-p-obsidian-900: #131F35;
-  --ow-p-obsidian-800: #1E293B;
-  --ow-p-slate-900: #0F172A;
-  --ow-p-slate-700: #334155;
-  --ow-p-slate-600: #475569;
-  --ow-p-slate-300: #CBD5E1;
-  --ow-p-slate-200: #E2E8F0;
-  --ow-p-slate-150: #EDF2F7;
-  --ow-p-slate-100: #F1F5F9;
-  --ow-p-slate-50: #F6F8FB;
+  /* Layer 1: Primitive Tokens (Warm Paper, Stone Ink & Parcel Burnt Orange) */
+  --ow-p-obsidian-950: #1C1917;
+  --ow-p-obsidian-900: #292524;
+  --ow-p-obsidian-800: #44403C;
+  --ow-p-slate-900: #18181B;
+  --ow-p-slate-700: #44403C;
+  --ow-p-slate-600: #57534E;
+  --ow-p-slate-300: #D6D3D1;
+  --ow-p-slate-200: #E7E5E4;
+  --ow-p-slate-150: #EFECE6;
+  --ow-p-slate-100: #F3EFEA;
+  --ow-p-slate-50: #FAF8F5;
   --ow-p-white: #FFFFFF;
 
-  --ow-p-cobalt-700: #1E40AF;
-  --ow-p-cobalt-600: #1D4ED8;
-  --ow-p-cobalt-500: #2563EB;
-  --ow-p-cobalt-50: #EFF6FF;
-  --ow-p-cobalt-100: #DBEAFE;
+  --ow-p-cobalt-700: #9A3412;
+  --ow-p-cobalt-600: #C8430C;
+  --ow-p-cobalt-500: #EA580C;
+  --ow-p-cobalt-50: #FFF7ED;
+  --ow-p-cobalt-100: #FED7AA;
 
   --ow-p-emerald-800: #065F46;
   --ow-p-emerald-500: #10B981;
@@ -42,19 +42,20 @@
   --ow-bg-canvas: var(--ow-p-slate-50);
   --ow-bg-sheet: var(--ow-p-white);
   --ow-bg-recessed: var(--ow-p-slate-100);
+  --ow-bg-tab-inactive: #EAE5DC;
   --ow-bg-telemetry: var(--ow-p-obsidian-950);
   --ow-bg-telemetry-raised: var(--ow-p-obsidian-900);
 
   --ow-text-primary: var(--ow-p-slate-900);
   --ow-text-secondary: var(--ow-p-slate-700);
   --ow-text-muted: var(--ow-p-slate-600);
-  --ow-text-on-dark: #F8FAFC;
-  --ow-text-on-dark-muted: var(--ow-p-slate-300);
+  --ow-text-on-dark: #FAF8F5;
+  --ow-text-on-dark-muted: #D6D3D1;
 
   --ow-border-strong: var(--ow-p-slate-300);
   --ow-border-default: var(--ow-p-slate-200);
   --ow-border-subtle: var(--ow-p-slate-150);
-  --ow-border-on-dark: rgba(203, 213, 225, 0.16);
+  --ow-border-on-dark: rgba(231, 229, 228, 0.18);
 
   --ow-action-primary: var(--ow-p-cobalt-600);
   --ow-action-primary-hover: var(--ow-p-cobalt-700);
@@ -188,7 +189,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 40;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(250, 248, 245, 0.94);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--ow-border-default);
 }
@@ -686,7 +687,7 @@ a {
 }
 
 .ow-table tbody tr:last-child td { border-bottom: none; }
-.ow-table tbody tr:hover td { background-color: #F8FAFC; }
+.ow-table tbody tr:hover td { background-color: var(--ow-bg-canvas); }
 
 /* 8. Split Architecture & Pricing Ledger */
 .ow-split-2 {
@@ -1473,4 +1474,392 @@ html.js-ready .ow-reveal.is-visible {
 @keyframes owFadeOnly {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* ==========================================================================
+   13. OWDS v3.0 — Studio Ticket Hero (C) + Centered Feature Showcase (A)
+   ========================================================================== */
+
+/* Header Perforated Ticket Divider */
+.ow-brand-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  align-self: stretch;
+}
+
+.ow-ticket-notch-sep {
+  position: relative;
+  width: 1px;
+  align-self: stretch;
+  min-height: 60px;
+  border-left: 1px dashed var(--ow-border-strong);
+  flex-shrink: 0;
+}
+
+.ow-ticket-notch-sep::before,
+.ow-ticket-notch-sep::after {
+  content: '';
+  position: absolute;
+  left: -5px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--ow-bg-canvas);
+  border: 1px solid var(--ow-border-strong);
+}
+.ow-ticket-notch-sep::before { top: -5px; }
+.ow-ticket-notch-sep::after { bottom: -5px; }
+
+/* Concept C Hero Split */
+.ow-studio-hero {
+  padding: 64px 0 72px;
+  border-bottom: 1px dashed var(--ow-border-strong);
+  background-color: var(--ow-bg-canvas);
+}
+
+.ow-studio-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.ow-studio-headline {
+  margin: 0 0 18px;
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.032em;
+  color: var(--ow-text-primary);
+  text-wrap: balance;
+}
+
+.ow-compare-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-strong);
+  color: var(--ow-text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 24px;
+}
+
+.ow-hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* Tactile Perforated Waybill Ticket Card (Concept C Right Column) */
+.ow-waybill-ticket {
+  position: relative;
+  background-color: var(--ow-bg-sheet);
+  border-left: 1px solid var(--ow-border-strong);
+  border-right: 1px solid var(--ow-border-strong);
+  padding: 28px 28px 24px;
+  max-width: 440px;
+  width: 100%;
+  margin-left: auto;
+}
+
+.ow-waybill-edge {
+  display: block;
+  width: calc(100% + 2px);
+  height: 10px;
+  margin-left: -1px;
+}
+
+.ow-waybill-edge-top {
+  margin-top: -28px;
+  margin-bottom: 18px;
+}
+
+.ow-waybill-edge-bottom {
+  margin-top: 18px;
+  margin-bottom: -24px;
+}
+
+.ow-waybill-barcode {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: 54px;
+  margin: 0 auto 18px;
+  color: var(--ow-text-primary);
+}
+
+.ow-waybill-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ow-text-primary);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--ow-border-strong);
+}
+
+.ow-waybill-recipient {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--ow-text-primary);
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ow-waybill-saving-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--ow-radius-xs);
+  background-color: var(--ow-p-emerald-800);
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 16px;
+}
+
+.ow-waybill-meta-row {
+  padding-top: 12px;
+  border-top: 1px dashed var(--ow-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ow-text-secondary);
+}
+
+/* Concept A Centered Feature Showcase & Live Workbench (Below Hero) */
+.ow-showcase-section {
+  padding: 52px 0 80px;
+  border-bottom: 1px solid var(--ow-border-default);
+  background-color: var(--ow-bg-canvas);
+}
+
+.ow-showcase-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.ow-showcase-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.ow-showcase-title {
+  margin: 0 0 14px;
+  font-size: clamp(1.625rem, 2.8vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.26;
+  letter-spacing: -0.03em;
+  color: var(--ow-text-primary);
+  text-wrap: balance;
+}
+
+.ow-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: var(--ow-radius-xs);
+  background-color: var(--ow-p-emerald-50);
+  border: 1px solid var(--ow-p-emerald-200);
+  color: var(--ow-p-emerald-800);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Physical 5-Courier Folder Tabs Attached to Workbench Card */
+.ow-courier-tabs {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+}
+
+.ow-courier-tab {
+  appearance: none;
+  background-color: var(--ow-bg-tab-inactive);
+  color: var(--ow-text-secondary);
+  border: 1px solid var(--ow-border-strong);
+  border-bottom: 1px solid var(--ow-border-strong);
+  border-radius: var(--ow-radius-sm) var(--ow-radius-sm) 0 0;
+  padding: 11px 8px;
+  min-height: 44px;
+  font-family: var(--ow-font-sans);
+  font-size: 0.84375rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.ow-courier-tab[aria-selected="true"] {
+  background-color: var(--ow-bg-sheet);
+  color: var(--ow-text-primary);
+  border-bottom-color: var(--ow-bg-sheet);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ow-courier-tab:hover:not([aria-selected="true"]) {
+    background-color: var(--ow-bg-recessed);
+    color: var(--ow-text-primary);
+  }
+}
+
+/* Centered White Workbench Card */
+.ow-workbench-card {
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-strong);
+  border-radius: 0 0 var(--ow-radius-md) var(--ow-radius-md);
+  padding: 28px;
+}
+
+/* 6-Marketplace -> Courier Convergence Visual Row */
+.ow-market-convergence {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  background-color: var(--ow-bg-canvas);
+  border: 1px solid var(--ow-border-default);
+  border-radius: var(--ow-radius-md);
+  flex-wrap: wrap;
+}
+
+.ow-market-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ow-market-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-bg-sheet);
+  border: 1px solid var(--ow-border-default);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ow-text-primary);
+}
+
+.ow-market-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  font-family: var(--ow-font-mono);
+}
+
+.ow-convergence-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ow-text-muted);
+  padding: 0 4px;
+}
+
+.ow-target-xlsx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--ow-radius-sm);
+  background-color: var(--ow-p-emerald-50);
+  border: 1px solid var(--ow-p-emerald-200);
+  color: var(--ow-p-emerald-800);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+/* Merged Bundle Savings Full-Width Highlight Row in Table */
+.ow-merged-savings-row td {
+  background-color: var(--ow-p-emerald-50) !important;
+  color: var(--ow-p-emerald-800) !important;
+  border-top: 1px solid var(--ow-p-emerald-200);
+  border-bottom: 1px solid var(--ow-p-emerald-200);
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  padding: 9px 14px;
+}
+
+/* Bottom Action Bar inside Workbench Card */
+.ow-workbench-actionbar {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ow-border-default);
+  display: grid;
+  grid-template-columns: auto auto minmax(220px, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+@media (max-width: 980px) {
+  .ow-studio-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .ow-waybill-ticket {
+    margin: 0 auto;
+  }
+  .ow-courier-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ow-courier-tab {
+    border-radius: var(--ow-radius-xs);
+    border-bottom: 1px solid var(--ow-border-strong);
+  }
+  .ow-courier-tab[aria-selected="true"] {
+    border-color: var(--ow-action-primary);
+    background-color: var(--ow-action-wash);
+    color: var(--ow-action-primary);
+  }
+  .ow-workbench-card {
+    border-radius: var(--ow-radius-md);
+    margin-top: 8px;
+  }
+  .ow-workbench-actionbar {
+    grid-template-columns: 1fr;
+  }
+  .ow-ticket-notch-sep {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ow-studio-hero { padding: 40px 0 48px; }
+  .ow-showcase-section { padding: 52px 0 64px; }
+  .ow-workbench-card { padding: 18px 16px; }
+  .ow-courier-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ow-market-convergence { justify-content: center; text-align: center; }
 }
