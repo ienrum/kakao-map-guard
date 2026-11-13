@@ -15,6 +15,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "Domeme Ownerclan Wholesale Order Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/domeme-ownerclan-wholesale/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "Waybill Tracking Reverse-Splitter Guide",
     "url": "https://ienrum.github.io/kakao-map-guard/seller-converter/waybill-upload-split/",
     "expectSubstring": "AW-17208942339"

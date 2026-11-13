@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>도매매·오너클랜·도매꾹 위탁판매 대량발주 엑셀 3초 자동 변환 (스마트스토어·쿠팡 합포장) — 오커 웍스</title>
+  <meta name="description" content="스마트스토어(암호 엑셀 Ctrl+V)와 쿠팡 윙 주문서를 내 PC 메모리(외부 전송 0 Byte)에서 하나로 병합해, 050 안심번호 중복 주문을 합포장하고 도매매·오너클랜·도매꾹 위탁발주 표준 엑셀(.xlsx)로 3초 만에 변환합니다." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/seller-converter/domeme-ownerclan-wholesale/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="스마트스토어·쿠팡 주문서 → 도매매·오너클랜 위탁발주 엑셀 3초 자동 변환" />
+  <meta property="og:description" content="재다운로드 없는 암호 엑셀 Ctrl+V · 쿠팡 분리주소 자동 결합 · 050 안심번호 중복 택배비 차단 · 서버 전송 0 Byte." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-converter.jpg" />
+  <link rel="icon" type="image/jpeg" href="../../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../../assets/design-system.css" />
+
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17208942339');
+    function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
+      try {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
+          'value': 4900.0,
+          'currency': 'KRW',
+          'event_callback': go
+        });
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        "name": "스마트스토어·쿠팡 주문서를 도매매·오너클랜 위탁판매 대량발주 엑셀로 3초 변환하는 법",
+        "step": [
+          { "@type": "HowToStep", "position": 1, "name": "오픈마켓 발주서 파일 드롭 또는 Ctrl+V 붙여넣기", "text": "스마트스토어 암호 엑셀(Ctrl+A → Ctrl+C), 쿠팡 윙, 11번가, G마켓 주문서를 변환기에 그대로 넣습니다." },
+          { "@type": "HowToStep", "position": 2, "name": "분리주소 결합 및 050 안심번호 중복 주문 합포장", "text": "쿠팡 기본주소+상세주소 결합, 서울 4자리 우편번호 0 복원, 동일 수취인+주소 추가주문 합포장이 자동 수행됩니다." },
+          { "@type": "HowToStep", "position": 3, "name": "도매 위탁발주서(.xlsx) 저장 후 오후 송장 역변환", "text": "도매꾹·오너클랜 위탁발주서 양식으로 내려받아 발주하고, 오후에 받은 운송장 엑셀은 역변환기로 마켓별 송장 등록 양식으로 분리합니다." }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "부업·위탁판매 셀러가 매일 밤 엑셀 복붙에 쓰는 시간을 얼마나 줄일 수 있나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "스마트스토어 암호 해제 재다운로드, 쿠팡 상세주소 수식 결합(CONCATENATE), 중복 주문 눈대중 대조를 모두 자동화하여 평균 25분 걸리던 발주 정리를 3초 만에 끝냅니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "도매처에서 받은 합포장 운송장 번호를 다시 스마트스토어·쿠팡에 올릴 수도 있나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "네. 통합기 하단 [오후 2단계: 운송장 역변환]에 도매처 송장 엑셀을 넣으면 콤마(,)로 묶인 주문번호를 마켓별 발송처리 일괄등록 양식으로 1초 만에 다시 분리해 줍니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "구매자 개인정보를 외부 웹페이지에 올려도 안전한가요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "오커 웍스는 외부 서버로 파일을 업로드하지 않고 셀러 본인의 PC 브라우저 메모리(RAM) 안에서만 변환하므로 외부 네트워크 전송량이 0 Byte입니다." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="ow-telemetry-rail" role="region" aria-label="위탁셀러 보안 안내">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>도매매 · 오너클랜 · 도매꾹 위탁발주 3초 자동화 · 외부 전송 <span class="ow-mono">0 Byte</span></span>
+        </span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="../../privacy-terms/">개인정보 무수집·7일 환불 보증</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../">
+        <img class="ow-brand-mark" src="../../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스</span>
+          <span class="ow-brand-sub">DROPSHIPPING &amp; WHOLESALE</span>
+        </span>
+      </a>
+      <nav class="ow-suite-nav" aria-label="셀러 도구 메뉴">
+        <a class="ow-suite-link" href="../">6대 마켓 발주서 통합기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">도매·위탁발주 가이드</a>
+        <a class="ow-suite-link" href="../waybill-upload-split/">합포장 송장 역변환</a>
+        <a class="ow-suite-link" href="../sabangnet-alternative/">사방넷·ERP 비용 비교</a>
+      </nav>
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-subtle" href="../?preset=wholesale">무료 5건 체험</a>
+        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 시작</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <div class="ow-workbench-grid">
+          <div>
+            <span class="ow-chip ow-chip-ok" style="margin-bottom:12px;">부업 · 위탁판매 셀러 퇴근 후 25분 수작업 제거</span>
+            <h1 class="ow-display-title">스마트스토어·쿠팡 주문서, 도매매·오너클랜 위탁발주 엑셀로 3초 변환</h1>
+            <p class="ow-lead">
+              사방넷·플레이오토 월 10만 원이 부담스러운 위탁 셀러를 위해, 암호 걸린 스마트스토어 표(<span class="ow-mono">Ctrl+V</span>)와 쿠팡 분리주소를 한 번에 합포장하여 <strong>도매처 일괄발주 표준 엑셀(.xlsx)</strong>로 즉시 정리합니다.
+            </p>
+
+            <div class="ow-hero-metrics">
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">3초</span>
+                <span class="ow-metric-lbl">암호엑셀·분리주소 자동 정리</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">3,000원 절약</span>
+                <span class="ow-metric-lbl">050 중복 주문 합포장 시 건당</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">0 Byte</span>
+                <span class="ow-metric-lbl">구매자 주소 서버 업로드 없음</span>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+              <a class="ow-btn ow-btn-primary ow-btn-lg" href="../?preset=wholesale">위탁발주 변환기 무료 열기 (5건 무료)</a>
+              <a class="ow-btn ow-btn-secondary ow-btn-lg" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 무제한 패스 발급</a>
+            </div>
+          </div>
+
+          <!-- Instant Ctrl+V Wholesale Bridge -->
+          <div class="ow-ledger-sheet" style="padding:24px;">
+            <div class="ow-console-header" style="margin-bottom:14px;">
+              <span class="ow-console-title">암호 엑셀 Ctrl+V → 위탁발주 즉시 브릿지</span>
+              <span class="ow-chip ow-chip-ok">무복사 자동 연동</span>
+            </div>
+
+            <label for="wholesaleQuickTsv" class="ow-fine" style="display:block;font-weight:600;margin-bottom:6px;">열어 둔 스마트스토어·쿠팡 주문 표를 붙여넣고 버튼을 누르세요</label>
+            <textarea id="wholesaleQuickTsv" class="ow-input ow-mono" rows="5" style="width:100%;font-size:12px;margin-bottom:12px;">상품주문번호	수취인명	수취인연락처1	우편번호	배송지	상품명	옵션정보	수량	배송메세지
+202611139101	최지훈	0508-1111-2222	06236	서울특별시 강남구 테헤란로 152 4층	캠핑 폴딩박스	아이보리 대형	1	문 앞 부탁드려요
+202611139102	최지훈	0508-9999-8888	6236	서울 강남구 테헤란로 152, 4층	전용 상판 우드롤	월넛	1	문 앞 부탁드려요</textarea>
+
+            <div id="wholesaleQuickStat" class="ow-fine" style="background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:12px;margin-bottom:14px;">
+              샘플 2건 감지됨 — 동일 주소 050 안심번호 중복 발주 1건 합포장 대상 (중복 배송비 약 3,000원 즉시 방어)
+            </div>
+
+            <a id="btnJumpWholesale" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?preset=wholesale#workbench">도매·위탁발주 양식(.xlsx)으로 즉시 변환하기 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">위탁판매 셀러가 매일 겪는 4대 엑셀 병목과 자동 해결 명세</h2>
+            <p class="ow-fine" style="margin:6px 0 0;">오전 발주부터 오후 송장 일괄등록까지 브라우저 탭 하나로 끝납니다.</p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>수작업 병목 구간</th>
+                  <th>기존 엑셀 복붙 시 발생하는 사고</th>
+                  <th>오커 웍스 3초 자동 처리 결과</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">스마트스토어 암호 엑셀</td>
+                  <td>도매 사이트 엑셀 업로드 시 암호화 파일 인식 불가 오류 발생</td>
+                  <td><strong>열려 있는 엑셀 <code class="ow-mono">Ctrl+A → Ctrl+C → Ctrl+V</code>로 재다운로드 없이 즉시 변환</strong></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">쿠팡 윙 분리 주소열</td>
+                  <td>수취인 기본주소와 상세주소가 두 열로 나뉘어 동·호수 누락 오배송 발생</td>
+                  <td><strong>기본주소 + 상세주소 공백 정규화 자동 병합 및 취소·반품 행 원천 제외</strong></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">050 안심번호 추가주문</td>
+                  <td>같은 고객이 색상별로 따로 결제하면 050 번호가 달라 도매처 배송비 2중 차감</td>
+                  <td><strong>수취인 성명 + 정규화 주소 기준 자동 합포장 및 품목·옵션 합산 표기</strong></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">오후 송장 마켓 재등록</td>
+                  <td>합포장된 송장 번호를 스마트스토어·쿠팡 주문번호마다 일일이 수동 대조 입력</td>
+                  <td><strong>[오후 2단계: 운송장 역변환]으로 마켓별 일괄 발송처리 엑셀 1초 자동 분리</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div class="ow-fine">
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+        </div>
+        <div class="ow-footer-links ow-fine">
+          <a href="../">6대 마켓 발주서 통합</a>
+          <a href="../smartstore-lois-parcel/">스마트스토어 암호·로이스파셀</a>
+          <a href="../coupang-wing-bundle/">쿠팡 윙 분리주소·합포장</a>
+          <a href="./">도매매·오너클랜 위탁발주</a>
+          <a href="../waybill-upload-split/">합포장 운송장 역변환</a>
+          <a href="../courier-excel-format/">택배사별 엑셀 양식</a>
+          <a href="../sabangnet-alternative/">사방넷·플레이오토 비교</a>
+          <a href="../../privacy-terms/">개인정보·환불약관</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var ta = document.getElementById('wholesaleQuickTsv');
+      var stat = document.getElementById('wholesaleQuickStat');
+      var btn = document.getElementById('btnJumpWholesale');
+
+      function refreshStat() {
+        var lines = (ta.value || '').trim().split(/\r?\n/).filter(function(l) { return l.trim().length > 0; });
+        var dataRows = Math.max(0, lines.length - 1);
+        stat.textContent = dataRows > 0
+          ? ('표 데이터 ' + dataRows + '행 감지됨 — 버튼 클릭 시 위탁발주 양식(.xlsx) 프리셋으로 재붙여넣기 없이 바로 연결됩니다.')
+          : '열려 있는 발주서 엑셀 표를 붙여넣으면 위탁발주 양식으로 바로 이어집니다.';
+      }
+
+      ta.addEventListener('input', refreshStat);
+      btn.addEventListener('click', function() {
+        try {
+          var v = (ta.value || '').trim();
+          if (v) sessionStorage.setItem('ow_pending_tsv', v);
+        } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>

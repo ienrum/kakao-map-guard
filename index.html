@@ -274,6 +274,23 @@
               </div>
             </div>
 
+            <details id="multiBranchDetails" class="ow-faq-item" style="margin-top:10px;background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);">
+              <summary class="ow-faq-summary" style="padding:10px 14px;cursor:pointer;">
+                <span style="display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span class="ow-chip ow-chip-ok">에이전시 · 다점포</span>
+                  <strong style="font-size:0.84375rem;">본점·지점 탭 전환 지도 위젯 모드 (탭 클릭 시 회색 깨짐 방지 relayout 자동 내장)</strong>
+                </span>
+                <span class="ow-mono" style="font-weight:700;color:var(--ow-action-primary);">열기 +</span>
+              </summary>
+              <div class="ow-faq-body" style="padding:12px 14px;border-top:1px dashed var(--ow-border-default);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                  <span class="ow-fine">한 줄에 하나씩 <code class="ow-mono">지점명 | 도로명 주소</code> 형식으로 적으면 탭 전환형 반응형 지도 HTML이 완성됩니다.</span>
+                  <button type="button" class="ow-preset-btn" id="btnSampleBranches">3개 지점 샘플 넣기</button>
+                </div>
+                <textarea id="multiBranchInput" class="ow-code-input" rows="3" style="min-height:76px;" placeholder="강남본점 | 서울특별시 강남구 테헤란로 152&#10;판교지점 | 경기도 성남시 분당구 판교역로 166"></textarea>
+              </div>
+            </details>
+
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap;">
               <span class="ow-fine">* 입력한 HTML과 앱키는 외부 서버로 절대 전송되지 않습니다.</span>
               <button type="button" class="ow-btn ow-btn-primary" id="btnSynthesize">무료 진단 &amp; 새 지도 코드 생성</button>
@@ -839,6 +856,91 @@
         ].join('\n');
       }
 
+      function buildMultiBranchCode(appKey, branches) {
+        var jsonBranches = JSON.stringify(branches);
+        return [
+          '<!-- [오커 웍스 자동 생성] 다점포 탭 전환 카카오 지도 v2 + relayout 깨짐 방지 + 4.5초 길찾기 폴백 -->',
+          '<div id="ow_branch_widget" style="font-family:Pretendard,sans-serif;">',
+          '  <div id="ow_branch_tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"></div>',
+          '  <div id="ow_branch_map" style="width:100%;height:380px;position:relative;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;background:#F8FAFC;"></div>',
+          '  <div id="ow_branch_bar" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#334155;"></div>',
+          '</div>',
+          '<script>',
+          '(function() {',
+          '  var APP_KEY = "' + appKey + '";',
+          '  var BRANCHES = ' + jsonBranches + ';',
+          '  var activeIdx = 0, map = null, marker = null, info = null, geocoder = null;',
+          '  var tabsEl = document.getElementById("ow_branch_tabs");',
+          '  var mapEl = document.getElementById("ow_branch_map");',
+          '  var barEl = document.getElementById("ow_branch_bar");',
+          '',
+          '  function routeLinksHtml(b) {',
+          '    var kUrl = "https://map.kakao.com/link/search/" + encodeURIComponent(b.address || b.name);',
+          '    var nUrl = "https://map.naver.com/p/search/" + encodeURIComponent(b.address || b.name);',
+          '    return \'<span><strong>\' + b.name + \'</strong> · \' + b.address + \'</span>\' +',
+          '      \'<span style="display:inline-flex;gap:6px;"><a href="\' + kUrl + \'" target="_blank" rel="noopener" style="padding:6px 12px;border-radius:6px;background:#1D4ED8;color:#fff;text-decoration:none;font-weight:600;">카카오맵</a>\' +',
+          '      \'<a href="\' + nUrl + \'" target="_blank" rel="noopener" style="padding:6px 12px;border-radius:6px;border:1px solid #CBD5E1;color:#0F172A;text-decoration:none;font-weight:600;">네이버지도</a></span>\';',
+          '  }',
+          '',
+          '  function renderFallback() {',
+          '    var b = BRANCHES[activeIdx] || BRANCHES[0];',
+          '    if (!mapEl || !b) return;',
+          '    barEl.innerHTML = routeLinksHtml(b);',
+          '    mapEl.innerHTML = \'<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">\' + routeLinksHtml(b) + \'</div>\';',
+          '  }',
+          '',
+          '  function selectBranch(idx) {',
+          '    activeIdx = idx;',
+          '    var b = BRANCHES[idx];',
+          '    Array.prototype.forEach.call(tabsEl.children, function(btn, i) {',
+          '      btn.style.background = i === idx ? "#0F172A" : "#FFFFFF";',
+          '      btn.style.color = i === idx ? "#FFFFFF" : "#0F172A";',
+          '    });',
+          '    barEl.innerHTML = routeLinksHtml(b);',
+          '    if (!map || !geocoder) return;',
+          '    map.relayout();',
+          '    geocoder.addressSearch(b.address, function(res, status) {',
+          '      if (status === window.kakao.maps.services.Status.OK && res[0]) {',
+          '        var pos = new window.kakao.maps.LatLng(res[0].y, res[0].x);',
+          '        map.setCenter(pos);',
+          '        if (marker) marker.setPosition(pos);',
+          '        if (info) { info.setContent(\'<div style="padding:6px 10px;font-size:13px;font-weight:600;">\' + b.name + \'</div>\'); info.open(map, marker); }',
+          '      }',
+          '    });',
+          '  }',
+          '',
+          '  BRANCHES.forEach(function(b, idx) {',
+          '    var btn = document.createElement("button");',
+          '    btn.type = "button";',
+          '    btn.textContent = b.name;',
+          '    btn.style.cssText = "padding:8px 14px;border-radius:6px;border:1px solid #CBD5E1;font-size:13px;font-weight:600;cursor:pointer;";',
+          '    btn.onclick = function() { selectBranch(idx); };',
+          '    tabsEl.appendChild(btn);',
+          '  });',
+          '',
+          '  var watchdog = setTimeout(renderFallback, 4500);',
+          '  var sdk = document.createElement("script");',
+          '  sdk.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + encodeURIComponent(APP_KEY) + "&libraries=services&autoload=false";',
+          '  sdk.async = true;',
+          '  sdk.onerror = function() { clearTimeout(watchdog); renderFallback(); };',
+          '  sdk.onload = function() {',
+          '    if (!window.kakao || !window.kakao.maps) { clearTimeout(watchdog); renderFallback(); return; }',
+          '    window.kakao.maps.load(function() {',
+          '      clearTimeout(watchdog);',
+          '      var initPos = new window.kakao.maps.LatLng(37.498095, 127.027610);',
+          '      map = new window.kakao.maps.Map(mapEl, { center: initPos, level: 3 });',
+          '      marker = new window.kakao.maps.Marker({ position: initPos, map: map });',
+          '      info = new window.kakao.maps.InfoWindow({ content: "" });',
+          '      geocoder = new window.kakao.maps.services.Geocoder();',
+          '      selectBranch(0);',
+          '    });',
+          '  };',
+          '  document.head.appendChild(sdk);',
+          '})();',
+          '<\/script>'
+        ].join('\n');
+      }
+
       function renderCodeOutput() {
         if (!fullGeneratedCode) return;
         if (isPro) {
@@ -849,7 +951,7 @@
           patchTelemetry.textContent = 'PRO 잠금 해제됨';
         } else {
           var lines = fullGeneratedCode.split('\n');
-          generatedCodePre.textContent = lines.slice(0, 11).join('\n') + '\n\n  /* ── 이하 (자동 지오코딩 + 4.5초 먹통 방지 길찾기 폴백 + v2 비동기 로더) 잠금 상태 ── */';
+          generatedCodePre.textContent = lines.slice(0, 11).join('\n') + '\n\n  /* ── 이하 (자동 지오코딩 · 다점포 relayout · 4.5초 먹통 방지 길찾기 폴백) 잠금 상태 ── */';
           codeGateOverlay.style.display = 'flex';
           btnCopyPatch.disabled = true;
           btnDownloadPatch.disabled = true;
@@ -858,10 +960,22 @@
 
       var customPlaceInput = document.getElementById('customPlaceInput');
       var customAddrInput = document.getElementById('customAddrInput');
+      var multiBranchInput = document.getElementById('multiBranchInput');
+
+      function parseBranches(text) {
+        return String(text || '').split(/\r?\n/).map(function(line) {
+          var parts = line.split('|');
+          if (parts.length < 2) return null;
+          var name = parts[0].trim();
+          var address = parts.slice(1).join('|').trim();
+          return (name && address) ? { name: name, address: address } : null;
+        }).filter(Boolean);
+      }
 
       function runSynthesize(silent) {
         var raw = (input.value || '').trim();
-        if (!raw) {
+        var branches = parseBranches(multiBranchInput ? multiBranchInput.value : '');
+        if (!raw && branches.length === 0) {
           auditCountBadge.className = 'ow-chip ow-chip-warn';
           auditCountBadge.textContent = 'HTML 입력 필요';
           return;
@@ -920,10 +1034,17 @@
           '<tr class="ow-merged-savings-row"><td colspan="3">외주 수리 의뢰 대비 평균 145,100원 절감 · 즉시 복붙 가능</td></tr>'
         ].join('');
 
-        fullGeneratedCode = buildReplacementCode(params);
+        fullGeneratedCode = branches.length >= 2 ? buildMultiBranchCode(params.appKey, branches) : buildReplacementCode(params);
+        if (branches.length >= 2 && outputCoordChip) {
+          outputCoordChip.textContent = '다점포 탭 위젯 (' + branches.length + '개 지점 · relayout 내장)';
+        }
         renderCodeOutput();
         if (!silent) {
-          showMapFeedback('진단 완료: ' + (params.address ? ('도로명 주소(' + params.address + ') 자동 지오코딩 코드가 합성되었습니다.') : ('내 매장 좌표(' + shortLat + ', ' + shortLng + ')가 새 지도 코드에 반영되었습니다.')), 'is-ok');
+          if (branches.length >= 2) {
+            showMapFeedback('다점포 합성 완료: ' + branches.length + '개 지점 탭 전환 + relayout 깨짐 방지 + 4.5초 폴백 코드가 생성되었습니다.', 'is-ok');
+          } else {
+            showMapFeedback('진단 완료: ' + (params.address ? ('도로명 주소(' + params.address + ') 자동 지오코딩 코드가 합성되었습니다.') : ('내 매장 좌표(' + shortLat + ', ' + shortLng + ')가 새 지도 코드에 반영되었습니다.')), 'is-ok');
+          }
         }
       }
 
@@ -1010,6 +1131,20 @@
       }
       if (customAddrInput) {
         customAddrInput.addEventListener('input', function() { if ((input.value || '').trim()) runSynthesize(true); });
+      }
+      if (multiBranchInput) {
+        multiBranchInput.addEventListener('input', function() { runSynthesize(true); });
+      }
+      var btnSampleBranches = document.getElementById('btnSampleBranches');
+      if (btnSampleBranches && multiBranchInput) {
+        btnSampleBranches.addEventListener('click', function() {
+          multiBranchInput.value = [
+            '강남본점 | 서울특별시 강남구 테헤란로 152',
+            '판교지점 | 경기도 성남시 분당구 판교역로 166',
+            '부산센텀점 | 부산광역시 해운대구 센텀중앙로 79'
+          ].join('\n');
+          runSynthesize(false);
+        });
       }
 
       /* Pre-populate pending HTML from diagnostic guide or demo sample on load */
