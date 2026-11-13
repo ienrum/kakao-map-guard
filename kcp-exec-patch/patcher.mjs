@@ -5,12 +5,14 @@
 
 const SHELL_CALL_REGEX = /\b(exec|shell_exec|system|passthru|popen|proc_open)\s*\(/g;
 const BINARY_CALL_REGEX = /(pp_cli_x64|pp_cli|ct_cli|pp_ax_hub|lib_payplus)/gi;
+const PHP8_DEPRECATED_REGEX = /\b(create_function|each|get_magic_quotes_gpc)\s*\(/g;
 
 export function analyzeLegacyPhp(source) {
   const src = String(source || '');
   const lines = src.split(/\r?\n/);
 
   const blockedCalls = [];
+  const php8Issues = [];
   lines.forEach((line, idx) => {
     const trimmed = line.trim();
     if (trimmed.startsWith('//') || trimmed.startsWith('#') || trimmed.startsWith('*')) return;
@@ -21,6 +23,14 @@ export function analyzeLegacyPhp(source) {
         fn: m[1],
         line: idx + 1,
         snippet: trimmed.slice(0, 90)
+      });
+    }
+    let pm;
+    PHP8_DEPRECATED_REGEX.lastIndex = 0;
+    while ((pm = PHP8_DEPRECATED_REGEX.exec(line)) !== null) {
+      php8Issues.push({
+        fn: pm[1],
+        line: idx + 1
       });
     }
   });
@@ -37,34 +47,40 @@ export function analyzeLegacyPhp(source) {
   const isTestMode = /testpaygw\.kcp\.co\.kr|^T00/i.test(src) || siteCd.startsWith('T00');
   const charset = /euc-kr|cp949/i.test(src) ? 'EUC-KR' : 'UTF-8';
   const hasCpayPlusClass = /class\s+C_PP_CLI|mf_do_tx/i.test(src);
+  const hasCancelFlow = /00200000|STSC|STPC|mod_type|orderpartcancel/i.test(src);
 
   return {
     blockedCalls,
+    php8Issues,
     binaries: Array.from(binaries),
     siteCd,
     isTestMode,
     charset,
     hasCpayPlusClass,
-    dangerCount: blockedCalls.length + (binaries.size > 0 ? 1 : 0)
+    hasCancelFlow,
+    dangerCount: blockedCalls.length + php8Issues.length + (binaries.size > 0 ? 1 : 0)
   };
 }
 
 export function synthesizeCurlAdapter(audit) {
-  const endpoint = audit.isTestMode
+  const payEndpoint = audit.isTestMode
     ? 'https://stg-spl.kcp.co.kr/gw/enc/v1/payment'
     : 'https://spl.kcp.co.kr/gw/enc/v1/payment';
+  const modEndpoint = audit.isTestMode
+    ? 'https://stg-spl.kcp.co.kr/gw/mod/v1/cancel'
+    : 'https://spl.kcp.co.kr/gw/mod/v1/cancel';
 
   const charsetHelper = audit.charset === 'EUC-KR'
-    ? "  private function toUtf8($v) { return function_exists('iconv') ? iconv('EUC-KR', 'UTF-8//IGNORE', (string)$v) : (string)$v; }\n  private function fromUtf8($v) { return function_exists('iconv') ? iconv('UTF-8', 'EUC-KR//IGNORE', (string)$v) : (string)$v; }"
-    : "  private function toUtf8($v) { return (string)$v; }\n  private function fromUtf8($v) { return (string)$v; }";
+    ? "  protected function toUtf8($v) { return function_exists('iconv') ? iconv('EUC-KR', 'UTF-8//IGNORE', (string)$v) : (string)$v; }\n  protected function fromUtf8($v) { return function_exists('iconv') ? iconv('UTF-8', 'EUC-KR//IGNORE', (string)$v) : (string)$v; }"
+    : "  protected function toUtf8($v) { return (string)$v; }\n  protected function fromUtf8($v) { return (string)$v; }";
 
   return [
     '<?php',
     '/**',
-    ' * [오커 웍스 자동 생성 패치] 호스팅 exec() 차단 대응 KCP 무바이너리 cURL REST 어댑터',
+    ' * [오커 웍스 자동 생성 패치] 호스팅 exec() 차단 & PHP 8 대응 KCP 무바이너리 cURL REST 어댑터',
     ' * - 감지된 사이트 코드: ' + audit.siteCd + ' (' + (audit.isTestMode ? '테스트 게이트웨이' : '실결제 게이트웨이') + ')',
-    ' * - 감지된 인코딩 규격: ' + audit.charset + ' · 외부 바이너리(pp_cli) 호출 0건',
-    ' * - 설치 방법: shop/kcp/ow_kcp_curl_adapter.php 업로드 후 settle_kcp.inc.php 하단에서 include_once 호출',
+    ' * - 감지된 인코딩 규격: ' + audit.charset + ' · 외부 바이너리(pp_cli) 호출 0건 · 승인 + 전체/부분취소 동시 지원',
+    ' * - 무수정 호환: 구형 C_PP_CLI(mf_do_tx / mf_set_modx_data) 호출 코드를 그대로 유지한 채 1줄 include 가능',
     ' */',
     "if (!defined('_GNUBOARD_') && !isset($_GET['ow_health'])) { exit; }",
     '',
@@ -77,18 +93,19 @@ export function synthesizeCurlAdapter(audit) {
     "    'exec_blocked' => in_array('exec', $disabled, true) || !function_exists('exec'),",
     "    'curl_ready' => function_exists('curl_init'),",
     "    'php_version' => PHP_VERSION,",
-    "    'adapter' => 'OW-KCP-cURL-2.0'",
+    "    'adapter' => 'OW-KCP-cURL-3.1'",
     '  ));',
     '  exit;',
     '}',
     '',
     'class OW_KCP_Curl_Adapter {',
-    "  private $endpoint = '" + endpoint + "';",
-    "  private $siteCd = '" + audit.siteCd + "';",
-    '  private $siteKey = "";',
-    '  public  $m_res_cd = "9500";',
-    '  public  $m_res_msg = "초기화 대기";',
-    '  public  $m_res_data = array();',
+    "  protected $payEndpoint = '" + payEndpoint + "';",
+    "  protected $modEndpoint = '" + modEndpoint + "';",
+    "  protected $siteCd = '" + audit.siteCd + "';",
+    '  protected $siteKey = "";',
+    '  public    $m_res_cd = "9500";',
+    '  public    $m_res_msg = "초기화 대기";',
+    '  public    $m_res_data = array();',
     '',
     '  public function __construct($siteCd = "", $siteKey = "") {',
     '    if ($siteCd !== "") $this->siteCd = $siteCd;',
@@ -97,23 +114,13 @@ export function synthesizeCurlAdapter(audit) {
     '',
     charsetHelper,
     '',
-    '  /** 구형 C_PP_CLI::mf_do_tx() 대체: exec(pp_cli) 없이 HTTPS cURL JSON 승인/취소 수행 */',
-    '  public function requestApproval($encData, $encInfo, $ordrMon, $tranCd = "00100000") {',
+    '  protected function postJson($url, $payloadArr) {',
     "    if (!function_exists('curl_init')) {",
     '      $this->m_res_cd = "9599";',
     '      $this->m_res_msg = "호스팅 PHP cURL 확장이 비활성화되어 있습니다.";',
     '      return false;',
     '    }',
-    '    $payload = json_encode(array(',
-    "      'tran_cd'   => (string)$tranCd,",
-    "      'site_cd'   => $this->siteCd,",
-    "      'kcp_cert_info' => $this->siteKey,",
-    "      'enc_data'  => $this->toUtf8($encData),",
-    "      'enc_info'  => $this->toUtf8($encInfo),",
-    "      'ordr_mony' => (int)$ordrMon",
-    '    ));',
-    '',
-    '    $ch = curl_init($this->endpoint);',
+    '    $ch = curl_init($url);',
     '    curl_setopt_array($ch, array(',
     '      CURLOPT_POST           => true,',
     '      CURLOPT_RETURNTRANSFER => true,',
@@ -121,7 +128,7 @@ export function synthesizeCurlAdapter(audit) {
     '      CURLOPT_TIMEOUT        => 20,',
     '      CURLOPT_SSLVERSION     => CURL_SSLVERSION_TLSv1_2,',
     "      CURLOPT_HTTPHEADER     => array('Content-Type: application/json; charset=utf-8'),",
-    '      CURLOPT_POSTFIELDS     => $payload',
+    '      CURLOPT_POSTFIELDS     => json_encode($payloadArr)',
     '    ));',
     '    $raw = curl_exec($ch);',
     '    $errno = curl_errno($ch);',
@@ -145,8 +152,65 @@ export function synthesizeCurlAdapter(audit) {
     "    return $this->m_res_cd === '0000';",
     '  }',
     '',
+    '  /** 1. 결제 승인 (tran_cd=00100000): exec(pp_cli) 없이 HTTPS cURL 승인 수행 */',
+    '  public function requestApproval($encData, $encInfo, $ordrMon, $tranCd = "00100000") {',
+    '    return $this->postJson($this->payEndpoint, array(',
+    "      'tran_cd'       => (string)$tranCd,",
+    "      'site_cd'       => $this->siteCd,",
+    "      'kcp_cert_info' => $this->siteKey,",
+    "      'enc_data'      => $this->toUtf8($encData),",
+    "      'enc_info'      => $this->toUtf8($encInfo),",
+    "      'ordr_mony'     => (int)$ordrMon",
+    '    ));',
+    '  }',
+    '',
+    '  /** 2. 관리자 주문취소·부분취소 (tran_cd=00200000, STSC/STPC) 무바이너리 처리 */',
+    '  public function requestCancel($tno, $modType = "STSC", $modDesc = "가맹점 취소", $modMny = 0, $remMny = 0) {',
+    '    $body = array(',
+    "      'tran_cd'       => '00200000',",
+    "      'site_cd'       => $this->siteCd,",
+    "      'kcp_cert_info' => $this->siteKey,",
+    "      'tno'           => (string)$tno,",
+    "      'mod_type'      => (string)$modType,",
+    "      'mod_desc'      => $this->toUtf8($modDesc)",
+    '    );',
+    "    if ($modType === 'STPC' && (int)$modMny > 0) {",
+    "      $body['mod_mny'] = (int)$modMny;",
+    "      $body['rem_mny'] = (int)$remMny;",
+    '    }',
+    '    return $this->postJson($this->modEndpoint, $body);',
+    '  }',
+    '',
     '  public function mf_get_res_data($key) {',
     '    return isset($this->m_res_data[$key]) ? $this->fromUtf8($this->m_res_data[$key]) : "";',
+    '  }',
+    '}',
+    '',
+    '/** 3. 구형 영카트5 C_PP_CLI 무수정 드롭인 호환 클래스 (orderformupdate / orderpartcancelupdate 자동 연결) */',
+    "if (!class_exists('C_PP_CLI')) {",
+    '  class C_PP_CLI extends OW_KCP_Curl_Adapter {',
+    '    private $encData = "";',
+    '    private $encInfo = "";',
+    '    private $ordrMony = 0;',
+    '    private $modx = array();',
+    '    public function mf_clear() { $this->encData = ""; $this->encInfo = ""; $this->ordrMony = 0; $this->modx = array(); }',
+    '    public function mf_set_encx_data($d, $i) { $this->encData = $d; $this->encInfo = $i; }',
+    '    public function mf_set_ordr_data($k, $v) { if ($k === "ordr_mony") $this->ordrMony = (int)$v; }',
+    '    public function mf_set_modx_data($k, $v) { $this->modx[$k] = $v; }',
+    '    public function mf_do_tx($traceNo, $homeDir, $siteCd, $siteKey, $tranCd) {',
+    '      if ($siteCd !== "") $this->siteCd = $siteCd;',
+    '      if ($siteKey !== "") $this->siteKey = $siteKey;',
+    "      if ((string)$tranCd === '00200000') {",
+    '        return $this->requestCancel(',
+    "          isset($this->modx['tno']) ? $this->modx['tno'] : '',",
+    "          isset($this->modx['mod_type']) ? $this->modx['mod_type'] : 'STSC',",
+    "          isset($this->modx['mod_desc']) ? $this->modx['mod_desc'] : '관리자 취소',",
+    "          isset($this->modx['mod_mny']) ? (int)$this->modx['mod_mny'] : 0,",
+    "          isset($this->modx['rem_mny']) ? (int)$this->modx['rem_mny'] : 0",
+    '        );',
+    '      }',
+    '      return $this->requestApproval($this->encData, $this->encInfo, $this->ordrMony, $tranCd);',
+    '    }',
     '  }',
     '}',
     '?>'

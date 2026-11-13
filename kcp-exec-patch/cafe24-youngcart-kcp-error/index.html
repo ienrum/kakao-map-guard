@@ -188,9 +188,25 @@
               </div>
             </div>
 
-            <p class="ow-fine" style="margin:0;">
+            <p class="ow-fine" style="margin:0 0 14px;">
               무료 진단기에서 1줄 원클릭 환경 확인 파일(<code class="ow-mono">ow_hosting_exec_diag.php</code>)도 무료로 내려받을 수 있습니다.
             </p>
+
+            <div style="padding-top:14px;border-top:1px solid var(--ow-border-default);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <label for="quickPhpSnippet" class="ow-fine" style="font-weight:700;color:var(--ow-text-primary);">3초 직결 진단: 호스팅 선택 후 PHP 코드 붙여넣기</label>
+                <select id="quickHostingSelect" class="ow-input" style="width:auto;min-height:32px;padding:4px 10px;font-size:12px;">
+                  <option value="cafe24" selected>카페24 웹호스팅</option>
+                  <option value="gabia">가비아</option>
+                  <option value="dothome">닷홈</option>
+                  <option value="php8">PHP 8 업그레이드</option>
+                </select>
+              </div>
+              <textarea id="quickPhpSnippet" class="ow-input ow-mono" rows="3" style="width:100%;font-size:12px;margin-bottom:10px;">$g_conf_site_cd = 'A52Q7';
+$bin_exe = $home_dir . '/bin/pp_cli_x64';
+exec($cmd, $output, $return_var);</textarea>
+              <a id="btnQuickPhpJump" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?hosting=cafe24#workbench">재붙여넣기 없이 cURL 승인·취소 어댑터 즉시 생성 →</a>
+            </div>
           </div>
         </div>
       </div>
@@ -279,6 +295,7 @@
           <a href="../../daumcdn-map-error/">다음·카카오 지도 백지 복구</a>
           <a href="../">PHP exec() 결제 복구</a>
           <a href="./">영카트 KCP 오류 가이드</a>
+          <a href="../php8-upgrade-kcp-error/">PHP 8 업그레이드 KCP 복구</a>
           <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
         </div>
       </div>
@@ -291,6 +308,9 @@
       var quote = document.getElementById('quoteSelect');
       var causeEl = document.getElementById('causeResultText');
       var savedEl = document.getElementById('kcpSavedLabel');
+      var hostSel = document.getElementById('quickHostingSelect');
+      var phpTa = document.getElementById('quickPhpSnippet');
+      var jumpBtn = document.getElementById('btnQuickPhpJump');
       var messages = {
         fatal: '판정: 호스팅 PHP 설정에서 exec() 쉘 호출이 차단되어 pp_cli 바이너리가 즉시 중단된 증상입니다. PHP 내장 cURL HTTPS REST 어댑터로 교체하면 바이너리 없이 즉시 복구됩니다.',
         empty: '판정: proc_open/exec 반환값이 비어 KCP 승인 응답(res_cd)을 파싱하지 못하는 증상입니다. JSON REST cURL 통신 어댑터로 전환하면 해결됩니다.',
@@ -303,9 +323,27 @@
         causeEl.textContent = messages[sym.value] || messages.fatal;
         savedEl.textContent = saved.toLocaleString('ko-KR') + '원 절약 (' + pct + '%)';
       }
-      sym.addEventListener('change', updateKcpSim);
+      function syncJumpHref() {
+        if (jumpBtn && hostSel) {
+          jumpBtn.href = '../?hosting=' + encodeURIComponent(hostSel.value) + '#workbench';
+        }
+      }
+      sym.addEventListener('change', function() {
+        updateKcpSim();
+        if (sym.value === 'perm' && hostSel) { hostSel.value = 'php8'; syncJumpHref(); }
+      });
       quote.addEventListener('change', updateKcpSim);
+      if (hostSel) hostSel.addEventListener('change', syncJumpHref);
+      if (jumpBtn) {
+        jumpBtn.addEventListener('click', function() {
+          try {
+            var v = phpTa ? (phpTa.value || '').trim() : '';
+            if (v) sessionStorage.setItem('ow_pending_php', v);
+          } catch (e) {}
+        });
+      }
       updateKcpSim();
+      syncJumpHref();
     })();
   </script>
 </body>

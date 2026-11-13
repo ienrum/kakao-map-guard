@@ -187,9 +187,27 @@
               </div>
             </div>
 
-            <p class="ow-fine" style="margin:0;">
+            <p class="ow-fine" style="margin:0 0 14px;">
               주문 마진 3,000원 기준, 고정비 절감만으로 <strong>연간 주문 200건 이상의 순이익</strong>을 그대로 지키는 효과입니다.
             </p>
+
+            <div style="padding-top:14px;border-top:1px solid var(--ow-border-default);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <label for="erpQuickTsv" class="ow-fine" style="font-weight:700;color:var(--ow-text-primary);">3초 실전 비교: 내 주문 표 붙여넣고 바로 합치기</label>
+                <select id="erpPresetSelect" class="ow-input" style="width:auto;min-height:32px;padding:4px 10px;font-size:12px;">
+                  <option value="cj" selected>CJ대한통운 (CNPlus)</option>
+                  <option value="hanjin">한진택배 (s-Focus)</option>
+                  <option value="lotte">롯데택배 (ALPS)</option>
+                  <option value="logen">로젠택배 (LOGEN)</option>
+                  <option value="epost">우체국택배</option>
+                  <option value="wholesale">도매매·오너클랜 위탁</option>
+                </select>
+              </div>
+              <textarea id="erpQuickTsv" class="ow-input ow-mono" rows="3" style="width:100%;font-size:12px;margin-bottom:10px;">상품주문번호	수취인명	수취인연락처1	우편번호	배송지	상품명	옵션정보	수량	배송메세지
+202611138801	박서준	0508-3333-4444	04799	서울 성동구 아차산로 17길 48 2층	데스크 매트	블랙 대형	1	부재 시 문 앞
+202611138802	박서준	0508-7777-8888	4799	서울특별시 성동구 아차산로17길 48, 2층	손목 받침대	차콜	1	부재 시 문 앞</textarea>
+              <a id="btnErpQuickJump" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?preset=cj#workbench">선택한 택배 양식으로 재붙여넣기 없이 3초 병합 →</a>
+            </div>
           </div>
         </div>
       </div>
@@ -294,6 +312,9 @@
       var select = document.getElementById('erpCostSelect');
       var erpLbl = document.getElementById('yearlyErpLabel');
       var savedLbl = document.getElementById('yearlySavedLabel');
+      var presetSel = document.getElementById('erpPresetSelect');
+      var tsvTa = document.getElementById('erpQuickTsv');
+      var jumpBtn = document.getElementById('btnErpQuickJump');
       var ohkerYear = 4900 * 12;
       function updateCalc() {
         var monthly = parseInt(select.value, 10) || 55000;
@@ -303,8 +324,23 @@
         erpLbl.textContent = yearly.toLocaleString('ko-KR') + '원';
         savedLbl.textContent = saved.toLocaleString('ko-KR') + '원 절약 (' + pct + '%)';
       }
+      function syncPresetHref() {
+        if (jumpBtn && presetSel) {
+          jumpBtn.href = '../?preset=' + encodeURIComponent(presetSel.value) + '#workbench';
+        }
+      }
       select.addEventListener('change', updateCalc);
+      if (presetSel) presetSel.addEventListener('change', syncPresetHref);
+      if (jumpBtn) {
+        jumpBtn.addEventListener('click', function() {
+          try {
+            var v = tsvTa ? (tsvTa.value || '').trim() : '';
+            if (v) sessionStorage.setItem('ow_pending_tsv', v);
+          } catch (e) {}
+        });
+      }
       updateCalc();
+      syncPresetHref();
     })();
   </script>
 </body>

@@ -469,6 +469,7 @@
           <a href="../daumcdn-map-error/">다음·카카오 지도 백지 복구</a>
           <a href="./">PHP exec() 결제 복구</a>
           <a href="cafe24-youngcart-kcp-error/">영카트 KCP 오류·외주비 비교</a>
+          <a href="php8-upgrade-kcp-error/">PHP 8 업그레이드 KCP 복구</a>
           <a href="../privacy-terms/">개인정보·이용·환불약관</a>
           <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 및 결제 관리</a>
         </div>
@@ -584,7 +585,7 @@
         btnDownloadPhpPatch.disabled = false;
       } else {
         const previewLines = fullAdapterCode.split('\n').slice(0, 16).join('\n');
-        generatedPhpPre.textContent = previewLines + '\n\n  /* ── 이하 70줄 (TLS 1.2 cURL JSON 승인 요청 + EUC-KR/UTF-8 브릿지 + 에러코드 매핑) 잠금 상태 ──\n     아래 패스 코드 입력 시 전체 ow_kcp_curl_adapter.php 코드 복사와 파일 다운로드가 즉시 열립니다. */';
+        generatedPhpPre.textContent = previewLines + '\n\n  /* ── 이하 120줄 (TLS 1.2 승인 00100000 + 관리자 전체/부분취소 00200000 + C_PP_CLI 무수정 호환 클래스) 잠금 상태 ──\n     아래 패스 코드 입력 시 전체 ow_kcp_curl_adapter.php 코드 복사와 파일 다운로드가 즉시 열립니다. */';
         phpGateOverlay.style.display = 'flex';
         btnCopyPhpPatch.disabled = true;
         btnDownloadPhpPatch.disabled = true;
@@ -636,6 +637,11 @@
         '  <td style="font-weight:600;">사이트 코드·인코딩</td>',
         '  <td><span class="ow-chip ow-chip-ok">추출됨</span></td>',
         '  <td class="ow-mono">site_cd=' + esc(audit.siteCd) + ' · ' + esc(audit.charset) + '</td>',
+        '</tr>',
+        '<tr class="ow-row-enter">',
+        '  <td style="font-weight:600;">승인·취소 호환 범위</td>',
+        '  <td><span class="ow-chip ow-chip-ok">동시 생성</span></td>',
+        '  <td class="ow-mono">승인(00100000) + 부분·전체취소(STSC/STPC) + C_PP_CLI 래퍼' + (audit.php8Issues && audit.php8Issues.length > 0 ? ' · PHP8 비호환 ' + audit.php8Issues.length + '건' : '') + '</td>',
         '</tr>',
         '<tr class="ow-merged-savings-row"><td colspan="3">PG 긴급 외주 수리비 평균 200,000원 절감 · 0.1초 로컬 조립 완료</td></tr>'
       ].join('\n');
@@ -752,9 +758,35 @@
       showPhpFeedback('ow_kcp_curl_adapter.php 다운로드가 완료되었습니다.', 'is-ok');
     });
 
+    /* Support ?hosting=<key> and sessionStorage ow_pending_php zero-repaste bridge */
+    let hasPendingPhp = false;
+    try {
+      const qHosting = (new URLSearchParams(window.location.search).get('hosting') || '').trim().toLowerCase();
+      if (qHosting && HOSTING_GUIDES[qHosting]) {
+        hostingTabs.forEach((t) => {
+          t.setAttribute('aria-selected', t.getAttribute('data-hosting') === qHosting ? 'true' : 'false');
+        });
+        if (hostingGuideDesc) hostingGuideDesc.textContent = HOSTING_GUIDES[qHosting];
+      }
+      const pendingPhp = sessionStorage.getItem('ow_pending_php');
+      if (pendingPhp && pendingPhp.trim()) {
+        hasPendingPhp = true;
+        isDemoSample = false;
+        sessionStorage.removeItem('ow_pending_php');
+        legacyPhpInput.value = pendingPhp;
+        runAudit(false);
+        setTimeout(() => {
+          const wb = document.getElementById('workbench');
+          if (wb) wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    } catch (e) {}
+
     /* Pre-populate demo audit on load so developers immediately see line-level detection */
-    legacyPhpInput.value = samplePhp;
-    runAudit(true);
+    if (!hasPendingPhp) {
+      legacyPhpInput.value = samplePhp;
+      runAudit(true);
+    }
   </script>
 </body>
 </html>

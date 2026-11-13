@@ -60,6 +60,11 @@
     "expectSubstring": "AW-17208942339"
   },
   {
+    "name": "PHP 8 Upgrade YoungCart5 KCP Error Guide",
+    "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/php8-upgrade-kcp-error/",
+    "expectSubstring": "AW-17208942339"
+  },
+  {
     "name": "Privacy Zero-Upload and Refund Policy",
     "url": "https://ienrum.github.io/kakao-map-guard/privacy-terms/",
     "expectSubstring": "AW-17208942339"

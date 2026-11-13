@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>영카트5·그누보드5 PHP 8 업그레이드 후 KCP 결제 Fatal Error(exec·취소 먹통) 3분 복구 — 오커 웍스</title>
+  <meta name="description" content="PHP 7.4 지원 종료 후 PHP 8.0·8.1·8.2 업그레이드 직후 발생하는 영카트5 NHN KCP(pp_cli) Call to undefined function exec() 승인·부분취소 먹통 오류를 외주 없이 무바이너리 cURL 어댑터로 3분 만에 복구하는 가이드." />
+  <link rel="canonical" href="https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/php8-upgrade-kcp-error/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="영카트5 PHP 8 업그레이드 직후 KCP 카드결제·부분취소 먹통 3분 복구" />
+  <meta property="og:description" content="Uncaught Error: Call to undefined function exec() · C_PP_CLI 무수정 호환 · 시크릿키 외부 전송 0 Byte · 7일 100% 환불." />
+  <meta property="og:image" content="https://ienrum.github.io/kakao-map-guard/assets/cover-monitor.jpg" />
+  <link rel="icon" type="image/jpeg" href="../../assets/brand-avatar.jpg" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../../assets/design-system.css" />
+
+  <!-- Google Ads Global Site Tag (AW-17208942339) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17208942339"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17208942339');
+    function trackSubscribeClick(url) {
+      var opened = false;
+      var go = function() {
+        if (!opened) {
+          opened = true;
+          window.open(url, '_blank', 'noopener');
+        }
+      };
+      try {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-17208942339/rKSDCOyDhbcdEIO-7o1A',
+          'value': 4900.0,
+          'currency': 'KRW',
+          'event_callback': go
+        });
+        setTimeout(go, 350);
+      } catch (e) {
+        go();
+      }
+      return false;
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "오커 웍스 영카트5 PHP 8 대응 KCP cURL 승인·취소 어댑터 생성기",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "url": "https://ienrum.github.io/kakao-map-guard/kcp-exec-patch/php8-upgrade-kcp-error/",
+        "description": "PHP 8.0~8.3 업그레이드 직후 발생하는 구형 영카트5 NHN KCP(pp_cli) Call to undefined function exec() Fatal Error 및 관리자 주문취소 먹통을 외부 전송 0바이트로 복구하는 cURL 어댑터 생성기.",
+        "offers": {
+          "@type": "Offer",
+          "price": "4900",
+          "priceCurrency": "KRW",
+          "availability": "https://schema.org/InStock",
+          "url": "https://litt.ly/ohker"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "PHP 7.4에서는 잘 되던 영카트5 KCP 결제가 왜 PHP 8로 바꾸자마자 흰 화면(500 오류)으로 멈추나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "PHP 7에서는 비활성 함수 호출 시 Warning만 남기고 넘어가는 경우가 있었으나, PHP 8.0 이상에서는 disable_functions에 묶인 exec()를 호출하는 즉시 Uncaught Error: Call to undefined function exec() 치명적 오류(Fatal Error)를 발생시켜 결제 승인과 주문 DB 기록이 통째로 중단되기 때문입니다." }
+          },
+          {
+            "@type": "Question",
+            "name": "고객 결제 승인뿐 아니라 관리자 페이지 주문취소·부분취소도 함께 복구되나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "네. 생성되는 ow_kcp_curl_adapter.php에는 승인(tran_cd=00100000)과 전체·부분취소(tran_cd=00200000, STSC/STPC), 그리고 구형 C_PP_CLI 호환 클래스가 모두 내장되어 있어 orderformupdate.php와 관리자 취소 로직이 동시에 복구됩니다." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="ow-theme-paypatch">
+  <div class="ow-telemetry-rail" role="region" aria-label="PHP 8 결제 복구 보안 안내">
+    <div class="ow-telemetry-inner">
+      <div class="ow-telemetry-group">
+        <span class="ow-telemetry-item">
+          <span class="ow-pulse-dot" aria-hidden="true"></span>
+          <span>영카트5 PHP 8.0 ~ 8.3 KCP 복구 가이드 · 시크릿키·FTP 외부 전송 <span class="ow-mono">0 Byte</span></span>
+        </span>
+      </div>
+      <div class="ow-telemetry-group">
+        <a href="mailto:oker04897@gmail.com">기술지원·7일 100% 환불: oker04897@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="ow-header">
+    <div class="ow-header-inner">
+      <a class="ow-brand" href="../">
+        <img class="ow-brand-mark" src="../../assets/brand-avatar.jpg" alt="오커 웍스" width="32" height="32" />
+        <span class="ow-brand-text">
+          <span class="ow-brand-name">오커 웍스</span>
+          <span class="ow-brand-sub">OHKER WORKS</span>
+        </span>
+      </a>
+
+      <nav class="ow-suite-nav" aria-label="도구 전환">
+        <a class="ow-suite-link" href="../../seller-converter/">6대 마켓 발주서 통합</a>
+        <a class="ow-suite-link" href="../../">카카오 지도 코드 복구</a>
+        <a class="ow-suite-link" href="../">PHP exec() 결제 생성기</a>
+        <a class="ow-suite-link" href="./" aria-current="page">PHP 8 업그레이드 가이드</a>
+      </nav>
+
+      <div class="ow-header-actions">
+        <a class="ow-btn ow-btn-subtle" href="../?hosting=php8#workbench">PHP 8 무료 진단</a>
+        <a class="ow-btn ow-btn-primary" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 즉시 복구</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="ow-hero-section">
+      <div class="ow-container">
+        <div class="ow-workbench-grid">
+          <div>
+            <h1 class="ow-display-title">영카트5 PHP 8 업그레이드 직후 멈춘 KCP 결제·부분취소, 3분 만에 무바이너리 cURL로 복구</h1>
+            <p class="ow-lead">
+              호스팅 PHP 8 전환과 동시에 터지는 <code class="ow-mono">Uncaught Error: Call to undefined function exec()</code> 치명적 오류와 구형 <code class="ow-mono">pp_cli</code> 바이너리 충돌을, 기존 <code class="ow-mono">C_PP_CLI</code> 코드 재작성 없이 <strong>1파일 드롭인 HTTPS cURL 어댑터</strong>로 해결하세요.
+            </p>
+
+            <div class="ow-hero-metrics">
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">승인 + 취소</span>
+                <span class="ow-metric-lbl">결제승인·전체·부분취소 1파일 내장</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">PHP 8.3 호환</span>
+                <span class="ow-metric-lbl">Fatal Error 원천 제거 · TLS 1.2</span>
+              </div>
+              <div class="ow-metric-tile">
+                <span class="ow-metric-val ow-tnum">0 Byte</span>
+                <span class="ow-metric-lbl">FTP·시크릿키 외부 서버 노출</span>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+              <a class="ow-btn ow-btn-primary ow-btn-lg" href="../?hosting=php8#workbench">PHP 8 호환 어댑터 무료 진단하기</a>
+              <a class="ow-btn ow-btn-secondary ow-btn-lg" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">월 4,900원 패스 발급 (7일 100% 환불)</a>
+            </div>
+          </div>
+
+          <!-- Interactive PHP 8 Fatal Error Matcher + Zero-Repaste Bridge -->
+          <div class="ow-ledger-sheet" style="padding:24px;">
+            <div class="ow-console-header" style="margin-bottom:16px;">
+              <span class="ow-console-title">PHP 8 에러 로그 대조 &amp; 3초 직결 진단</span>
+              <span class="ow-chip ow-chip-ok">전송 0 Byte</span>
+            </div>
+
+            <label for="php8ErrSelect" style="display:block;font-weight:600;margin-bottom:8px;">1. 에러 로그 또는 관리자 화면 증상 선택</label>
+            <select id="php8ErrSelect" class="ow-input" style="width:100%;margin-bottom:12px;">
+              <option value="exec_fatal" selected>Fatal error: Uncaught Error: Call to undefined function exec() in pp_cli_hub_lib.php</option>
+              <option value="admin_cancel">고객 결제는 넘어갔는데 관리자 주문취소·부분취소 클릭 시 500 흰 화면</option>
+              <option value="legacy_fn">PHP 8 전환 후 each() / create_function() 및 EUC-KR 한글 깨짐 동반</option>
+            </select>
+
+            <div id="php8DiagnosisBox" class="ow-fine" style="background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:14px;margin-bottom:14px;color:var(--ow-text-primary);font-weight:600;">
+              원인 판정: PHP 8부터 비활성화된 exec() 호출이 Warning 대신 즉시 스크립트를 강제 종료(Fatal Error)시켜 승인 후 주문서 DB 업데이트까지 누락되는 상태입니다.
+            </div>
+
+            <label for="php8SnippetTa" class="ow-fine" style="display:block;font-weight:700;color:var(--ow-text-primary);margin-bottom:6px;">2. <code class="ow-mono">settle_kcp.inc.php</code> 또는 <code class="ow-mono">pp_cli_hub_lib.php</code> 붙여넣기</label>
+            <textarea id="php8SnippetTa" class="ow-input ow-mono" rows="4" style="width:100%;font-size:12px;margin-bottom:12px;">&lt;?php
+$g_conf_site_cd = 'A52Q7';
+class C_PP_CLI {
+  function mf_do_tx($trace_no, $home_dir, $site_cd, $site_key, $tx_cd) {
+    exec($home_dir . '/bin/pp_cli_x64', $out, $ret);
+  }
+}
+?&gt;</textarea>
+
+            <a id="btnPhp8Bridge" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?hosting=php8#workbench">PHP 8 무바이너리 cURL 어댑터로 바로 변환하기 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ow-section">
+      <div class="ow-container">
+        <div class="ow-section-head">
+          <div>
+            <h2 class="ow-section-title">왜 PHP 8 업그레이드 직후 영카트5 KCP 결제가 연쇄 중단되나요?</h2>
+            <p class="ow-fine" style="margin:6px 0 0;">단순히 PHP 버전만 내리면 호스팅 보안 지원이 끊깁니다. 바이너리 의존성 자체를 걷어내야 재발하지 않습니다.</p>
+          </div>
+        </div>
+
+        <div class="ow-ledger-sheet">
+          <div class="ow-table-wrap">
+            <table class="ow-table">
+              <thead>
+                <tr>
+                  <th>점검 지점</th>
+                  <th>PHP 7.4 이하 구형 환경</th>
+                  <th>PHP 8.0 ~ 8.3 업그레이드 환경 + 오커 웍스 패치</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;"><code class="ow-mono">exec(pp_cli)</code> 호출</td>
+                  <td>비활성 시 Warning만 출력되거나 구형 32/64비트 바이너리 실행</td>
+                  <td><strong>PHP 8 Fatal Error 원천 회피 — 순수 PHP <code class="ow-mono">curl_init</code> TLS 1.2 직결</strong></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">관리자 취소·부분취소</td>
+                  <td><code class="ow-mono">orderpartcancelupdate.php</code>에서 동일하게 <code class="ow-mono">pp_cli</code> 호출</td>
+                  <td><strong><code class="ow-mono">tran_cd=00200000</code> 전체취소(STSC)·부분취소(STPC) 동시 내장</strong></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">기존 소스 수정 범위</td>
+                  <td>결제·취소 파일 수십 줄을 수작업 리팩토링 (외주 20만원+)</td>
+                  <td><strong><code class="ow-mono">C_PP_CLI</code> 호환 래퍼 내장으로 기존 영카트 호출 코드 그대로 작동</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ow-footer">
+    <div class="ow-container">
+      <div class="ow-footer-grid">
+        <div class="ow-fine">
+          <strong style="color:var(--ow-text-primary);">오커 웍스 (Ohker Works)</strong> · 7일 이내 100% 전액 환불 보장 · 문의: <a href="mailto:oker04897@gmail.com">oker04897@gmail.com</a>
+        </div>
+        <div class="ow-footer-links ow-fine">
+          <a href="../../seller-converter/">6대 마켓 발주서 통합</a>
+          <a href="../../seller-converter/sabangnet-alternative/">사방넷·플레이오토 경량 대안</a>
+          <a href="../../">카카오 지도 코드 복구</a>
+          <a href="../../gnuboard-cafe24-map-fix/">그누보드 카카오맵 복구</a>
+          <a href="../">PHP exec() 결제 복구</a>
+          <a href="../cafe24-youngcart-kcp-error/">영카트 KCP 외주비 비교</a>
+          <a href="./">PHP 8 업그레이드 KCP 복구</a>
+          <a href="../../privacy-terms/">개인정보·환불약관</a>
+          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var sel = document.getElementById('php8ErrSelect');
+      var box = document.getElementById('php8DiagnosisBox');
+      var ta = document.getElementById('php8SnippetTa');
+      var btn = document.getElementById('btnPhp8Bridge');
+      var notes = {
+        exec_fatal: '원인 판정: PHP 8부터 비활성화된 exec() 호출이 Warning 대신 즉시 스크립트를 강제 종료(Fatal Error)시켜 승인 후 주문서 DB 업데이트까지 누락되는 상태입니다.',
+        admin_cancel: '원인 판정: 관리자 주문취소(orderinquirycancel.php)와 부분취소(orderpartcancelupdate.php) 역시 내부에서 C_PP_CLI::mf_do_tx()로 pp_cli를 실행하기 때문에 함께 멈춘 증상입니다. STSC/STPC 취소 내장 cURL 어댑터로 한 번에 해결됩니다.',
+        legacy_fn: '원인 판정: 구형 KCP 허브 라이브러리에 남아 있는 PHP 8 제거 함수(each 등)와 EUC-KR 인코딩 충돌입니다. iconv 자동 브릿지가 포함된 신규 cURL 어댑터로 교체하세요.'
+      };
+      sel.addEventListener('change', function() {
+        box.textContent = notes[sel.value] || notes.exec_fatal;
+      });
+      btn.addEventListener('click', function() {
+        try {
+          var v = ta ? (ta.value || '').trim() : '';
+          if (v) sessionStorage.setItem('ow_pending_php', v);
+        } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
