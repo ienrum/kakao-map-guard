@@ -11,7 +11,7 @@
 - [합포장 운송장 번호 스마트스토어·쿠팡 일괄 발송처리 엑셀 역변환 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/waybill-upload-split/): CJ 로이스파셀·한진·롯데·로젠·우체국 출력 운송장 엑셀의 콤마 병합 주문번호를 스마트스토어·쿠팡 윙 발송처리 일괄등록 양식으로 3초 만에 자동 분리·역변환.
 - [5대 택배사 일괄접수 엑셀 양식 무료 발급기](https://ienrum.github.io/kakao-map-guard/seller-converter/courier-excel-format/): CJ대한통운 CNPlus, 우체국 계약소포, 한진 H-Focus, 롯데 알짜배기, 로젠 i-LOGEN, 도매 위탁발주서 표준 빈 양식(.xlsx) 무료 다운로드 및 자동 변환 연동.
 - [쇼핑몰 주문 통합관리 무료 시작 가이드](https://ienrum.github.io/kakao-map-guard/seller-converter/order-integration-free/): 주문 수집, 합포장, 창고 피킹 검수표, 송장 역변환 4단계를 가입 없이 브라우저에서 처리하는 소량 셀러용 주문 통합관리.
-- [사방넷·플레이오토 소량 셀러 경량 대안 비교](https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/): 일 주문 5~100건 위탁·부업 셀러를 위한 월 5~30만원 통합관리 ERP 대비 월 4,900원 경량 대안 안내 및 연간 비용 절감 계산기.
+- [사방넷·플레이오토 소량 셀러 경량 대안 비교](https://ienrum.github.io/kakao-map-guard/seller-converter/sabangnet-alternative/): 일 주문 5~100건 위탁·부업 셀러를 위한 월 5~30만원 통합관리 ERP 대비 월 1,500원 경량 대안 안내 및 연간 비용 절감 계산기.
 - [카카오 지도 종료 대비 교체 코드 생성기](https://ienrum.github.io/kakao-map-guard/): 구형 카카오 지도 스크립트를 무료 진단하고 매장 좌표를 유지한 신규 v2 SDK 및 4.5초 먹통 감지 길찾기 폴백 완성 코드를 즉시 합성.
 - [홈페이지 오시는길 카카오맵·다음지도 백지 복구 가이드](https://ienrum.github.io/kakao-map-guard/daumcdn-map-error/): 구형 다음지도(apis.daum.net) 중단 및 HTTPS 혼합 콘텐츠 차단 복구 절차와 웹에이전시·다점포 유지보수 비용 절감 시뮬레이터.
 - [그누보드5·카페24·아임웹 오시는길 카카오맵 백지 오류 1분 교체 가이드](https://ienrum.github.io/kakao-map-guard/gnuboard-cafe24-map-fix/): 그누보드5 내용관리(content)·카페24 스마트디자인·아임웹 코드위젯에서 구형 다음지도 종료 및 SSL 혼합 콘텐츠 차단을 5초 자가진단하고 최신 v2 비동기 SDK + 4.5초 길찾기 폴백 코드로 교체하는 가이드.
@@ -22,6 +22,6 @@
 
 ## 요금 및 보증
 
-- 단일 통합 패스: 월 4,900원 (VAT 포함 고정 정가, 약정 없음, 매달 자동 과금 없는 1회 결제 30일 패스, 3종 유틸리티 무제한 동시 잠금 해제)
+- 단일 통합 패스: 월 1,500원 (VAT 포함 고정 정가, 약정 없음, 매달 자동 과금 없는 1회 결제 30일 패스, 3종 유틸리티 무제한 동시 잠금 해제)
 - 즉시 발급 창구: https://litt.ly/ohker/sale/1m1jHkV
 - 환불 보증 및 지원: 결제 후 7일 이내 조건 없는 100% 전액 환불 보장 (oker04897@gmail.com)
