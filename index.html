@@ -74,8 +74,8 @@
           },
           {
             "@type": "Question",
-            "name": "한 번만 교체하고 구독을 해지해도 되나요?",
-            "acceptedAnswer": { "@type": "Answer", "text": "네. 약정이 없으며 생성해 붙여 넣은 코드는 구독 해지 후에도 사이트에서 영구 작동합니다." }
+            "name": "매달 자동결제가 빠져나가나요?",
+            "acceptedAnswer": { "@type": "Answer", "text": "아니요. 자동 연장 없는 1회 결제 패스(1,500원 VAT 포함)이며 생성해 붙여 넣은 코드는 사이트에서 영구 작동합니다." }
           }
         ]
       }
@@ -117,8 +117,8 @@
       </nav>
 
       <div class="ow-header-actions">
-        <a class="ow-btn ow-btn-subtle" href="#story">장애 전·후 비교</a>
-        <a class="ow-btn ow-btn-primary" href="#workbench">내 매장 지도 복구하기</a>
+        <a class="ow-btn ow-btn-subtle" href="#offer">1,500원 1회 패스</a>
+        <a class="ow-btn ow-btn-primary" href="#workbench">내 매장 지도 10초 복구 →</a>
       </div>
     </div>
     <div class="ow-scroll-progress" aria-hidden="true">
@@ -153,17 +153,24 @@
                 <svg class="ow-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
                 11월 30일 구형 다음·카카오 지도 종료 대비
               </span>
-              <span class="ow-chip ow-chip-neutral">외주 수리 15만원 → 월 1,500원 무제한</span>
+              <span class="ow-chip ow-chip-neutral">외주 수리 15만원 → 1,500원(1회 결제·자동결제 없음)</span>
             </div>
 
             <p class="ow-lead">
               FTP나 호스팅 비밀번호를 외부 업체에 넘길 필요 없이, 기존 오시는 길 HTML만 붙여 넣으세요. 내 매장 좌표 그대로 최신 HTTPS v2 지도와 <strong>4.5초 먹통 감지 길찾기 폴백 코드</strong>가 즉시 완성됩니다.
             </p>
 
-            <div class="ow-hero-cta-row">
-              <a class="ow-btn ow-btn-primary ow-btn-lg" href="#workbench" id="btnHeroJumpWorkbench">기존 HTML 코드 붙여넣기</a>
-              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroSampleMap">1초 샘플 코드로 진단 보기</button>
+            <div class="ow-hero-cta-row" style="margin-bottom:8px;">
+              <a class="ow-btn ow-btn-primary ow-btn-lg" href="#workbench" id="btnHeroJumpWorkbench">내 매장 지도 10초 무료 복구하기 →</a>
+              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroSampleMap">1초 샘플로 복구 화면 먼저 보기</button>
             </div>
+            <p class="ow-cta-microcopy" style="margin:0 0 14px;">
+              <span>FTP 비밀번호 불필요</span>
+              <span aria-hidden="true">·</span>
+              <span>서버 전송 0 Byte</span>
+              <span aria-hidden="true">·</span>
+              <span>내 매장 좌표 자동 추출 먼저 확인</span>
+            </p>
 
             <p class="ow-fine" style="margin:0;">
               자동 치환 대상: <span class="ow-mono">apis.daum.net</span> · <span class="ow-mono">daumcdn.net</span> · <span class="ow-mono">http://</span> 혼합 보안 차단 스크립트
@@ -293,7 +300,7 @@
 
             <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap;">
               <span class="ow-fine">* 입력한 HTML과 앱키는 외부 서버로 절대 전송되지 않습니다.</span>
-              <button type="button" class="ow-btn ow-btn-primary" id="btnSynthesize">무료 진단 &amp; 새 지도 코드 생성</button>
+              <button type="button" class="ow-btn ow-btn-primary" id="btnSynthesize">내 매장 좌표 추출 &amp; 새 코드 생성 →</button>
             </div>
 
             <!-- 2-Column Split: Left = Generated Code + Gate, Right = Diagnostic & Savings Ledger -->
@@ -310,12 +317,12 @@
                   <div class="ow-code-gate-overlay" id="codeGateOverlay">
                     <div class="ow-fine-dark">
                       <strong style="color:var(--ow-text-on-dark);">패스 코드 입력 시 전체 완성 코드가 즉시 열립니다.</strong>
-                      <span style="display:block;margin-top:4px;opacity:0.9;">직결 결제창에서 '카카오 지도 패스' 선택 결제 → 완료 화면에 코드 1초 즉시 표시 · 이메일 대기 없음 · 7일 100% 환불</span>
+                      <span style="display:block;margin-top:4px;opacity:0.9;">결제창에서 '카카오 지도 패스' 1회 결제 → 완료 화면에 코드 1초 즉시 표시 · 자동결제 없음 · 7일 100% 환불</span>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                       <input type="text" id="mapPassInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="패스 코드" />
                       <button type="button" class="ow-btn ow-btn-secondary" id="btnUnlockMapPass" style="min-height:38px;padding:8px 12px;">잠금 해제</button>
-                      <a class="ow-btn ow-btn-primary" style="min-height:38px;padding:8px 14px;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">패스 즉시 발급 (1,500원 →)</a>
+                      <a class="ow-btn ow-btn-primary" style="min-height:38px;padding:8px 14px;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">1,500원(1회) 코드 즉시 받기 →</a>
                     </div>
                   </div>
                 </div>
@@ -351,10 +358,10 @@
 
             <!-- Full-Width Action Bar -->
             <div class="ow-workbench-actionbar">
-              <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPatch" disabled>복구된 새 지도 HTML 복사</button>
-              <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPatch" disabled>.html 파일 저장</button>
+              <button type="button" class="ow-btn ow-btn-secondary" id="btnCopyPatch">완성 코드 복사 (잠금 해제)</button>
+              <button type="button" class="ow-btn ow-btn-subtle" id="btnDownloadPatch">.html 저장 (잠금 해제)</button>
               <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">
-                월 1,500원 패스로 완성 코드 즉시 복사하기
+                1,500원(1회·자동결제 없음)으로 내 매장 완성 코드 복사하기 →
               </a>
             </div>
           </div>
@@ -541,8 +548,8 @@
       <div class="ow-container">
         <div class="ow-section-head">
           <div>
-            <h2 class="ow-section-title">진단은 무료, 완성 코드 복사는 월 1,500원으로 끝내세요</h2>
-            <p class="ow-fine" style="margin:6px 0 0;">인상 없는 고정 정가 · 언제든 해지 · 7일 이내 100% 환불 보증</p>
+            <h2 class="ow-section-title">좌표 진단은 무료, 완성 코드 복사는 단 1,500원(1회)으로 끝내세요</h2>
+            <p class="ow-fine" style="margin:6px 0 0;">자동 연장 없는 1회 결제 · 지점·사이트 무제한 · 7일 이내 100% 환불 보증</p>
           </div>
         </div>
 
@@ -550,13 +557,13 @@
           <div class="ow-rate-card">
             <div>
               <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <h3 style="margin:0;font-size:1.125rem;font-weight:700;">오커 웍스 무제한 통합 패스</h3>
-                <span class="ow-chip ow-chip-ok">고정 정가</span>
+                <h3 style="margin:0;font-size:1.125rem;font-weight:700;">오커 웍스 30일 무제한 통합 패스</h3>
+                <span class="ow-chip ow-chip-ok">자동결제 없음 · 1회 결제</span>
               </div>
 
               <div class="ow-price-figure">
-                <span class="ow-price-amount">월 1,500원</span>
-                <span class="ow-price-unit">/ 지점·사이트 무제한 (VAT 포함)</span>
+                <span class="ow-price-amount">1,500원</span>
+                <span class="ow-price-unit">/ 30일 지점·사이트 무제한 (1회 결제 · VAT 포함)</span>
               </div>
 
               <ul class="ow-check-list">
@@ -581,10 +588,14 @@
 
             <div>
               <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">
-                월 1,500원 패스로 완성 코드 바로 복사하기
+                1,500원(1회 결제)으로 내 매장 완성 코드 바로 받기 →
               </a>
-              <p class="ow-fine" style="margin:10px 0 0;text-align:center;">
-                단 한 번의 교체가 필요한 분도 안심하세요 — 매달 자동 결제되지 않는 1회 결제 패스(자동 연장 없음)입니다.
+              <p class="ow-cta-microcopy ow-cta-microcopy-center">
+                <span>자동 연장 없음(단 1회 결제)</span>
+                <span aria-hidden="true">·</span>
+                <span>교체 후 영구 작동</span>
+                <span aria-hidden="true">·</span>
+                <span>미작동 시 7일 100% 환불</span>
               </p>
             </div>
           </div>
@@ -606,8 +617,8 @@
                 <div class="ow-faq-body ow-fine">네. 카페24·아임웹·워드프레스·그누보드 편집기에서 기존 지도 블록을 지우고 생성된 코드를 그대로 붙여 넣으면 끝납니다.</div>
               </details>
               <details class="ow-faq-item">
-                <summary class="ow-faq-summary"><span>한 번만 교체하고 해지해도 되나요?</span><span class="ow-mono">+</span></summary>
-                <div class="ow-faq-body ow-fine">물론입니다. 약정이 없으며, 생성해 붙여 넣은 코드는 구독 해지 후에도 내 사이트에서 영구 작동합니다.</div>
+                <summary class="ow-faq-summary"><span>매달 자동결제가 빠져나가나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">아니요. 단 한 번의 교체가 필요한 사장님도 부담 없도록 자동 연장 없는 1회 결제 패스(1,500원)로 운영되며, 붙여 넣은 코드는 영구 작동합니다.</div>
               </details>
               <details class="ow-faq-item">
                 <summary class="ow-faq-summary"><span>패스 코드는 언제 발급되나요?</span><span class="ow-mono">+</span></summary>
@@ -942,19 +953,25 @@
       }
 
       function renderCodeOutput() {
-        if (!fullGeneratedCode) return;
+        if (!fullGeneratedCode) {
+          btnCopyPatch.disabled = true;
+          btnDownloadPatch.disabled = true;
+          return;
+        }
+        btnCopyPatch.disabled = false;
+        btnDownloadPatch.disabled = false;
         if (isPro) {
           generatedCodePre.textContent = fullGeneratedCode;
           codeGateOverlay.style.display = 'none';
-          btnCopyPatch.disabled = false;
-          btnDownloadPatch.disabled = false;
+          btnCopyPatch.textContent = '복구된 새 지도 HTML 복사';
+          btnDownloadPatch.textContent = '.html 파일 저장';
           patchTelemetry.textContent = 'PRO 잠금 해제됨';
         } else {
           var lines = fullGeneratedCode.split('\n');
           generatedCodePre.textContent = lines.slice(0, 11).join('\n') + '\n\n  /* ── 이하 (자동 지오코딩 · 다점포 relayout · 4.5초 먹통 방지 길찾기 폴백) 잠금 상태 ── */';
           codeGateOverlay.style.display = 'flex';
-          btnCopyPatch.disabled = true;
-          btnDownloadPatch.disabled = true;
+          btnCopyPatch.textContent = '완성 코드 복사 (잠금 해제)';
+          btnDownloadPatch.textContent = '.html 저장 (잠금 해제)';
         }
       }
 
@@ -1077,6 +1094,7 @@
         isDemoSample = false;
         input.value = '';
         fullGeneratedCode = '';
+        renderCodeOutput();
         auditCountBadge.className = 'ow-chip ow-chip-neutral';
         auditCountBadge.textContent = '입력 대기';
         mapFeedback.className = 'ow-inline-feedback';
@@ -1107,8 +1125,16 @@
         }
       });
 
+      function promptMapUnlock() {
+        if (codeGateOverlay) codeGateOverlay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (mapPassInput) setTimeout(function() { mapPassInput.focus(); }, 180);
+        mapFeedback.className = 'ow-inline-feedback is-visible is-warn';
+        mapFeedback.innerHTML = '완성된 전체 코드는 잠금 상태입니다 — <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick(\'https://litt.ly/ohker/sale/1m1jHkV\');" style="font-weight:700;text-decoration:underline;">1,500원(1회·자동결제 없음) 패스 코드 즉시 받기 →</a> 또는 위 입력칸에 패스 코드를 입력해 바로 복사하세요.';
+      }
+
       btnCopyPatch.addEventListener('click', function() {
-        if (!isPro || !fullGeneratedCode) return;
+        if (!fullGeneratedCode) return;
+        if (!isPro) { promptMapUnlock(); return; }
         navigator.clipboard.writeText(fullGeneratedCode).then(function() {
           btnCopyPatch.textContent = '복사 완료';
           showMapFeedback('완성 코드가 클립보드에 복사되었습니다.', 'is-ok');
@@ -1117,7 +1143,8 @@
       });
 
       btnDownloadPatch.addEventListener('click', function() {
-        if (!isPro || !fullGeneratedCode) return;
+        if (!fullGeneratedCode) return;
+        if (!isPro) { promptMapUnlock(); return; }
         var blob = new Blob([fullGeneratedCode], { type: 'text/html;charset=utf-8;' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);

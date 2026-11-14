@@ -330,6 +330,7 @@ a {
   }
   .ow-btn-subtle:hover:not(:disabled) {
     background-color: var(--ow-p-cobalt-100);
+    color: var(--ow-action-primary-hover);
   }
 }
 
@@ -337,6 +338,22 @@ a {
   font-size: 0.9375rem;
   padding: 13px 22px;
   min-height: 46px;
+}
+
+.ow-cta-microcopy {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ow-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ow-cta-microcopy-center {
+  justify-content: center;
+  text-align: center;
 }
 
 /* 4. Asymmetric Workbench Hero Split (Spacious Editorial Breathing Room) */
@@ -2242,6 +2259,13 @@ body.ow-theme-paypatch .ow-btn-subtle {
   background-color: #064E3B;
   border-color: #047857;
   color: #6EE7B7;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.ow-theme-paypatch .ow-btn-subtle:hover:not(:disabled) {
+    background-color: #065F46;
+    color: #A7F3D0;
+  }
 }
 
 body.ow-theme-paypatch .ow-chip-ok,
