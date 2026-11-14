@@ -157,12 +157,13 @@
             </div>
 
             <p class="ow-lead">
-              FTP나 호스팅 비밀번호를 외부 업체에 넘길 필요 없이, 기존 오시는 길 HTML만 붙여 넣으세요. 내 매장 좌표 그대로 최신 HTTPS v2 지도와 <strong>4.5초 먹통 감지 길찾기 폴백 코드</strong>가 즉시 완성됩니다.
+              기존 오시는 길 HTML을 붙여 넣거나, 기존 코드가 없어도 <strong>도로명 주소 한 줄</strong>만 입력하세요. 내 매장 위치 그대로 최신 HTTPS v2 지도와 <strong>4.5초 먹통 감지 길찾기 폴백 코드</strong>가 즉시 완성됩니다.
             </p>
 
             <div class="ow-hero-cta-row" style="margin-bottom:8px;">
-              <a class="ow-btn ow-btn-primary ow-btn-lg" href="#workbench" id="btnHeroJumpWorkbench">내 매장 지도 10초 무료 복구하기 →</a>
-              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroSampleMap">1초 샘플로 복구 화면 먼저 보기</button>
+              <a class="ow-btn ow-btn-primary ow-btn-lg" href="#workbench" id="btnHeroJumpWorkbench">구형 지도 HTML 10초 복구 →</a>
+              <button type="button" class="ow-btn ow-btn-secondary ow-btn-lg" id="btnHeroAddressStart">도로명 주소로 새 지도 만들기</button>
+              <button type="button" class="ow-btn ow-btn-subtle ow-btn-lg" id="btnHeroSampleMap">1초 샘플 보기</button>
             </div>
             <p class="ow-cta-microcopy" style="margin:0 0 14px;">
               <span>FTP 비밀번호 불필요</span>
@@ -255,6 +256,12 @@
               </span>
             </div>
 
+            <!-- 2-Mode Input Switcher: Legacy HTML vs Road Address -->
+            <div class="ow-five-tabs" id="mapInputModeBar" role="tablist" aria-label="지도 생성 방식 선택" style="margin-bottom:10px;">
+              <button type="button" class="ow-courier-tab" role="tab" id="modeTabHtml" aria-selected="true" data-map-mode="html">1. 기존 지도 HTML 붙여넣어 복구</button>
+              <button type="button" class="ow-courier-tab" role="tab" id="modeTabAddress" aria-selected="false" data-map-mode="address">2. 도로명 주소만 입력해 새 지도 만들기 (기존 코드 불필요)</button>
+            </div>
+
             <!-- HTML Input & Preset Toolbar -->
             <div class="ow-console-toolbar">
               <div class="ow-preset-group">
@@ -266,19 +273,21 @@
               <span class="ow-console-meta" id="patchTelemetry">무료 좌표 진단 활성</span>
             </div>
 
-            <label for="legacyHtmlInput" class="ow-fine" style="display:block;font-weight:600;color:var(--ow-text-secondary);margin-bottom:6px;">
-              오시는 길 페이지의 기존 지도 HTML 스크립트 붙여넣기 (<span class="ow-mono">Ctrl+V</span> 즉시 진단)
-            </label>
-            <textarea id="legacyHtmlInput" class="ow-code-input" spellcheck="false" placeholder="오시는 길 페이지의 기존 지도 HTML 코드를 붙여 넣으세요."></textarea>
+            <div id="legacyHtmlBlock">
+              <label for="legacyHtmlInput" class="ow-fine" style="display:block;font-weight:600;color:var(--ow-text-secondary);margin-bottom:6px;">
+                오시는 길 페이지의 기존 지도 HTML 스크립트 붙여넣기 (<span class="ow-mono">Ctrl+V</span> 즉시 진단)
+              </label>
+              <textarea id="legacyHtmlInput" class="ow-code-input" spellcheck="false" placeholder="오시는 길 페이지의 기존 지도 HTML 코드를 붙여 넣으세요."></textarea>
+            </div>
 
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px;">
+            <div id="addressInputBlock" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px;">
               <div>
                 <label for="customPlaceInput" class="ow-fine" style="display:block;font-weight:600;margin-bottom:4px;">매장·상호명 (선택)</label>
-                <input type="text" id="customPlaceInput" class="ow-pass-input" style="width:100%;" placeholder="비워두면 HTML에서 자동 추출" />
+                <input type="text" id="customPlaceInput" class="ow-pass-input" style="width:100%;" placeholder="예: 오커 카페 강남점 (비우면 HTML 자동 추출)" />
               </div>
               <div>
                 <label for="customAddrInput" class="ow-fine" style="display:block;font-weight:600;margin-bottom:4px;">도로명 주소 (기존 HTML 없이 주소만 적어도 새 지도 코드 즉시 생성)</label>
-                <input type="text" id="customAddrInput" class="ow-pass-input" style="width:100%;" placeholder="예: 서울특별시 서초구 반포대로 222" />
+                <input type="text" id="customAddrInput" class="ow-pass-input" style="width:100%;" placeholder="예: 서울특별시 강남구 테헤란로 152" />
               </div>
             </div>
 
@@ -333,6 +342,21 @@
                 <div class="ow-console-header">
                   <span class="ow-console-title">무료 진단 및 추출 요약</span>
                   <span class="ow-console-meta">자동 이식 완료</span>
+                </div>
+                <div id="liveStoreWidgetPreview" style="padding:12px 14px;background:var(--ow-bg-recessed);border-bottom:1px solid var(--ow-border-default);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                    <span class="ow-fine" style="font-weight:700;color:var(--ow-text-secondary);">실시간 매장 길찾기 폴백 카드 미리보기</span>
+                    <span class="ow-chip ow-chip-ok">4.5초 먹통 대비 작동</span>
+                  </div>
+                  <div style="background:#FFFFFF;border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:12px;">
+                    <div style="font-weight:700;font-size:0.9375rem;color:var(--ow-text-primary);" id="previewWidgetPlace">서울성모정형외과 본원</div>
+                    <div class="ow-fine" id="previewWidgetAddr" style="margin:2px 0 10px;color:var(--ow-text-secondary);">37.4981, 127.0276</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                      <a id="previewKakaoLink" href="https://map.kakao.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:6px 12px;border-radius:6px;background:#FEE500;color:#191919;font-size:0.8125rem;font-weight:700;text-decoration:none;">카카오맵 길찾기</a>
+                      <a id="previewNaverLink" href="https://map.naver.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:6px 12px;border-radius:6px;background:#03C75A;color:#FFFFFF;font-size:0.8125rem;font-weight:700;text-decoration:none;">네이버지도 보기</a>
+                      <button type="button" id="btnPreviewCopyAddr" class="ow-preset-btn" style="font-size:0.8125rem;">주소·좌표 복사</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="ow-table-wrap">
                   <table class="ow-table">
@@ -984,6 +1008,49 @@
       var customPlaceInput = document.getElementById('customPlaceInput');
       var customAddrInput = document.getElementById('customAddrInput');
       var multiBranchInput = document.getElementById('multiBranchInput');
+      var modeTabHtml = document.getElementById('modeTabHtml');
+      var modeTabAddress = document.getElementById('modeTabAddress');
+      var legacyHtmlBlock = document.getElementById('legacyHtmlBlock');
+      var addressInputBlock = document.getElementById('addressInputBlock');
+      var btnSynthesize = document.getElementById('btnSynthesize');
+      var btnHeroAddressStart = document.getElementById('btnHeroAddressStart');
+      var previewWidgetPlace = document.getElementById('previewWidgetPlace');
+      var previewWidgetAddr = document.getElementById('previewWidgetAddr');
+      var previewKakaoLink = document.getElementById('previewKakaoLink');
+      var previewNaverLink = document.getElementById('previewNaverLink');
+      var btnPreviewCopyAddr = document.getElementById('btnPreviewCopyAddr');
+      var mapInputMode = 'html';
+      var lastPreviewCopyValue = '37.4981, 127.0276';
+
+      function setMapInputMode(mode, focusEl) {
+        mapInputMode = mode === 'address' ? 'address' : 'html';
+        var isAddr = mapInputMode === 'address';
+        if (modeTabHtml) modeTabHtml.setAttribute('aria-selected', isAddr ? 'false' : 'true');
+        if (modeTabAddress) modeTabAddress.setAttribute('aria-selected', isAddr ? 'true' : 'false');
+        if (legacyHtmlBlock) legacyHtmlBlock.style.display = isAddr ? 'none' : '';
+        if (addressInputBlock) {
+          addressInputBlock.style.background = isAddr ? 'var(--ow-bg-recessed)' : '';
+          addressInputBlock.style.border = isAddr ? '1px solid var(--ow-border-strong)' : '';
+          addressInputBlock.style.borderRadius = isAddr ? 'var(--ow-radius-sm)' : '';
+          addressInputBlock.style.padding = isAddr ? '12px' : '';
+        }
+        if (btnSynthesize) {
+          btnSynthesize.textContent = isAddr ? '도로명 주소로 새 지도 코드 생성 →' : '내 매장 좌표 추출 & 새 코드 생성 →';
+        }
+        if (isAddr) {
+          isDemoSample = false;
+          input.value = '';
+          var hasAddr = customAddrInput && (customAddrInput.value || '').trim();
+          var hasBranches = multiBranchInput && parseBranches(multiBranchInput.value).length > 0;
+          if (hasAddr || hasBranches) {
+            runSynthesize(false);
+          } else {
+            auditCountBadge.className = 'ow-chip ow-chip-neutral';
+            auditCountBadge.textContent = '주소 입력 대기';
+            if (focusEl && typeof focusEl.focus === 'function') focusEl.focus();
+          }
+        }
+      }
 
       function parseBranches(text) {
         return String(text || '').split(/\r?\n/).map(function(line) {
@@ -1034,16 +1101,30 @@
         var shortLat = parseFloat(params.lat).toFixed(4);
         var shortLng = parseFloat(params.lng).toFixed(4);
         var coordSummary = params.address ? ('주소 지오코딩: ' + params.address.slice(0, 18)) : ('위도 ' + shortLat + ' / 경도 ' + shortLng);
+        var kakaoHref = params.address ? ('https://map.kakao.com/link/search/' + encodeURIComponent(params.address)) : ('https://map.kakao.com/link/to/' + encodeURIComponent(params.placeName) + ',' + params.lat + ',' + params.lng);
+        var naverHref = 'https://map.naver.com/p/search/' + encodeURIComponent(params.address || params.placeName);
         if (simPlaceTitle) simPlaceTitle.textContent = params.placeName;
         if (heroMapPlaceText) heroMapPlaceText.textContent = params.placeName.slice(0, 14);
         if (heroCoordBadge) heroCoordBadge.textContent = params.address ? '도로명 지오코딩' : (shortLat + ', ' + shortLng);
         if (outputCoordChip) outputCoordChip.textContent = coordSummary;
-        if (heroKakaoRouteLink) {
-          heroKakaoRouteLink.href = params.address ? ('https://map.kakao.com/link/search/' + encodeURIComponent(params.address)) : ('https://map.kakao.com/link/to/' + encodeURIComponent(params.placeName) + ',' + params.lat + ',' + params.lng);
+        if (heroKakaoRouteLink) heroKakaoRouteLink.href = kakaoHref;
+        if (heroNaverRouteLink) heroNaverRouteLink.href = naverHref;
+
+        var widgetPlaceText = params.placeName;
+        var widgetAddrText = params.address || (shortLat + ', ' + shortLng);
+        var widgetKakaoHref = kakaoHref;
+        var widgetNaverHref = naverHref;
+        if (branches.length >= 2) {
+          widgetPlaceText = branches[0].name + ' 외 ' + (branches.length - 1) + '개 지점';
+          widgetAddrText = branches[0].address;
+          widgetKakaoHref = 'https://map.kakao.com/link/search/' + encodeURIComponent(branches[0].address || branches[0].name);
+          widgetNaverHref = 'https://map.naver.com/p/search/' + encodeURIComponent(branches[0].address || branches[0].name);
         }
-        if (heroNaverRouteLink) {
-          heroNaverRouteLink.href = 'https://map.naver.com/p/search/' + encodeURIComponent(params.address || params.placeName);
-        }
+        lastPreviewCopyValue = widgetAddrText;
+        if (previewWidgetPlace) previewWidgetPlace.textContent = widgetPlaceText;
+        if (previewWidgetAddr) previewWidgetAddr.textContent = widgetAddrText;
+        if (previewKakaoLink) previewKakaoLink.href = widgetKakaoHref;
+        if (previewNaverLink) previewNaverLink.href = widgetNaverHref;
 
         var firstRow = addrOnlyMode
           ? ('<tr class="ow-row-enter"><td style="font-weight:600;">신규 주소 생성</td><td><span class="ow-chip ow-chip-ok">준비됨</span></td><td class="ow-fine">구형 HTML 없이 도로명 주소 지오코딩 + 4.5초 폴백 합성</td></tr>')
@@ -1074,6 +1155,7 @@
       }
 
       function loadMapSample(scrollInto) {
+        setMapInputMode('html');
         isDemoSample = false;
         input.value = sampleHtml;
         runSynthesize(false);
@@ -1161,6 +1243,34 @@
         showMapFeedback('ohker_kakao_map_patch.html 파일 저장이 완료되었습니다.', 'is-ok');
       });
 
+      if (modeTabHtml) {
+        modeTabHtml.addEventListener('click', function() { setMapInputMode('html', input); });
+      }
+      if (modeTabAddress) {
+        modeTabAddress.addEventListener('click', function() { setMapInputMode('address', customPlaceInput || customAddrInput); });
+      }
+      if (btnHeroAddressStart) {
+        btnHeroAddressStart.addEventListener('click', function() {
+          setMapInputMode('address', customPlaceInput || customAddrInput);
+          var wb = document.getElementById('workbench');
+          if (wb) wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+      if (btnPreviewCopyAddr) {
+        btnPreviewCopyAddr.addEventListener('click', function() {
+          var val = lastPreviewCopyValue || '37.4981, 127.0276';
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(val).then(function() {
+              showMapFeedback('매장 주소·좌표가 복사되었습니다.', 'is-ok');
+            }).catch(function() {
+              showMapFeedback('복사할 주소·좌표: ' + val, 'is-ok');
+            });
+          } else {
+            showMapFeedback('복사할 주소·좌표: ' + val, 'is-ok');
+          }
+        });
+      }
+
       if (customPlaceInput) {
         customPlaceInput.addEventListener('input', function() {
           if ((input.value || '').trim() || (customAddrInput && (customAddrInput.value || '').trim())) runSynthesize(true);
@@ -1179,18 +1289,12 @@
       var btnAddressOnlyMode = document.getElementById('btnAddressOnlyMode');
       if (btnAddressOnlyMode && customAddrInput) {
         btnAddressOnlyMode.addEventListener('click', function() {
-          isDemoSample = false;
-          input.value = '';
           if (customPlaceInput && !(customPlaceInput.value || '').trim()) {
             customPlaceInput.value = '내 매장';
           }
-          if ((customAddrInput.value || '').trim()) {
-            runSynthesize(false);
-          } else {
-            auditCountBadge.className = 'ow-chip ow-chip-neutral';
-            auditCountBadge.textContent = '주소 입력 대기';
+          setMapInputMode('address', customAddrInput);
+          if (!(customAddrInput.value || '').trim()) {
             showMapFeedback('도로명 주소와 매장명을 입력하면 기존 HTML 없이도 반응형 카카오 지도 v2 + 4.5초 길찾기 폴백 코드가 즉시 생성됩니다.', 'is-ok');
-            customAddrInput.focus();
           }
         });
       }
@@ -1214,6 +1318,7 @@
       var pendingAddr = '';
       var pendingPlace = '';
       var qBuilder = '';
+      var qMode = '';
       try {
         var qs = new URLSearchParams(window.location.search);
         pendingHtml = (sessionStorage.getItem('ow_pending_map_html') || '').trim();
@@ -1223,6 +1328,7 @@
         if (sessionStorage.getItem('ow_pending_map_addr')) sessionStorage.removeItem('ow_pending_map_addr');
         if (sessionStorage.getItem('ow_pending_map_place')) sessionStorage.removeItem('ow_pending_map_place');
         qBuilder = (qs.get('builder') || '').trim().toLowerCase();
+        qMode = (qs.get('mode') || '').trim().toLowerCase();
       } catch (e) {}
 
       if (qBuilder && BUILDER_GUIDES[qBuilder]) {
@@ -1234,13 +1340,14 @@
       if (pendingAddr && customAddrInput) customAddrInput.value = pendingAddr;
 
       if (pendingHtml) {
+        setMapInputMode('html');
         isDemoSample = false;
         input.value = pendingHtml;
         runSynthesize(false);
       } else if (pendingAddr) {
-        isDemoSample = false;
-        input.value = '';
-        runSynthesize(false);
+        setMapInputMode('address');
+      } else if (qMode === 'address') {
+        setMapInputMode('address', customPlaceInput || customAddrInput);
       } else {
         input.value = sampleHtml;
         runSynthesize(true);

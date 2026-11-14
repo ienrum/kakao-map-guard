@@ -1,7 +1,7 @@
 /* 오커 웍스 무료 체험 실행 계측 (개인정보 0 Byte: 붙여넣은 내용은 전송하지 않고 '실행 여부'만 기록) */
 (function () {
   var TRIAL_IDS = [
-    'btnHeroSampleMap', 'btnSampleHospital', 'btnAddressOnlyMode', 'btnSampleBranches', 'btnSynthesize', 'btnJumpWorkbench', 'btnCopyQuickMap', 'btnDaumQuickGo',
+    'btnHeroSampleMap', 'btnHeroAddressStart', 'modeTabAddress', 'btnSampleHospital', 'btnAddressOnlyMode', 'btnSampleBranches', 'btnSynthesize', 'btnPreviewCopyAddr', 'btnJumpWorkbench', 'btnCopyQuickMap', 'btnDaumQuickGo', 'btnGnuQuickGo',
     'btnSampleOrders', 'btnHeroSample', 'btnRunPaste', 'btnTrackSample', 'btnRunTrackSplit', 'btnDownloadXlsx', 'btnDownloadCsv', 'btnDownloadPickingXlsx', 'btnPrintPicking',
     'btnBridgeRun', 'btnJumpWholesale', 'btnDownloadBlankXlsx', 'btnAutoFillCourier', 'btnGoPresetWorkbench', 'btnErpQuickJump',
     'btnHeroSamplePhp', 'btnSampleYoungcart', 'btnRunPhpAudit', 'btnDownloadDiag', 'btnHeroDiagDownload', 'btnQuickPhpJump', 'btnCopyQuickPhp'

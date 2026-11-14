@@ -212,6 +212,15 @@
               <a class="ow-btn ow-btn-primary" style="flex:1 1 200px;justify-content:center;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">1,500원(1회) 패스 즉시 발급 →</a>
               <a id="btnJumpWorkbench" class="ow-btn ow-btn-secondary" style="flex:1 1 200px;justify-content:center;" href="../?builder=gnuboard#workbench">상세 커스텀 워크벤치 열기 →</a>
             </div>
+
+            <div style="margin-top:12px;padding:12px;background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);">
+              <p class="ow-fine" style="margin:0 0 8px;font-weight:700;color:var(--ow-text-secondary);">기존 지도 HTML이 없거나 새로 만드시나요? 도로명 주소 한 줄로 즉시 생성</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                <input type="text" id="quickGnuPlace" class="ow-pass-input" placeholder="매장·회사명" aria-label="매장·회사명" style="flex:1 1 110px;min-height:36px;" />
+                <input type="text" id="quickGnuAddr" class="ow-pass-input" placeholder="도로명 주소 (예: 서울 강남구 테헤란로 152)" aria-label="도로명 주소" style="flex:2 1 180px;min-height:36px;" />
+                <button type="button" id="btnGnuQuickGo" class="ow-btn ow-btn-secondary" style="min-height:36px;padding:6px 12px;">주소로 새 지도 생성 →</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -472,6 +481,20 @@
             var v = (input.value || '').trim();
             if (v) sessionStorage.setItem('ow_pending_map_html', v);
           } catch (e) {}
+        });
+      }
+      var quickGnuPlace = document.getElementById('quickGnuPlace');
+      var quickGnuAddr = document.getElementById('quickGnuAddr');
+      var btnGnuQuickGo = document.getElementById('btnGnuQuickGo');
+      function goAddressWorkbench() {
+        var addr = (quickGnuAddr && quickGnuAddr.value || '').trim() || '서울특별시 강남구 테헤란로 152';
+        var place = (quickGnuPlace && quickGnuPlace.value || '').trim() || '강남본점';
+        window.location.href = '../?mode=address&builder=gnuboard&addr=' + encodeURIComponent(addr) + '&place=' + encodeURIComponent(place) + '#workbench';
+      }
+      if (btnGnuQuickGo) btnGnuQuickGo.addEventListener('click', goAddressWorkbench);
+      if (quickGnuAddr) {
+        quickGnuAddr.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault(); goAddressWorkbench(); }
         });
       }
       analyze();
