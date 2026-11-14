@@ -317,7 +317,7 @@
                   <div class="ow-code-gate-overlay" id="codeGateOverlay">
                     <div class="ow-fine-dark">
                       <strong style="color:var(--ow-text-on-dark);">패스 코드 입력 시 전체 완성 코드가 즉시 열립니다.</strong>
-                      <span style="display:block;margin-top:4px;opacity:0.9;">결제창에서 '카카오 지도 패스' 1회 결제 → 완료 화면에 코드 1초 즉시 표시 · 자동결제 없음 · 7일 100% 환불</span>
+                      <span style="display:block;margin-top:4px;opacity:0.9;">결제창 하단 '구독하기' 클릭 → '카카오 지도 패스(1,500원)' 선택 → '구매하기' (정기 자동결제 없음 · 완료 화면 원클릭 해제 링크/코드 즉시 표시)</span>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                       <input type="text" id="mapPassInput" class="ow-pass-input" placeholder="패스 코드 입력" aria-label="패스 코드" />
@@ -591,9 +591,9 @@
                 1,500원(1회 결제)으로 내 매장 완성 코드 바로 받기 →
               </a>
               <p class="ow-cta-microcopy ow-cta-microcopy-center">
-                <span>자동 연장 없음(단 1회 결제)</span>
+                <span>결제창 하단 '구독하기' 클릭 → 1,500원 1회 옵션 선택 → '구매하기'</span>
                 <span aria-hidden="true">·</span>
-                <span>교체 후 영구 작동</span>
+                <span>자동 연장 없음(영구 작동)</span>
                 <span aria-hidden="true">·</span>
                 <span>미작동 시 7일 100% 환불</span>
               </p>
@@ -617,8 +617,8 @@
                 <div class="ow-faq-body ow-fine">네. 카페24·아임웹·워드프레스·그누보드 편집기에서 기존 지도 블록을 지우고 생성된 코드를 그대로 붙여 넣으면 끝납니다.</div>
               </details>
               <details class="ow-faq-item">
-                <summary class="ow-faq-summary"><span>매달 자동결제가 빠져나가나요?</span><span class="ow-mono">+</span></summary>
-                <div class="ow-faq-body ow-fine">아니요. 단 한 번의 교체가 필요한 사장님도 부담 없도록 자동 연장 없는 1회 결제 패스(1,500원)로 운영되며, 붙여 넣은 코드는 영구 작동합니다.</div>
+                <summary class="ow-faq-summary"><span>결제창 버튼이 '구독하기'로 되어 있는데 매달 자동결제되나요?</span><span class="ow-mono">+</span></summary>
+                <div class="ow-faq-body ow-fine">아니요. 리틀리 시스템상 하단 버튼명만 '구독하기'로 표시되며, 누르면 나오는 옵션(1,500원) 선택 후 '구매하기'로 1회만 결제됩니다. 자동 연장이나 정기과금이 전혀 없으며, 붙여 넣은 코드는 영구 작동합니다.</div>
               </details>
               <details class="ow-faq-item">
                 <summary class="ow-faq-summary"><span>패스 코드는 언제 발급되나요?</span><span class="ow-mono">+</span></summary>
@@ -659,12 +659,17 @@
     (function() {
       var VALID_PASS = 'PASS-2026-PRO';
       var isPro = false;
+      var hadUrlPass = false;
       var isDemoSample = true;
       try {
-        var qPass = (new URLSearchParams(window.location.search).get('pass') || '').trim().toUpperCase();
+        var params = new URLSearchParams(window.location.search);
+        var qPass = (params.get('pass') || '').trim().toUpperCase();
         if (qPass === VALID_PASS) {
+          hadUrlPass = true;
           localStorage.setItem('ow_pro_pass', VALID_PASS);
-          window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+          params.delete('pass');
+          var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+          window.history.replaceState({}, '', cleanUrl);
         }
         isPro = localStorage.getItem('ow_pro_pass') === VALID_PASS;
       } catch (e) {}
@@ -1196,7 +1201,12 @@
         input.value = sampleHtml;
         runSynthesize(true);
       }
-      if (isPro) { patchTelemetry.textContent = 'PRO 잠금 해제됨'; }
+      if (isPro) {
+        patchTelemetry.textContent = 'PRO 잠금 해제됨';
+        if (hadUrlPass) {
+          showMapFeedback('패스 코드가 원클릭 자동 인증되었습니다! 전체 완성 코드를 바로 복사·저장하세요.', 'is-ok');
+        }
+      }
     })();
   </script>
   <script src="assets/ow-trial-track.js" defer></script>
