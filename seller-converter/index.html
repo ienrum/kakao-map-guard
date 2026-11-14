@@ -62,7 +62,7 @@
           "price": "4900",
           "priceCurrency": "KRW",
           "availability": "https://schema.org/InStock",
-          "url": "https://litt.ly/ohker"
+          "url": "https://litt.ly/ohker/sale/1m1jHkV"
         }
       },
       {
@@ -344,7 +344,7 @@
               <div id="limitNotice" style="display:none;margin-top:12px;padding:10px 12px;border-radius:var(--ow-radius-sm);background-color:var(--ow-p-amber-50);border:1px solid var(--ow-p-amber-200);font-size:0.75rem;color:var(--ow-p-amber-800);">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
                   <span id="limitNoticeText">무료 체험은 <strong>5건</strong>까지 저장됩니다. 전체 <strong id="totalRowsLabel">0</strong>건 무제한 저장은 월 4,900원 패스로 즉시 해제하세요.</span>
-                  <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
+                  <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');" class="ow-btn ow-btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.75rem;">월 4,900원 패스 즉시 발급 →</a>
                 </div>
               </div>
 
@@ -356,11 +356,11 @@
 
               <!-- Pass Unlock Bar -->
               <div class="ow-unlock-bar" style="margin-top:14px;">
-                <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">무제한 패스 코드 해제 <span style="font-weight:400;opacity:0.85;">(결제 완료 화면에 1초 즉시 표시)</span></label>
+                <label for="passInput" class="ow-fine" style="font-weight:600;color:var(--ow-text-secondary);">무제한 패스 코드 해제 <span style="font-weight:400;opacity:0.85;">(직결 결제창에서 '발주서 무제한' 선택 결제 → 완료 화면에 통합 코드 1초 즉시 표시)</span></label>
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                   <input type="text" id="passInput" class="ow-pass-input" placeholder="패스 코드 입력 (예: PASS-...)" />
                   <button type="button" class="ow-btn ow-btn-secondary" id="btnApplyPass" style="padding:8px 14px;min-height:38px;">적용</button>
-                  <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');" class="ow-btn ow-btn-primary" style="padding:8px 14px;min-height:38px;">패스 발급 (4,900원 →)</a>
+                  <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');" class="ow-btn ow-btn-primary" style="padding:8px 14px;min-height:38px;">패스 발급 (4,900원 →)</a>
                 </div>
               </div>
               <div class="ow-inline-feedback" id="convFeedback" role="status" aria-live="polite"></div>
@@ -828,11 +828,11 @@
             </div>
 
             <div>
-              <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">
+              <a class="ow-btn ow-btn-primary ow-btn-lg" style="width:100%;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">
                 월 4,900원 패스 시작하기 (결제 즉시 코드 발급)
               </a>
               <p class="ow-fine" style="margin:10px 0 0;text-align:center;">
-                결제 완료 화면에서 해제 코드가 즉시 표시되며, 언제든 원클릭 해지 가능합니다.
+                클릭 시 직결 결제 옵션 창이 바로 열리며(3종 어느 옵션을 선택해도 동일 통합 패스 코드 즉시 표시), 언제든 원클릭 해지 가능합니다.
               </p>
             </div>
           </div>
@@ -893,7 +893,7 @@
           <a href="../kcp-exec-patch/cafe24-youngcart-kcp-error/">영카트 KCP 오류 가이드</a>
           <a href="../privacy-terms/">개인정보·이용·환불약관</a>
           <a href="../design-system/">디자인 규격</a>
-          <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick('https://litt.ly/ohker');">구독 결제창</a>
+          <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">구독 결제창</a>
         </div>
       </div>
     </div>
@@ -1965,7 +1965,7 @@
           XLSX.utils.book_append_sheet(wb, ws, sLabel);
           XLSX.writeFile(wb, '오커웍스_' + sLabel + '_' + new Date().toISOString().slice(0, 10) + (isPro ? '_전체' : '_무료5건') + '.xlsx');
           if (!isPro && activeRows.length > 5) {
-            showTrackFeedback('무료 5건 저장 완료 — 나머지 <strong>' + (activeRows.length - 5) + '건</strong> 포함 무제한 발송처리는 <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick(\'https://litt.ly/ohker\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.', 'is-warn');
+            showTrackFeedback('무료 5건 저장 완료 — 나머지 <strong>' + (activeRows.length - 5) + '건</strong> 포함 무제한 발송처리는 <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick(\'https://litt.ly/ohker/sale/1m1jHkV\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.', 'is-warn');
           } else {
             showTrackFeedback(sLabel.replace(/_/g, ' ') + ' (' + outJson.length + '건) 엑셀 다운로드 완료!', 'is-ok');
           }
@@ -2071,7 +2071,7 @@
           if (pickingFeedback) {
             pickingFeedback.className = 'ow-inline-feedback is-visible ' + (!isPro && list.length > 5 ? 'is-warn' : 'is-ok');
             pickingFeedback.innerHTML = (!isPro && list.length > 5)
-              ? ('무료 5개 품목 저장 완료 — 나머지 <strong>' + (list.length - 5) + '개 품목</strong> 포함 전체 피킹표는 <a href="https://litt.ly/ohker" onclick="return trackSubscribeClick(\'https://litt.ly/ohker\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.')
+              ? ('무료 5개 품목 저장 완료 — 나머지 <strong>' + (list.length - 5) + '개 품목</strong> 포함 전체 피킹표는 <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick(\'https://litt.ly/ohker/sale/1m1jHkV\');" style="font-weight:700;text-decoration:underline;">월 4,900원 패스 즉시 발급 →</a>으로 해제하세요.')
               : ('창고 피킹 총량표(' + outRows.length + '개 품목) 엑셀 다운로드 완료!');
           }
         });

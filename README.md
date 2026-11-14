@@ -37,6 +37,6 @@
 
 ## 통합 패스 및 보안·환불 보증
 - **3종 통합 무제한 패스**: 월 **4,900원** (VAT 포함 고정 정가 · 약정 없음 · 결제 즉시 `PASS-2026-PRO` 코드 자동 발급)
-- **즉시 발급 창구**: https://litt.ly/ohker
+- **즉시 발급 창구**: https://litt.ly/ohker/sale/1m1jHkV
 - **개인정보 무수집(0 Byte) 방침 및 7일 100% 환불 규정**: https://ienrum.github.io/kakao-map-guard/privacy-terms/
 - **기술지원 및 환불 접수**: `oker04897@gmail.com` (결제 후 7일 이내 조건 없는 100% 전액 환불 보장)
