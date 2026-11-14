@@ -1,11 +1,13 @@
 /* 오커 웍스 무료 체험 실행 계측 (개인정보 0 Byte: 붙여넣은 내용은 전송하지 않고 '실행 여부'만 기록) */
 (function () {
   var TRIAL_IDS = [
-    'btnHeroSampleMap', 'btnSampleHospital', 'btnSampleBranches', 'btnSynthesize',
+    'btnHeroSampleMap', 'btnSampleHospital', 'btnSampleBranches', 'btnSynthesize', 'btnJumpWorkbench', 'btnCopyQuickMap',
     'btnSampleOrders', 'btnHeroSample', 'btnRunPaste', 'btnTrackSample', 'btnRunTrackSplit', 'btnDownloadXlsx', 'btnDownloadCsv', 'btnDownloadPickingXlsx', 'btnPrintPicking',
-    'btnHeroSamplePhp', 'btnSampleYoungcart', 'btnRunPhpAudit', 'btnDownloadDiag', 'btnHeroDiagDownload'
+    'btnHeroSamplePhp', 'btnSampleYoungcart', 'btnRunPhpAudit', 'btnDownloadDiag', 'btnHeroDiagDownload', 'btnQuickPhpJump', 'btnCopyQuickPhp'
   ];
-  var tool = /seller-converter/.test(location.pathname) ? 'seller' : (/kcp-exec-patch/.test(location.pathname) ? 'kcp' : 'map');
+  var tool = /seller-converter/.test(location.pathname)
+    ? 'seller'
+    : (/kcp-exec-patch/.test(location.pathname) ? 'kcp' : 'map');
   function fire(action) {
     var key = 'ow_trial_' + tool + '_' + action;
     try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) {}

@@ -187,11 +187,31 @@
 <script src="http://apis.daum.net/maps/maps3.js?apikey=demo_legacy_key"></script>
 <script>var pos = new daum.maps.LatLng(37.501274, 127.039585);</script></textarea>
 
-            <div id="quickDiagBox" style="background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:14px;margin-bottom:14px;font-size:0.875rem;line-height:1.55;">
+            <div id="quickDiagBox" style="background:var(--ow-bg-recessed);border:1px solid var(--ow-border-default);border-radius:var(--ow-radius-sm);padding:14px;margin-bottom:12px;font-size:0.875rem;line-height:1.55;">
               진단 중...
             </div>
 
-            <a id="btnJumpWorkbench" class="ow-btn ow-btn-primary" style="width:100%;justify-content:center;" href="../?builder=gnuboard#workbench">추출된 좌표로 최신 v2 + 폴백 코드 생성하기 →</a>
+            <div class="ow-code-preview-box" style="margin-bottom:12px;">
+              <pre id="quickMapCodePre" class="ow-code-pre" style="max-height:190px;overflow:auto;">생성 중...</pre>
+              <div class="ow-code-gate-overlay" id="quickMapGateOverlay" style="padding:12px 14px;">
+                <div class="ow-fine-dark" style="font-size:0.8125rem;">
+                  <strong style="color:var(--ow-text-on-dark);">추출된 좌표 기반 최신 v2 + 4.5초 폴백 코드</strong>
+                  <span style="display:block;opacity:0.9;">결제창 하단 '구독하기' → 1,500원(1회) → '구매하기' (자동결제 없음 · 완료 화면 원클릭 해제)</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;">
+                  <input type="text" id="quickMapPassInput" class="ow-pass-input" placeholder="패스 코드 (PASS-...)" aria-label="패스 코드 입력" style="min-height:36px;flex:1 1 130px;min-width:120px;" />
+                  <button type="button" class="ow-btn ow-btn-secondary" id="btnUnlockQuickMap" style="min-height:36px;padding:6px 12px;">잠금 해제</button>
+                  <button type="button" class="ow-btn ow-btn-subtle" id="btnCopyQuickMap" style="min-height:36px;padding:6px 12px;">전체 코드 복사</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ow-inline-feedback" id="quickMapFeedback" role="status" aria-live="polite" style="margin-bottom:10px;"></div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a class="ow-btn ow-btn-primary" style="flex:1 1 200px;justify-content:center;" href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick('https://litt.ly/ohker/sale/1m1jHkV');">1,500원(1회) 패스 즉시 발급 →</a>
+              <a id="btnJumpWorkbench" class="ow-btn ow-btn-secondary" style="flex:1 1 200px;justify-content:center;" href="../?builder=gnuboard#workbench">상세 커스텀 워크벤치 열기 →</a>
+            </div>
           </div>
         </div>
       </div>
@@ -284,9 +304,102 @@
 
   <script>
     (function() {
+      var VALID_PASS = 'PASS-2026-PRO';
+      var isPro = false;
+      var hadUrlPass = false;
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var qPass = (params.get('pass') || '').trim().toUpperCase();
+        if (qPass === VALID_PASS) {
+          hadUrlPass = true;
+          localStorage.setItem('ow_pro_pass', VALID_PASS);
+          params.delete('pass');
+          var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '') + window.location.hash;
+          window.history.replaceState({}, '', cleanUrl);
+        }
+        isPro = localStorage.getItem('ow_pro_pass') === VALID_PASS;
+      } catch (e) {}
+
       var input = document.getElementById('quickMapInput');
       var badge = document.getElementById('quickRiskBadge');
       var box = document.getElementById('quickDiagBox');
+      var codePre = document.getElementById('quickMapCodePre');
+      var gateOverlay = document.getElementById('quickMapGateOverlay');
+      var passInput = document.getElementById('quickMapPassInput');
+      var unlockBtn = document.getElementById('btnUnlockQuickMap');
+      var copyBtn = document.getElementById('btnCopyQuickMap');
+      var feedbackEl = document.getElementById('quickMapFeedback');
+      var fullCode = '';
+
+      function showQuickFeedback(msg, tone, isHtml) {
+        if (!feedbackEl) return;
+        feedbackEl.className = 'ow-inline-feedback is-visible ' + (tone || 'is-ok');
+        if (isHtml) feedbackEl.innerHTML = msg;
+        else feedbackEl.textContent = msg;
+      }
+
+      function buildQuickMapCode(raw) {
+        var idMatch = raw.match(/id\s*=\s*["']([^"']*map[^"']*)["']/i) || raw.match(/getElementById\(\s*["']([^"']+)["']\s*\)/i);
+        var keyMatch = raw.match(/(?:apikey|appkey)\s*=\s*([A-Za-z0-9_-]{8,64})/i);
+        var coord = raw.match(/LatLng\(\s*([0-9]{2}\.[0-9]+)\s*,\s*([0-9]{2,3}\.[0-9]+)\s*\)/i);
+        var containerId = idMatch ? idMatch[1] : 'daumRoughmapContainer';
+        var appKey = keyMatch ? keyMatch[1] : 'YOUR_KAKAO_JAVASCRIPT_KEY';
+        var lat = coord ? coord[1] : '37.501274';
+        var lng = coord ? coord[2] : '127.039585';
+        return [
+          '<!-- [오커 웍스] 카카오 지도 v2 비동기 SDK + 4.5초 먹통 감지 길찾기 폴백 -->',
+          '<div id="' + containerId + '" style="width:100%;height:380px;position:relative;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;background:#F8FAFC;"></div>',
+          '<script>',
+          '(function() {',
+          '  var CFG = { containerId: "' + containerId + '", appKey: "' + appKey + '", lat: ' + lat + ', lng: ' + lng + ', placeName: "매장 위치" };',
+          '  function renderFallback() {',
+          '    var el = document.getElementById(CFG.containerId); if (!el) return;',
+          '    var kUrl = "https://map.kakao.com/link/to/" + encodeURIComponent(CFG.placeName) + "," + CFG.lat + "," + CFG.lng;',
+          '    var nUrl = "https://map.naver.com/p/search/" + encodeURIComponent(CFG.placeName);',
+          '    el.innerHTML = \'<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">\' +',
+          '      \'<strong style="font-size:17px;margin-bottom:10px;">\' + CFG.placeName + \' 오시는 길</strong>\' +',
+          '      \'<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">\' +',
+          '      \'<a href="\' + kUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;background:#1D4ED8;color:#fff;text-decoration:none;font-weight:600;">카카오맵 길찾기</a>\' +',
+          '      \'<a href="\' + nUrl + \'" target="_blank" rel="noopener" style="padding:10px 16px;border-radius:8px;border:1px solid #CBD5E1;background:#fff;color:#0F172A;text-decoration:none;font-weight:600;">네이버지도 보기</a></div></div>\';',
+          '  }',
+          '  var wd = setTimeout(renderFallback, 4500);',
+          '  var s = document.createElement("script");',
+          '  s.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=" + encodeURIComponent(CFG.appKey) + "&autoload=false";',
+          '  s.async = true;',
+          '  s.onerror = function() { clearTimeout(wd); renderFallback(); };',
+          '  s.onload = function() {',
+          '    if (!window.kakao || !window.kakao.maps) { clearTimeout(wd); renderFallback(); return; }',
+          '    window.kakao.maps.load(function() {',
+          '      clearTimeout(wd);',
+          '      var pos = new window.kakao.maps.LatLng(CFG.lat, CFG.lng);',
+          '      var map = new window.kakao.maps.Map(document.getElementById(CFG.containerId), { center: pos, level: 3 });',
+          '      new window.kakao.maps.Marker({ position: pos, map: map });',
+          '    });',
+          '  };',
+          '  document.head.appendChild(s);',
+          '})();',
+          '<\/script>'
+        ].join('\n');
+      }
+
+      function renderPreview() {
+        if (!codePre) return;
+        if (!fullCode) {
+          codePre.textContent = '/* 오시는길 HTML을 붙여넣으면 최신 v2 + 4.5초 폴백 코드가 즉시 합성됩니다. */';
+          if (copyBtn) copyBtn.disabled = true;
+          return;
+        }
+        if (copyBtn) copyBtn.disabled = false;
+        if (isPro) {
+          codePre.textContent = fullCode;
+          if (passInput) passInput.style.display = 'none';
+          if (unlockBtn) unlockBtn.style.display = 'none';
+          if (copyBtn) copyBtn.textContent = '완성 코드 즉시 복사';
+        } else {
+          codePre.textContent = fullCode.split('\n').slice(0, 7).join('\n') + '\n  /* ── 이하 비동기 kakao.maps.load + 4.5초 먹통 감지 길찾기 폴백 잠금 (1,500원 1회 패스) ── */';
+          if (copyBtn) copyBtn.textContent = '전체 코드 복사 (잠금 해제)';
+        }
+      }
 
       function analyze() {
         var raw = (input.value || '').trim();
@@ -294,6 +407,8 @@
           badge.className = 'ow-chip ow-chip-neutral';
           badge.textContent = '입력 대기';
           box.textContent = '오시는길 HTML 코드를 붙여넣으면 구형 도메인·HTTP 차단 여부와 매장 좌표를 즉시 판별합니다.';
+          fullCode = '';
+          renderPreview();
           return;
         }
         var findings = [];
@@ -314,6 +429,39 @@
           badge.textContent = '구형 도메인 없음';
           box.innerHTML = '<strong>점검 결과:</strong> 구형 도메인 문자열이 보이지 않습니다. 앱키·도메인 누락 대비 4.5초 길찾기 폴백 내장 여부를 확인하세요.<br><span class="ow-mono" style="font-size:12px;">' + coordText + '</span>';
         }
+        fullCode = buildQuickMapCode(raw);
+        renderPreview();
+      }
+
+      if (unlockBtn) {
+        unlockBtn.addEventListener('click', function() {
+          var code = (passInput && passInput.value || '').trim().toUpperCase();
+          if (code === VALID_PASS) {
+            isPro = true;
+            try { localStorage.setItem('ow_pro_pass', VALID_PASS); } catch (e) {}
+            renderPreview();
+            showQuickFeedback('인증 완료! 추출 좌표가 반영된 최신 v2 + 4.5초 폴백 전체 코드를 즉시 복사하세요.', 'is-ok', false);
+          } else {
+            if (passInput) { passInput.value = ''; passInput.focus(); }
+            showQuickFeedback('유효하지 않은 패스 코드입니다. 결제 완료 화면에서 확인한 코드를 입력해 주세요.', 'is-warn', false);
+          }
+        });
+      }
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          if (!fullCode) return;
+          if (!isPro) {
+            if (passInput) passInput.focus();
+            showQuickFeedback('전체 완성 코드는 잠금 상태입니다 — <a href="https://litt.ly/ohker/sale/1m1jHkV" onclick="return trackSubscribeClick(\'https://litt.ly/ohker/sale/1m1jHkV\');" style="font-weight:700;text-decoration:underline;">1,500원(1회·자동결제 없음) 패스 즉시 발급 →</a> 또는 위 입력칸에 패스 코드를 입력해 주세요.', 'is-warn', true);
+            return;
+          }
+          navigator.clipboard.writeText(fullCode).then(function() {
+            copyBtn.textContent = '복사 완료';
+            showQuickFeedback('추출 좌표가 반영된 전체 HTML 코드가 클립보드에 복사되었습니다.', 'is-ok', false);
+            setTimeout(function() { copyBtn.textContent = '완성 코드 즉시 복사'; }, 1600);
+          });
+        });
       }
 
       input.addEventListener('input', analyze);
@@ -327,7 +475,11 @@
         });
       }
       analyze();
+      if (isPro && hadUrlPass) {
+        showQuickFeedback('패스 코드가 원클릭 자동 인증되었습니다! 전체 완성 코드를 바로 복사하세요.', 'is-ok', false);
+      }
     })();
   </script>
+  <script src="../assets/ow-trial-track.js" defer></script>
 </body>
 </html>
