@@ -259,6 +259,7 @@
             <div class="ow-console-toolbar">
               <div class="ow-preset-group">
                 <button type="button" class="ow-preset-btn" id="btnSampleHospital">병원·매장 구형 샘플 넣기</button>
+                <button type="button" class="ow-preset-btn" id="btnAddressOnlyMode">기존 코드 없이 주소로만 새 지도 만들기</button>
                 <button type="button" class="ow-preset-btn" id="btnClearHtml">초기화</button>
                 <span class="ow-chip ow-chip-neutral" id="auditCountBadge">입력 대기</span>
               </div>
@@ -276,7 +277,7 @@
                 <input type="text" id="customPlaceInput" class="ow-pass-input" style="width:100%;" placeholder="비워두면 HTML에서 자동 추출" />
               </div>
               <div>
-                <label for="customAddrInput" class="ow-fine" style="display:block;font-weight:600;margin-bottom:4px;">도로명 주소 (좌표 없는 구형 약도일 때 자동 지오코딩, 선택)</label>
+                <label for="customAddrInput" class="ow-fine" style="display:block;font-weight:600;margin-bottom:4px;">도로명 주소 (기존 HTML 없이 주소만 적어도 새 지도 코드 즉시 생성)</label>
                 <input type="text" id="customAddrInput" class="ow-pass-input" style="width:100%;" placeholder="예: 서울특별시 서초구 반포대로 222" />
               </div>
             </div>
@@ -996,10 +997,12 @@
 
       function runSynthesize(silent) {
         var raw = (input.value || '').trim();
+        var manualPlace = customPlaceInput ? (customPlaceInput.value || '').trim() : '';
+        var manualAddr = customAddrInput ? (customAddrInput.value || '').trim() : '';
         var branches = parseBranches(multiBranchInput ? multiBranchInput.value : '');
-        if (!raw && branches.length === 0) {
+        if (!raw && !manualAddr && branches.length === 0) {
           auditCountBadge.className = 'ow-chip ow-chip-warn';
-          auditCountBadge.textContent = 'HTML 입력 필요';
+          auditCountBadge.textContent = 'HTML 또는 도로명 주소 입력 필요';
           return;
         }
 
@@ -1010,8 +1013,6 @@
         var levelMatch = raw.match(/level\s*:\s*([0-9]{1,2})/i);
         var heightMatch = raw.match(/height\s*:\s*([0-9]+px)/i);
         var placeMatch = raw.match(/>([^<>]{2,28})<\/div>\s*["']/);
-        var manualPlace = customPlaceInput ? (customPlaceInput.value || '').trim() : '';
-        var manualAddr = customAddrInput ? (customAddrInput.value || '').trim() : '';
 
         var params = {
           appKey: keyMatch ? keyMatch[1] : 'YOUR_KAKAO_JAVASCRIPT_KEY',
@@ -1026,8 +1027,9 @@
         };
 
         var dangerCount = legacyMatches.length;
+        var addrOnlyMode = !raw && Boolean(manualAddr);
         auditCountBadge.className = dangerCount > 0 ? 'ow-chip ow-chip-crit' : 'ow-chip ow-chip-ok';
-        auditCountBadge.textContent = dangerCount > 0 ? ('종료 위험 ' + dangerCount + '건') : '표준 변환 준비';
+        auditCountBadge.textContent = dangerCount > 0 ? ('종료 위험 ' + dangerCount + '건') : (addrOnlyMode ? '주소 단독 생성 준비' : '표준 변환 준비');
 
         var shortLat = parseFloat(params.lat).toFixed(4);
         var shortLng = parseFloat(params.lng).toFixed(4);
@@ -1043,10 +1045,11 @@
           heroNaverRouteLink.href = 'https://map.naver.com/p/search/' + encodeURIComponent(params.address || params.placeName);
         }
 
+        var firstRow = addrOnlyMode
+          ? ('<tr class="ow-row-enter"><td style="font-weight:600;">신규 주소 생성</td><td><span class="ow-chip ow-chip-ok">준비됨</span></td><td class="ow-fine">구형 HTML 없이 도로명 주소 지오코딩 + 4.5초 폴백 합성</td></tr>')
+          : ('<tr class="ow-row-enter"><td style="font-weight:600;">종료·차단 호출</td><td><span class="ow-chip ' + (dangerCount > 0 ? 'ow-chip-crit' : 'ow-chip-ok') + '">' + (dangerCount > 0 ? (dangerCount + '건 검출') : '안전') + '</span></td><td class="ow-mono">' + (dangerCount > 0 ? escapeHtml(legacyMatches.join(', ')) : '구형 호출 없음') + '</td></tr>');
         extractTableBody.innerHTML = [
-          '<tr class="ow-row-enter"><td style="font-weight:600;">종료·차단 호출</td>' +
-            '<td><span class="ow-chip ' + (dangerCount > 0 ? 'ow-chip-crit' : 'ow-chip-ok') + '">' + (dangerCount > 0 ? (dangerCount + '건 검출') : '안전') + '</span></td>' +
-            '<td class="ow-mono">' + (dangerCount > 0 ? escapeHtml(legacyMatches.join(', ')) : '구형 호출 없음') + '</td></tr>',
+          firstRow,
           '<tr class="ow-row-enter"><td style="font-weight:600;">매장 좌표·주소</td>' +
             '<td><span class="ow-chip ow-chip-ok">이식됨</span></td>' +
             '<td class="ow-mono">#' + escapeHtml(params.containerId) + ' (' + escapeHtml(params.address || (shortLat + ', ' + shortLng)) + ')</td></tr>',
@@ -1159,10 +1162,37 @@
       });
 
       if (customPlaceInput) {
-        customPlaceInput.addEventListener('input', function() { if ((input.value || '').trim()) runSynthesize(true); });
+        customPlaceInput.addEventListener('input', function() {
+          if ((input.value || '').trim() || (customAddrInput && (customAddrInput.value || '').trim())) runSynthesize(true);
+        });
       }
       if (customAddrInput) {
-        customAddrInput.addEventListener('input', function() { if ((input.value || '').trim()) runSynthesize(true); });
+        customAddrInput.addEventListener('input', function() {
+          var v = (customAddrInput.value || '').trim();
+          if (isDemoSample && v) {
+            isDemoSample = false;
+            input.value = '';
+          }
+          if ((input.value || '').trim() || v) runSynthesize(true);
+        });
+      }
+      var btnAddressOnlyMode = document.getElementById('btnAddressOnlyMode');
+      if (btnAddressOnlyMode && customAddrInput) {
+        btnAddressOnlyMode.addEventListener('click', function() {
+          isDemoSample = false;
+          input.value = '';
+          if (customPlaceInput && !(customPlaceInput.value || '').trim()) {
+            customPlaceInput.value = '내 매장';
+          }
+          if ((customAddrInput.value || '').trim()) {
+            runSynthesize(false);
+          } else {
+            auditCountBadge.className = 'ow-chip ow-chip-neutral';
+            auditCountBadge.textContent = '주소 입력 대기';
+            showMapFeedback('도로명 주소와 매장명을 입력하면 기존 HTML 없이도 반응형 카카오 지도 v2 + 4.5초 길찾기 폴백 코드가 즉시 생성됩니다.', 'is-ok');
+            customAddrInput.focus();
+          }
+        });
       }
       if (multiBranchInput) {
         multiBranchInput.addEventListener('input', function() { runSynthesize(true); });
@@ -1179,13 +1209,20 @@
         });
       }
 
-      /* Pre-populate pending HTML from diagnostic guide or demo sample on load */
+      /* Pre-populate pending HTML or address from diagnostic guide or query string on load */
       var pendingHtml = '';
+      var pendingAddr = '';
+      var pendingPlace = '';
       var qBuilder = '';
       try {
+        var qs = new URLSearchParams(window.location.search);
         pendingHtml = (sessionStorage.getItem('ow_pending_map_html') || '').trim();
+        pendingAddr = (qs.get('addr') || sessionStorage.getItem('ow_pending_map_addr') || '').trim();
+        pendingPlace = (qs.get('place') || sessionStorage.getItem('ow_pending_map_place') || '').trim();
         if (pendingHtml) sessionStorage.removeItem('ow_pending_map_html');
-        qBuilder = (new URLSearchParams(window.location.search).get('builder') || '').trim().toLowerCase();
+        if (sessionStorage.getItem('ow_pending_map_addr')) sessionStorage.removeItem('ow_pending_map_addr');
+        if (sessionStorage.getItem('ow_pending_map_place')) sessionStorage.removeItem('ow_pending_map_place');
+        qBuilder = (qs.get('builder') || '').trim().toLowerCase();
       } catch (e) {}
 
       if (qBuilder && BUILDER_GUIDES[qBuilder]) {
@@ -1193,9 +1230,16 @@
         if (builderGuideDesc) builderGuideDesc.textContent = BUILDER_GUIDES[qBuilder];
       }
 
+      if (pendingPlace && customPlaceInput) customPlaceInput.value = pendingPlace;
+      if (pendingAddr && customAddrInput) customAddrInput.value = pendingAddr;
+
       if (pendingHtml) {
         isDemoSample = false;
         input.value = pendingHtml;
+        runSynthesize(false);
+      } else if (pendingAddr) {
+        isDemoSample = false;
+        input.value = '';
         runSynthesize(false);
       } else {
         input.value = sampleHtml;

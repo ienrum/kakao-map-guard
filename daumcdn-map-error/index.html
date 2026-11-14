@@ -194,9 +194,13 @@
               </div>
             </div>
 
-            <p class="ow-fine" style="margin:0;">
-              웹에이전시·유지보수 담당자도 패스 1개(1,500원 1회 결제)로 수십 개 클라이언트 사이트의 오시는길 코드를 건수 제한 없이 생성할 수 있습니다.
-            </p>
+            <div style="border-top:1px dashed var(--ow-border-default);padding-top:14px;">
+              <strong style="display:block;font-size:0.875rem;margin-bottom:8px;">내 매장 주소·HTML로 새 지도 코드 바로 만들기</strong>
+              <input type="text" id="quickDaumPlace" class="ow-pass-input" style="width:100%;margin-bottom:8px;" placeholder="매장·상호명 (선택, 예: 강남본점)" aria-label="매장 상호명" />
+              <textarea id="quickDaumInput" class="ow-code-input" rows="2" style="min-height:68px;" placeholder="도로명 주소 (예: 서울 강남구 테헤란로 152) 또는 기존 오시는길 HTML 붙여넣기" aria-label="도로명 주소 또는 기존 HTML"></textarea>
+              <button type="button" class="ow-btn ow-btn-primary" id="btnDaumQuickGo" style="width:100%;justify-content:center;margin-top:10px;">내 매장 새 지도 코드 즉시 생성하기 →</button>
+              <p class="ow-fine" style="margin:8px 0 0;">웹에이전시·유지보수 담당자도 패스 1개(1,500원 1회 결제)로 클라이언트 사이트를 건수 제한 없이 생성합니다.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -300,6 +304,27 @@
       }
       select.addEventListener('change', updateMapCalc);
       updateMapCalc();
+
+      var quickPlace = document.getElementById('quickDaumPlace');
+      var quickInput = document.getElementById('quickDaumInput');
+      var btnQuickGo = document.getElementById('btnDaumQuickGo');
+      if (btnQuickGo) {
+        btnQuickGo.addEventListener('click', function() {
+          var val = quickInput ? (quickInput.value || '').trim() : '';
+          var place = quickPlace ? (quickPlace.value || '').trim() : '';
+          try {
+            if (place) sessionStorage.setItem('ow_pending_map_place', place);
+            if (val) {
+              if (/<script|daum|kakao/i.test(val)) {
+                sessionStorage.setItem('ow_pending_map_html', val);
+              } else {
+                sessionStorage.setItem('ow_pending_map_addr', val);
+              }
+            }
+          } catch (e) {}
+          window.location.href = '../#workbench';
+        });
+      }
     })();
   </script>
   <script src="../assets/ow-trial-track.js" defer></script>
